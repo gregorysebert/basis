@@ -1,0 +1,192 @@
+<%
+	import javax.jcr.Node;
+	import org.exoplatform.webui.form.UIFormStringInput;
+	import java.text.SimpleDateFormat;
+	import java.util.Calendar;
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
+
+	Node dir=uicomponent.getCurrentNode();
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    String todayS=sdf.format(new Date());
+	String folderName= dir.getName();
+	String text="";
+	private String getTimestampName() {
+		   Calendar now = Calendar.getInstance();
+		   SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd '-' hh'h'mm'm'ss");
+		   return formatter.format(now.getTime());
+		 }
+	String timestampName = getTimestampName();
+%>
+<% //uicomponent.addInterceptor("ecm-explorer/interceptor/RefuseDocumentInterceptor.groovy", "post");%>
+<div class="UIForm FormLayout">
+	<% uiform.begin() %> 
+		<div class="HorizontalLayout">
+			<table class="UIFormGrid">
+			    <tr style="display:none;">
+		          <td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docId")%></td>
+		          <td class="FieldComponent">
+		            $timestampName 
+		               <div style="display:none;"><%
+		              String[] docNameField = ["jcrPath=/node", "mixintype=mix:i18n", "editable=if-null", "validate=empty,name", timestampName] ;
+		              uicomponent.addTextField("name", docNameField) ;
+		            %></div>
+		          </td>
+        		</tr>
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docType")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] docTypeField = ["jcrPath=/node/basis:docType", "options=type1,type2,type3", "validate=empty", "onchange=false"];
+				        uicomponent.addSelectBoxField("docType", docTypeField);
+				        %>
+				    </td>
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docRegistrationDate")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] docRegistrationDateField = ["jcrPath=/node/basis:docRegistrationDate", "visible=true", "validate=empty,datetime", ("defaultValues="+todayS)];
+						uicomponent.addCalendarField("docRegistrationDate", docRegistrationDateField);
+						%>
+					</td>
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docDate")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] docDateField = ["jcrPath=/node/basis:docDate", "visible=true", "validate=empty,datetime", ("defaultValues="+todayS)];
+						uicomponent.addCalendarField("docDate", docDateField);
+						%>
+					</td>
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docReference")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] docReferenceField = ["jcrPath=/node/basis:docReference", "validate=empty"];
+						uicomponent.addTextField("docReference", docReferenceField);
+						%>
+					</td>
+				</tr>
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docKeywords")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] docKeywordsField = ["jcrPath=/node/basis:docKeywords", "options=keyword1,keyword2,keyword3", "validate=empty", "onchange=false"];
+				        uicomponent.addSelectBoxField("docKeywords", docKeywordsField);
+				        %>
+				    </td>
+				</tr>
+			    <tr>
+			        <td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docInternSender")%></td>
+			        <td class="FieldComponent">
+			          	<%
+			          	 String[] docInternSenderField = ["jcrPath=/node/basis:docInternSender", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "validate=org.exoplatform.wcm.webui.validator.MandatoryValidator", "options=null"];
+			           	uicomponent.addActionField("docInternSender", docInternSenderField);
+			          	%>
+			        </td>
+			    </tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderName")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] docExternSenderNameField = ["jcrPath=/node/basis:docExternSenderName", "validate=empty"];
+						uicomponent.addTextField("docExternSenderName", docExternSenderNameField);
+						%>
+					</td>
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderAdress")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] docExternSenderAdressField = ["jcrPath=/node/basis:docExternSenderAdress", "validate=empty"];
+						uicomponent.addTextAreaField("docExternSenderAdress", docExternSenderAdressField);
+						%>
+					</td>
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderZipCode")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] docExternSenderZipCodeField = ["jcrPath=/node/basis:docExternSenderZipCode", "validate=empty"];
+						uicomponent.addTextField("docExternSenderZipCode", docExternSenderZipCodeField);
+						%>
+					</td>
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderCity")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] docExternSenderCityField = ["jcrPath=/node/basis:docExternSenderCity", "validate=empty"];
+						uicomponent.addTextField("docExternSenderCity", docExternSenderCityField);
+						%>
+					</td>
+				</tr>
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderCountry")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] docExternSenderCountryField = ["jcrPath=/node/basis:docExternSenderCountry", "validate=empty",
+				        "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy",
+				        "scriptParams=Belgique,België,Afghanistan,Albania,American Samoa,Andorra," +
+				        "Angola,Anguilla,Antarctica,Antigua & Barbuda,Argentina," +
+				        "Armenia,Aruba,Ascension Island,Australia,Austria,Azerbaijan," +
+				        "Bahamas,Bahrain,Bangladesh,Barbados,Belarus,Belize," +
+				        "Benin,Bermuda,Bhutan,Bolivia,Bosnia/Herzegovina,Botswana," +
+				        "Brazil,British Virgin Islands,Brunei,Bulgaria,Burkina Faso," +
+				        "Burundi,Cambodia,Cameroon,Canada,Cape Verde Islands,Cayman Islands," +
+				        "Central African Republic,Chad Republic,Chile,China,Christmas Island," +
+				        "Cocos Keeling Island,Colombia,Comoros,Congo Democratic Republic," +
+				        "Cook Islands,Costa Rica,Cote D'Ivoire,Croatia,Cuba,Cyprus,Czech Republic," +
+				        "Denmark,Djibouti,Dominica,Dominican Republic,Ecuador,Egypt,El Salvador,Equatorial Guinea," +
+				        "Eritrea,Estonia,Ethiopia,Falkland Islands,Faroe Island,Fiji Islands,Finland,France," +
+				        "French Antilles/Martinique,French Guiana,French Polynesia,Gabon Republic,Gambia,Georgia," +
+				        "Germany,Ghana,Gibraltar,Greece,Greenland,Grenada,Guadeloupe,Guam,Guatemala,Guinea Republic," +
+				        "Guinea-Bissau,Guyana,Haiti,Honduras,Hong Kong,Hungary,Iceland,India,Indonesia,Iraq,Ireland," +
+				        "Israel,Italy,Jamaica,Japan,Jordan,Kenya,Kiribati,Kosovo,Kuwait,Kyrgyzstan,Laos,Latvia,Lebanon," +
+				        "Lesotho,Liberia,Libya,Liechtenstein,Lithuania,Luxembourg,Macau,Macedonia,Madagascar,Malawi," +
+				        "Malaysia,Maldives,Mali Republic,Malta,Marshall Islands,Mauritania,Mauritius,Mexico,Micronesia," +
+				        "Moldova,Monaco,Mongolia,Montenegro,Montserrat,Morocco,Mozambique,Myanmar (Burma),Namibia,Nauru," +
+				        "Nepal,Netherlands,Netherlands Antilles,New Caledonia,New Zealand,Nicaragua,Niger Republic,Nigeria," +
+				        "Niue Island,Norfolk,North Korea,Norway,Oman Dem Republic,Pakistan,Palau Republic,Palestine,Panama," +
+				        "Papua New Guinea,Paraguay,Peru,Philippines,Poland,Portugal,Puerto Rico,Qatar,Reunion Island,Romania," +
+				        "Russia,Rwanda Republic,Saipan/Mariannas,San Marino,Sao Tome/Principe,Saudi Arabia,Senegal,Serbia,Seychelles Island," +
+				        "Sierra Leone,Singapore,Slovakia,Slovenia,Solomon Islands,Somalia Republic,Somoa,South Africa,South Korea," +
+				        "Spain,Sri Lanka,St. Helena,St. Kitts,St. Lucia,St. Pierre,St. Vincent,Sudan,Suriname,Swaziland,Sweden," +
+				        "Switzerland,Syria,Taiwan,Tajikistan,Tanzania,Thailand,Togo Republic,Tokelau,Tonga Islands,Trinidad & Tobago," +
+				        "Tunisia,Turkey,Turkmenistan,Turks & Caicos Island,Tuvalu,Uganda,Ukraine,United Arab Emirates,United Kingdom," +
+				        "Uruguay,USA/Canada,Uzbekistan,Vanuatu,Vatican City,Venezuela,Vietnam,Virgin Islands (US),Wallis/Futuna Islands," +
+				        "Yemen Arab Republic,Zambia,Zimbabwe"];
+				        uicomponent.addSelectBoxField("docExternSenderCountry", docExternSenderCountryField);
+				        %>
+				    </td>
+				</tr>																			    
+			    																				
+			</table>
+	<div class="UIAction"> 
+					<table class="ActionContainer">
+						<tr>
+							<td>
+						  <% for(action in uicomponent.getActions()) { 
+								 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+										 String link = uicomponent.event(action) ;
+						  %>
+							<div onclick="$link" class="ActionButton LightBlueStyle">
+								<div class="ButtonLeft">
+									<div class="ButtonRight">
+										<div class="ButtonMiddle">
+											<a href="javascript:void(0);">$actionLabel</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						<%}%>          
+						</td>
+					  </tr>
+					</table>
+				  </div>
+				<%/*end render action*/%>    
+		</div>
+	<%uiform.end()%>
+</div>

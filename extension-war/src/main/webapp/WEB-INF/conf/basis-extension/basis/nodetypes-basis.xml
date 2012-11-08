@@ -1,0 +1,58 @@
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.5" xmlns:mix="http://www.jcp.org/jcr/mix/1.5"
+           xmlns:jcr="http://www.jcp.org/jcr/1.5">
+    <nodeType name="basis:basisDocument" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+        <supertypes>
+            <supertype>nt:base</supertype>
+        </supertypes>
+        <propertyDefinitions>
+            <!--propertyDefinition name="basis:docId" requiredType="String" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition-->            
+            <propertyDefinition name="basis:docType" requiredType="String" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docRegistrationDate" requiredType="Date" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docDate" requiredType="Date" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docReference" requiredType="String" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docKeywords" requiredType="String" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docInternSender" requiredType="String" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docExternSenderName" requiredType="String" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docExternSenderAdress" requiredType="String" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docExternSenderZipCode" requiredType="String" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docExternSenderCity" requiredType="String" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition> 
+            <propertyDefinition name="basis:docExternSenderCountry" requiredType="String" autoCreated="false" mandatory="true"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>                                                                 
+        </propertyDefinitions>
+    </nodeType>
+</nodeTypes>

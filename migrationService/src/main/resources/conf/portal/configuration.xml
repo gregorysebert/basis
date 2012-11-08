@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+	<component>
+        <key>basis.migration.service.MigrationService</key>
+        <type>basis.migration.service.MigrationServiceImpl</type>
+    </component>
+     
+<external-component-plugins>
+  <target-component>org.exoplatform.services.jcr.ext.script.groovy.GroovyScript2RestLoader</target-component>
+  <component-plugin>
+    <name>ServiceStatRest</name>
+    <set-method>addPlugin</set-method>
+    <type>org.exoplatform.services.jcr.ext.script.groovy.GroovyScript2RestLoaderPlugin</type>
+    <init-params>
+      <value-param>
+        <name>repository</name>
+        <value>repository</value>
+      </value-param>
+	 <value-param>
+              <name>workspace</name>
+              <value>portal-system</value>
+      </value-param>
+      <value-param>
+        <name>node</name>
+        <value>/script/groovy</value>
+      </value-param>
+      <properties-param>
+        <name>migrationBasis.grs</name>
+        <property name="autoload" value="true" />
+        <property name="path" value="jar:/groovy/REST/migrationBasis.grs" />
+      </properties-param>
+    </init-params>
+  </component-plugin>
+</external-component-plugins>
+</configuration>
