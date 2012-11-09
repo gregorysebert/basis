@@ -12,8 +12,10 @@
 	xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
 	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 	    
+	<import>war:/conf/basis-extension/common-configuration.xml</import>    
 	<import>war:/conf/basis-extension/namespace-configuration.xml</import>    
     <import>war:/conf/basis-extension/basis/nodetypes-configuration.xml</import>
+    <import>war:/conf/basis-extension/basis/scripts-configuration.xml</import>
     <import>war:/conf/basis-extension/basis/templates-configuration-basis.xml</import>
 
 </configuration>

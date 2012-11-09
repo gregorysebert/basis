@@ -1,3 +1,11 @@
+.idea/
+.project
+.settings/
+.svn/
+target/
+.classpath
 *.iml
-*.DS_STORE
-target
+*.cmd
+.springBeans
+/.gitk*
+.DS_Store

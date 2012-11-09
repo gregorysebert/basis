@@ -36,15 +36,13 @@
                     <object type="org.exoplatform.services.cms.impl.ResourceConfig">
                         <field name="resources">
                             <collection type="java.util.ArrayList">
-                                <!-- artifacts/scripts/interceptor -->
-                                <!--value>
+                                 <value>
                                     <object type="org.exoplatform.services.cms.impl.ResourceConfig$Resource">
                                         <field name="name">
-                                            <string>ecm-explorer/interceptor/RequesterDocumentInterceptor.groovy
-                                            </string>
+                                            <string>ecm-explorer/widget/FillSelectBoxWithTitles.groovy</string>
                                         </field>
                                     </object>
-                                </value-->
+                                </value>
                             </collection>
                         </field>
                     </object>
