@@ -3,11 +3,12 @@
 	import org.exoplatform.webui.form.UIFormStringInput;
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
+	import org.exoplatform.webui.form.UIFormSelectBox;
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
 
 	Node dir=uicomponent.getCurrentNode();
-	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     String todayS=sdf.format(new Date());
 	String folderName= dir.getName();
 	String text="";
@@ -28,7 +29,7 @@
 		          <td class="FieldComponent">
 		            $timestampName 
 		               <div style="display:none;"><%
-		              String[] docNameField = ["jcrPath=/node", "mixintype=mix:i18n", "editable=if-null", "validate=empty,name", timestampName] ;
+		              String[] docNameField = ["jcrPath=/node", "mixintype=mix:i18n", "editable=if-null", timestampName] ;
 		              uicomponent.addTextField("name", docNameField) ;
 		            %></div>
 		          </td>
@@ -37,16 +38,16 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docTypeField = ["jcrPath=/node/basis:docType", "options=type1,type2,type3", "validate=empty", "onchange=false"];
+				        String[] docTypeField = ["jcrPath=/node/basis:docType", "options=type1,type2,type3", "onchange=false"];
 				        uicomponent.addSelectBoxField("docType", docTypeField);
 				        %>
 				    </td>
 				</tr>
-				<tr>
+				<tr style="display:none;">
 					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docRegistrationDate")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docRegistrationDateField = ["jcrPath=/node/basis:docRegistrationDate", "visible=true", "validate=empty,datetime", ("defaultValues="+todayS)];
+						String[] docRegistrationDateField = ["jcrPath=/node/basis:docRegistrationDate", ("defaultValues="+todayS)];
 						uicomponent.addCalendarField("docRegistrationDate", docRegistrationDateField);
 						%>
 					</td>
@@ -55,7 +56,7 @@
 					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docDate")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docDateField = ["jcrPath=/node/basis:docDate", "visible=true", "validate=empty,datetime", ("defaultValues="+todayS)];
+						String[] docDateField = ["jcrPath=/node/basis:docDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];
 						uicomponent.addCalendarField("docDate", docDateField);
 						%>
 					</td>
@@ -64,7 +65,7 @@
 					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docReference")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docReferenceField = ["jcrPath=/node/basis:docReference", "validate=empty"];
+						String[] docReferenceField = ["jcrPath=/node/basis:docReference"];
 						uicomponent.addTextField("docReference", docReferenceField);
 						%>
 					</td>
@@ -73,25 +74,39 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docKeywords")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docKeywordsField = ["jcrPath=/node/basis:docKeywords", "options=keyword1,keyword2,keyword3", "validate=empty", "onchange=false"];
+				        String[] docKeywordsField = ["jcrPath=/node/basis:docKeywords", "options=keyword1,keyword2,keyword3", "multiValues=true", "onchange=false"];
 				        uicomponent.addSelectBoxField("docKeywords", docKeywordsField);
 				        %>
 				    </td>
 				</tr>
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docSenderType")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] docSenderTypeField = ["jcrPath=/node/basis:docSenderType", "options=intern,extern", "onchange=true"];
+				        uicomponent.addSelectBoxField("docSenderType", docSenderTypeField);
+				        %>
+				    </td>
+				</tr>
+				<%
+				UIFormSelectBox docSenderTypeSelectBox = uicomponent.findComponentById("docSenderType");
+				if(docSenderTypeSelectBox.getValue().equals("intern")){
+				%>
 			    <tr>
 			        <td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docInternSender")%></td>
 			        <td class="FieldComponent">
 			          	<%
-			          	 String[] docInternSenderField = ["jcrPath=/node/basis:docInternSender", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "validate=org.exoplatform.wcm.webui.validator.MandatoryValidator", "options=null"];
+			          	 String[] docInternSenderField = ["jcrPath=/node/basis:docInternSender", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
 			           	uicomponent.addActionField("docInternSender", docInternSenderField);
 			          	%>
 			        </td>
 			    </tr>
+			    <% } else {%>
 				<tr>
 					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderName")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docExternSenderNameField = ["jcrPath=/node/basis:docExternSenderName", "validate=empty"];
+						String[] docExternSenderNameField = ["jcrPath=/node/basis:docExternSenderName"];
 						uicomponent.addTextField("docExternSenderName", docExternSenderNameField);
 						%>
 					</td>
@@ -100,7 +115,7 @@
 					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderAdress")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docExternSenderAdressField = ["jcrPath=/node/basis:docExternSenderAdress", "validate=empty"];
+						String[] docExternSenderAdressField = ["jcrPath=/node/basis:docExternSenderAdress"];
 						uicomponent.addTextAreaField("docExternSenderAdress", docExternSenderAdressField);
 						%>
 					</td>
@@ -109,7 +124,7 @@
 					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderZipCode")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docExternSenderZipCodeField = ["jcrPath=/node/basis:docExternSenderZipCode", "validate=empty"];
+						String[] docExternSenderZipCodeField = ["jcrPath=/node/basis:docExternSenderZipCode"];
 						uicomponent.addTextField("docExternSenderZipCode", docExternSenderZipCodeField);
 						%>
 					</td>
@@ -118,7 +133,7 @@
 					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderCity")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docExternSenderCityField = ["jcrPath=/node/basis:docExternSenderCity", "validate=empty"];
+						String[] docExternSenderCityField = ["jcrPath=/node/basis:docExternSenderCity"];
 						uicomponent.addTextField("docExternSenderCity", docExternSenderCityField);
 						%>
 					</td>
@@ -127,7 +142,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderCountry")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docExternSenderCountryField = ["jcrPath=/node/basis:docExternSenderCountry", "validate=empty",
+				        String[] docExternSenderCountryField = ["jcrPath=/node/basis:docExternSenderCountry",
 				        "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy",
 				        "scriptParams=Belgique,België,Afghanistan,Albania,American Samoa,Andorra," +
 				        "Angola,Anguilla,Antarctica,Antigua & Barbuda,Argentina," +
@@ -162,7 +177,7 @@
 				        %>
 				    </td>
 				</tr>																			    
-			    																				
+			   <% } %> 																				
 			</table>
 	<div class="UIAction"> 
 					<table class="ActionContainer">

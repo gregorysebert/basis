@@ -5,51 +5,51 @@
             <supertype>nt:base</supertype>
         </supertypes>
         <propertyDefinitions>
-            <!--propertyDefinition name="basis:docId" requiredType="String" autoCreated="false" mandatory="true"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition-->            
-            <propertyDefinition name="basis:docType" requiredType="String" autoCreated="false" mandatory="true"
+            <propertyDefinition name="basis:docType" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:docRegistrationDate" requiredType="Date" autoCreated="false" mandatory="true"
+            <propertyDefinition name="basis:docRegistrationDate" requiredType="Date" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:docDate" requiredType="Date" autoCreated="false" mandatory="true"
+            <propertyDefinition name="basis:docDate" requiredType="Date" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:docReference" requiredType="String" autoCreated="false" mandatory="true"
+            <propertyDefinition name="basis:docReference" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:docKeywords" requiredType="String" autoCreated="false" mandatory="true"
+            <propertyDefinition name="basis:docKeywords" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="true">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docSenderType" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:docInternSender" requiredType="String" autoCreated="false" mandatory="true"
+            <propertyDefinition name="basis:docInternSender" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:docExternSenderName" requiredType="String" autoCreated="false" mandatory="true"
+            <propertyDefinition name="basis:docExternSenderName" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:docExternSenderAdress" requiredType="String" autoCreated="false" mandatory="true"
+            <propertyDefinition name="basis:docExternSenderAdress" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:docExternSenderZipCode" requiredType="String" autoCreated="false" mandatory="true"
+            <propertyDefinition name="basis:docExternSenderZipCode" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:docExternSenderCity" requiredType="String" autoCreated="false" mandatory="true"
+            <propertyDefinition name="basis:docExternSenderCity" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition> 
-            <propertyDefinition name="basis:docExternSenderCountry" requiredType="String" autoCreated="false" mandatory="true"
+            <propertyDefinition name="basis:docExternSenderCountry" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>                                                                 

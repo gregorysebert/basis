@@ -1,1 +1,173 @@
-Jaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+<%
+import java.text.SimpleDateFormat ;
+import javax.jcr.Value;
+%>
+<style>
+	<% _ctx.include(uicomponent.getTemplateSkin("basis:basisDocument", "Stylesheet")); %>
+</style>
+<%
+	def node = uicomponent.getNode();
+	def name = node.getName();
+	def valueDisplay;
+	def dateFormat = new SimpleDateFormat() ;
+	dateFormat.applyPattern("dd/MM/yyyy");
+%>
+		<div id="$uicomponent.id">
+			<table class="UIFormGrid">
+
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docId")%>:</td>
+					<td class="FieldComponent">${name}</td>
+				</tr>
+				<%
+				 if (node.hasProperty("basis:docType")) {
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docType")%>:</td>
+				<%
+					valueDisplay = node.getProperty("basis:docType").getString();
+				%>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				%>
+				<%
+				 if (node.hasProperty("basis:docRegistrationDate")) {
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docRegistrationDate")%>:</td>
+				<%
+					valueDisplay = dateFormat.format(node.getProperty("basis:docRegistrationDate").getDate().getTime());
+				%>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				%>
+				<%
+				 if (node.hasProperty("basis:docDate")) {
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docDate")%>:</td>
+				<%
+					valueDisplay = dateFormat.format(node.getProperty("basis:docDate").getDate().getTime());
+				%>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				%>
+				<%
+				 if (node.hasProperty("basis:docReference")) {
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docReference")%>:</td>
+				<%
+					valueDisplay = node.getProperty("basis:docReference").getString();
+				%>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				%>
+				<%
+				 if (node.hasProperty("basis:docKeywords")) {
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docKeywords")%>:</td>
+					<td class="FieldComponent">
+				<%
+					Value[] docKeywords = node.getProperty("basis:docKeywords").getValues();
+					for(String docKeyword : docKeywords){
+						valueDisplay = docKeyword.getString();%>
+						${valueDisplay} <br/>
+					<%	
+					}
+				%>
+				    
+					</td>
+				</tr>
+				<%
+					}
+				%>
+				<%
+				 if (node.hasProperty("basis:docInternSender")) {
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docInternSender")%>:</td>
+				<%
+					valueDisplay = node.getProperty("basis:docInternSender").getString();
+				%>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				%>
+				<%
+				 if (node.hasProperty("basis:docExternSenderName")) {
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderName")%>:</td>
+				<%
+					valueDisplay = node.getProperty("basis:docExternSenderName").getString();
+				%>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				%>
+				<%
+				 if (node.hasProperty("basis:docExternSenderAdress")) {
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderAdress")%>:</td>
+				<%
+					valueDisplay = node.getProperty("basis:docExternSenderAdress").getString();
+				%>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				%>
+				<%
+				 if (node.hasProperty("basis:docExternSenderZipCode")) {
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderZipCode")%>:</td>
+				<%
+					valueDisplay = node.getProperty("basis:docExternSenderZipCode").getString();
+				%>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				%>
+				<%
+				 if (node.hasProperty("basis:docExternSenderCity")) {
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderCity")%>:</td>
+				<%
+					valueDisplay = node.getProperty("basis:docExternSenderCity").getString();
+				%>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				%>
+				<%
+				 if (node.hasProperty("basis:docExternSenderCountry")) {
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.dialog.label.docExternSenderCountry")%>:</td>
+				<%
+					valueDisplay = node.getProperty("basis:docExternSenderCountry").getString();
+				%>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				%>
+			</table>
+		</div>
