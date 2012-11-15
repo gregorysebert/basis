@@ -1,0 +1,100 @@
+<%
+import java.text.SimpleDateFormat ;
+import javax.jcr.Value;
+%>
+<style>
+	<% _ctx.include(uicomponent.getTemplateSkin("basis:basisFolder", "Stylesheet")); %>
+</style>
+<%
+	def node = uicomponent.getNode();
+	def name = node.getName();
+	def valueDisplay;
+	def dateFormat = new SimpleDateFormat() ;
+	dateFormat.applyPattern("dd/MM/yyyy");
+%>
+		<div id="$uicomponent.id">
+			<table class="UIFormGrid">
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderNumber")%>:</td>
+					<td class="FieldComponent">${name}</td>
+				</tr>
+				<%
+				 if (node.hasProperty("basis:folderLanguage")) {
+					 valueDisplay = node.getProperty("basis:folderLanguage").getString();
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderLanguage")%>:</td>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+				<%
+				 if (node.hasProperty("basis:folderRegistrationDate")) {
+					 valueDisplay = dateFormat.format(node.getProperty("basis:folderRegistrationDate").getDate().getTime());
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderRegistrationDate")%>:</td>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+				<%
+				 if (node.hasProperty("basis:folderCloseBeforeDate")) {
+					 valueDisplay = dateFormat.format(node.getProperty("basis:folderCloseBeforeDate").getDate().getTime());
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderCloseBeforeDate")%>:</td>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+				<%
+				 if (node.hasProperty("basis:folderRNN")) {
+					 valueDisplay = node.getProperty("basis:folderRNN").getString();
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderRNN")%>:</td>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+				<%
+				 if (node.hasProperty("basis:folderExternalReference")) {
+					 valueDisplay = node.getProperty("basis:folderExternalReference").getString();
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderExternalReference")%>:</td>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+				<%
+				 if (node.hasProperty("basis:folderStatus")) {
+					 valueDisplay = node.getProperty("basis:folderStatus").getString();
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderStatus")%>:</td>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+			</table>
+		</div>
