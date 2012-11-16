@@ -28,25 +28,30 @@ public class RenameDocumentInterceptor implements CmsScript {
 			Node srcNode = (Node) session.getItem(nodePath);
 			Node basisFolerNode = srcNode.getParent();
 			NodeIterator it = basisFolerNode.getNodes();
-			String incre = "000";
+			String incre = "";
             while (it.hasNext()) {
-                Node basisDocumentNode = (Node) it.next();
-                if ((!basisDocumentNode.getName().split("-")[0].equals("Suivi"))&&(basisDocumentNode.getName().split("-")[1].compareTo(incre) > 0)) {
-                	incre = basisDocumentNode.getName().split("-")[1];
+                Node basisFollowNode = (Node) it.next();
+                if ((basisFollowNode.getName().split("-")[0].equals("Suivi"))&&(basisFollowNode.getName().split("-")[1].compareTo(incre) > 0)) {
+                	incre = basisFollowNode.getName().split("-")[1];
                 }
             }
-            if (incre.charAt(2) == '9' && incre.charAt(1) != '9') {
-	            incre = (String)(incre.substring(0, 1) + (char)(incre.charAt(1)+1)) + "0";
+            if (!incre.equals("")) {
+	            if (incre.charAt(2) == '9' && incre.charAt(1) != '9') {
+		            incre = (String)(incre.substring(0, 1) + (char)(incre.charAt(1)+1)) + "0";
+				}
+	            else if (incre.charAt(2) == '9' && incre.charAt(1) == '9' ) {
+		             incre = (String)((char)(incre.charAt(0)+1)) + "00";
+				}
+	            else {
+		            incre = (String)(incre.substring(0, 2) + (char)(incre.charAt(2)+1));
+				}
 			}
-            else if (incre.charAt(2) == '9' && incre.charAt(1) == '9' ) {
-	             incre = (String)((char)(incre.charAt(0)+1)) + "00";
-			}
-            else {
-	            incre = (String)(incre.substring(0, 2) + (char)(incre.charAt(2)+1));
-			}	
-            session.move(nodePath, basisFolerNode.getPath() + "/" + basisFolerNode.getName() + "-" + incre);
-			srcNode.setProperty("exo:name", basisFolerNode.getName() + "-" + incre);
-            srcNode.setProperty("exo:title", basisFolerNode.getName() + "-" + incre);
+			else {
+                incre = "000";
+            }		
+            session.move(nodePath, basisFolerNode.getPath() + "/" + "Suivi-" + incre);
+			srcNode.setProperty("exo:name", "Suivi-" + incre);
+            srcNode.setProperty("exo:title", "Suivi-" + incre);
 			session.save();
 		} catch (Exception e) {
 			logger.warning("Error in RenameDocumentInterceptor script : " + e.getMessage());

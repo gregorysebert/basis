@@ -1,0 +1,107 @@
+<%
+	import javax.jcr.Node;
+	import org.exoplatform.webui.form.UIFormStringInput;
+	import java.text.SimpleDateFormat;
+	import java.util.Calendar;
+	import org.exoplatform.webui.form.UIFormSelectBox;
+	def rcontext = _ctx.getRequestContext() ;
+	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
+
+	Node dir=uicomponent.getCurrentNode();
+	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+    String todayS=sdf.format(new Date());
+	String folderName= dir.getName();
+	String text="";
+	private String getTimestampName() {
+		   Calendar now = Calendar.getInstance();
+		   SimpleDateFormat formatter = new SimpleDateFormat("hh'h'mm'm'ss'-000'");
+		   return formatter.format(now.getTime());
+		 }
+	String timestampName = getTimestampName();
+%>
+<% uicomponent.addInterceptor("ecm-explorer/interceptor/RenameFollowInterceptor.groovy", "post");%>
+<div class="UIForm FormLayout">
+	<% uiform.begin() %> 
+		<div class="HorizontalLayout">
+			<table class="UIFormGrid">
+			    <tr style="display:none;">
+		          <td class="FieldComponent">
+		            $timestampName 
+		               <div style="display:none;"><%
+		              String[] followNameField = ["jcrPath=/node", "mixintype=mix:i18n", "editable=if-null", timestampName] ;
+		              uicomponent.addTextField("name", followNameField) ;
+		            %></div>
+		          </td>
+        		</tr>
+				<tr style="display:none;">
+					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followSendDate")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] followSendDateField = ["jcrPath=/node/basis:followSendDate", ("defaultValues="+todayS)];
+						uicomponent.addCalendarField("followSendDate", followSendDateField);
+						%>
+					</td>
+				</tr>
+			    <tr>
+			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followEditor")%></td>
+			        <td class="FieldComponent">
+			          	<%
+			          	 String[] followEditorField = ["jcrPath=/node/basis:followEditor", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			           	uicomponent.addActionField("followEditor", followEditorField);
+			          	%>
+			        </td>
+			    </tr>
+			    <tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "options=action1,action2,action3", "onchange=false"];
+				        uicomponent.addSelectBoxField("followRequiredAction", followRequiredActionField);
+				        %>
+				    </td>
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followComments")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] followCommentsField = ["jcrPath=/node/basis:followComments"];
+						uicomponent.addTextAreaField("followComments", followCommentsField);;
+						%>
+					</td>
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followAnswerByDate")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] followAnswerByDateField = ["jcrPath=/node/basis:followAnswerByDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];
+						uicomponent.addCalendarField("followAnswerByDate", followAnswerByDateField);
+						%>
+					</td>
+				</tr>
+			</table>
+	<div class="UIAction"> 
+					<table class="ActionContainer">
+						<tr>
+							<td>
+						  <% for(action in uicomponent.getActions()) { 
+								 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
+										 String link = uicomponent.event(action) ;
+						  %>
+							<div onclick="$link" class="ActionButton LightBlueStyle">
+								<div class="ButtonLeft">
+									<div class="ButtonRight">
+										<div class="ButtonMiddle">
+											<a href="javascript:void(0);">$actionLabel</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						<%}%>          
+						</td>
+					  </tr>
+					</table>
+				  </div>
+				<%/*end render action*/%>    
+		</div>
+	<%uiform.end()%>
+</div>
