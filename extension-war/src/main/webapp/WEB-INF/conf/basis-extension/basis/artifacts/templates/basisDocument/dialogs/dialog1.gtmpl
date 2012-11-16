@@ -14,12 +14,12 @@
 	String text="";
 	private String getTimestampName() {
 		   Calendar now = Calendar.getInstance();
-		   SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd '-' hh'h'mm'm'ss");
+		   SimpleDateFormat formatter = new SimpleDateFormat("hh'h'mm'm'ss'-000'");
 		   return formatter.format(now.getTime());
 		 }
 	String timestampName = getTimestampName();
 %>
-
+<% uicomponent.addInterceptor("ecm-explorer/interceptor/RenameDocumentInterceptor.groovy", "post");%>
 <div class="UIForm FormLayout">
 	<% uiform.begin() %> 
 		<div class="HorizontalLayout">
@@ -144,7 +144,7 @@
 				        <%
 				        String[] docExternSenderCountryField = ["jcrPath=/node/basis:docExternSenderCountry",
 				        "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy",
-				        "scriptParams=Belgique,België,Afghanistan,Albania,American Samoa,Andorra," +
+				        "scriptParams=Belgique,Belgi?,Afghanistan,Albania,American Samoa,Andorra," +
 				        "Angola,Anguilla,Antarctica,Antigua & Barbuda,Argentina," +
 				        "Armenia,Aruba,Ascension Island,Australia,Austria,Azerbaijan," +
 				        "Bahamas,Bahrain,Bangladesh,Barbados,Belarus,Belize," +

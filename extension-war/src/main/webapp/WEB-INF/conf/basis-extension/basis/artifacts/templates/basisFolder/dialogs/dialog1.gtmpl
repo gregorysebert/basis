@@ -14,7 +14,7 @@
 	String text="";
 	private String getTimestampName() {
 		   Calendar now = Calendar.getInstance();
-		   SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd '-' hh'h'mm'm'ss");
+		   SimpleDateFormat formatter = new SimpleDateFormat("hh'h'mm'm'ss'.00000000'");
 		   return formatter.format(now.getTime());
 		 }
 	String timestampName = getTimestampName();
