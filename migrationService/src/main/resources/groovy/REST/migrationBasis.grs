@@ -8,15 +8,21 @@ import javax.jcr.query.*;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.container.ExoContainerContext;
 
-import spff.stat.service.StatService;
+import basis.migration.service.MigrationService;
 
-@Path("/statsService")
+@Path("/MigrationService")
 public class Stat {
   @GET
-  @Path("getAllStats")
-  public String getAllStats() {
-    StatService  statService =  (StatService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(StatService);
-    Long[] docStats  = statService.getDocumentsStat();
-     return "<html><body><BR>################# Documents ##################<BR>Nombre de noeuds :" + docStats[0] + "<BR>"+ "Nombre de dossiers  : " + docStats[2] + "<BR>"+ "Nombre de documents  : " + docStats[1] + "<BR>"+ "<BR>################# Forum ##################<BR>Nombre de topics forum  : " + statService.countForum() + "<BR>"+ "Nombre de posts forum  : " + statService.countPost() + "<BR>"+"<BR>################# FAQ ##################<BR>Nombre de FAQ questions  : " + statService.countQuestions() + "<BR>"+"Nombre de FAQ reponses  : " + statService.countAnswers() + "<BR>"+"<BR>################# SOCIAL ##################<BR>Nombre d'espaces  : " + statService.countSpace() + "<BR>"+"<BR>################# WIKI ##################<BR>Nombre d'article  : " + statService.countWiki() +"<BR>"+"<BR>################# Utilisateurs ##################<BR>Nombre d'utilisateurs en ligne  : " + statService.getUserOnline().size() + "<BR>"+ "Nombre maximum de users online  : " + statService.getMostUserOnline() + " le: "+statService.dateMostUserOnline + "<BR>"+ "Nombre d'utilisateurs  : " + statService.countUsers() + "<BR>"+ "Nombre de groupes  : " + statService.countGroups() +"</html></body>";
+  @Path("migrateAll")
+  public String migrateAll() {
+    MigrationService  migrationService =  (MigrationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(MigrationService);
+    migrationService.MigrateAll();
+    return "<html><body>Migration done!</body></html>";
   }
+    @Path("/MigrateDocument/{fileName}")
+    public String MigrateDocument(@PathParam("fileName") String fileName) {
+      MigrationService  migrationService =  (MigrationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(MigrationService);
+      migrationService.MigrateDocument(fileName);
+      return "<html><body>Migration of document: "+ fileName +" done!</body></html>";
+    }
   }
