@@ -3,6 +3,8 @@ package basis.migration.service;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
+import javax.jcr.Node;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import java.net.URL;
 import java.util.Properties;
@@ -39,30 +41,48 @@ public class MigrationServiceImpl implements MigrationService
 
 
     @Override
-    public void MigrateAll() throws Exception {
+    public void MigrateAll(String BO) {
         //To change body of implemented methods use File | Settings | File Templates.
         log.info("Starting Migration of folder :" + path + "in jcr path :" + jcrpath );
         Session session = MigrationUtil.getSession();
+
+
+        Node rootNode = null;
+        try {
+            rootNode = session.getRootNode().getNode(jcrpath);
+
+
+        if (!rootNode.hasNode(jcrpath + "/" + BO))
+        {
+            rootNode.addNode(BO, "nt:unstructured");
+            session.save();
+        }
+
+        } catch (RepositoryException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        ;
+
 
         for(String fileName : MigrationUtil.getFileList(path))
         {
               log.info("Migrating file : " + fileName);
 
-              MigrationUtil.readBasisFile(path+"/"+fileName);
-              //Node rootNode = session.getRootNode().getNode(jcrpath);
-              session.save();
+                MigrationUtil.addBasisDocument(session, BO, path + "/" + fileName,jcrpath);
+
+
         }
         session.logout();
     }
 
     @Override
-    public void MigrateDocument(String fileName) throws Exception {
+    public void MigrateDocument(String BO,String fileName) throws Exception {
         //To change body of implemented methods use File | Settings | File Templates.
         log.info("Starting Migration of folder :" + path + "in jcr path :" + jcrpath );
         Session session = MigrationUtil.getSession();
 
         log.info("Migrating file : " + fileName);
-        MigrationUtil.readBasisFile(fileName);
+        //MigrationUtil.readBasisFile(fileName);
 
     }
 }

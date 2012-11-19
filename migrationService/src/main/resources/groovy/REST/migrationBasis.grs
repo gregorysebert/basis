@@ -11,18 +11,21 @@ import org.exoplatform.container.ExoContainerContext;
 import basis.migration.service.MigrationService;
 
 @Path("/MigrationService")
-public class Stat {
+public class MigrationRestService {
   @GET
-  @Path("migrateAll")
-  public String migrateAll() {
+  @Path("MigrateAll/{BO}")
+  public String MigrateAll(@PathParam("BO") String BO)
+  {
     MigrationService  migrationService =  (MigrationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(MigrationService);
-    migrationService.MigrateAll();
+    migrationService.MigrateAll(BO);
     return "<html><body>Migration done!</body></html>";
   }
-    @Path("/MigrateDocument/{fileName}")
-    public String MigrateDocument(@PathParam("fileName") String fileName) {
+
+   @GET
+   @Path("MigrateDocument/{BO}/{fileName}")
+   public String MigrateDocument(@PathParam("BO") String BO, @PathParam("fileName") String fileName) {
       MigrationService  migrationService =  (MigrationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(MigrationService);
-      migrationService.MigrateDocument(fileName);
+      migrationService.MigrateDocument(BO,fileName);
       return "<html><body>Migration of document: "+ fileName +" done!</body></html>";
-    }
+   }
   }

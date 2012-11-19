@@ -22,6 +22,16 @@ public class BasisDocument {
     private String docExternSenderZipCode;
     private String docExternSenderCity;
     private String docExternSenderCountry;
+    private Date sysDate;
+
+
+    public Date getSysDate() {
+        return sysDate;
+    }
+
+    public void setSysDate(Date sysDate) {
+        this.sysDate = sysDate;
+    }
 
     public String getDocType() {
         return docType;

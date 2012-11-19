@@ -15,19 +15,64 @@ import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.config.RepositoryConfigurationException;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.impl.core.SessionImpl;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 
+import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 
 public class MigrationUtil {
 
-    static final String repository = "repository" ;
-    static final String workspace = "collaboration";
+    private static final String repository = "repository" ;
+    private static final String workspace = "collaboration";
+    private static final SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+    private static final SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+    private static final SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
+    protected static Log log = ExoLogger.getLogger("basis.migration.service.MigrationServiceImpl");
+
+    /*ACCNUM
+    AFZEXP
+    ANSDAT
+    ANSWER
+    DESTIN
+    DIESER
+    DOCDAT
+    DOCNUM
+    DOSNUM
+    INSDAT
+    KEYWDS
+    KLANUM
+    MINREV
+    MINREVI
+    MINREVO
+    REVIS1
+    REVIS1O
+    SYSMOD
+    TOEACC
+    TYPDOC
+    ZAAAFF*/
+
+
+    private static final String doctype = "docType";
+    private static final String docRegistrationDate = "docRegistrationDate";
+    private static final String docDate = "docDate";
+    private static final String docReference = "docReference";
+    private static final String docKeywords = "docKeywords";
+    private static final String docInternSender = "docInternSender";
+    private static final String docExternSenderName = "docExternSenderName";
+    private static final String docExternSenderAdress = "docExternSenderAdress";
+    private static final String docExternSenderZipCode = "docExternSenderZipCode";
+    private static final String docExternSenderCity = "docExternSenderCity";
+    private static final String docExternSenderCountry = "docExternSenderCountry";
+    private static final String sysDate = "SYSDAT";
 
     public static Session getSession()
     {
@@ -60,10 +105,23 @@ public class MigrationUtil {
         return filesList;
     }
 
-    public static boolean addBasisDocument(Session session, String jcrBasisPath)
-    {
+    public static boolean addBasisDocument(Session session, String BO, String path, String jcrpath) {
+        HashMap<String, String>  mapDoc=  readBasisFile(path);
+        try {
 
-         return true;
+
+       BasisDocument  basisDoc =   getBasisDoc(mapDoc);
+
+       createDateFolder(basisDoc.getSysDate(),session,jcrpath + "/" + BO);
+
+       session.save();
+
+        } catch (RepositoryException e) {
+        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+
+        return true;
     }
 
     public static HashMap<String, String> readBasisFile(String path)
@@ -107,5 +165,40 @@ public class MigrationUtil {
     return dataBasis;
     }
 
+    public static void createDateFolder(Date date, Session session, String path) throws RepositoryException {
+        Node rootNode = session.getRootNode().getNode(path);
 
+
+        log.info("Check YEAR folder: "+ yearFormat.format(date));
+        if (!rootNode.hasNode(yearFormat.format(date)))
+        {
+            rootNode.addNode(yearFormat.format(date),"nt:unstructured");
+            session.save();
+        }
+
+        rootNode = session.getRootNode().getNode(path+"/"+yearFormat.format(date));
+
+        log.info("Check MONTH folder: "+ monthFormat.format(date));
+        if (!rootNode.hasNode(monthFormat.format(date)))
+        {
+            rootNode.addNode(monthFormat.format(date),"nt:unstructured");
+            session.save();
+        }
+
+        rootNode = session.getRootNode().getNode(path+"/"+yearFormat.format(date)+"/"+monthFormat.format(date));
+
+        log.info("Check DAY folder: "+ dayFormat.format(date));
+        if (!rootNode.hasNode(dayFormat.format(date)))
+        {
+            rootNode.addNode(dayFormat.format(date),"nt:unstructured");
+            session.save();
+        }
+    }
+
+    public static BasisDocument getBasisDoc(HashMap<String, String> docMap)
+    {
+        BasisDocument basisDoc= new BasisDocument();
+        basisDoc.setSysDate(new Date());
+        return basisDoc;
+    }
 }
