@@ -31,7 +31,7 @@ public class RenameDocumentInterceptor implements CmsScript {
 			String incre = "000";
             while (it.hasNext()) {
                 Node basisDocumentNode = (Node) it.next();
-                if ((!basisDocumentNode.getName().split("-")[0].equals("Suivi"))&&(basisDocumentNode.getName().split("-")[1].compareTo(incre) > 0)) {
+                if ((!basisDocumentNode.getName().split("-")[0].equals("FU"))&&(basisDocumentNode.getName().split("-")[1].compareTo(incre) > 0)) {
                 	incre = basisDocumentNode.getName().split("-")[1];
                 }
             }
@@ -43,10 +43,10 @@ public class RenameDocumentInterceptor implements CmsScript {
 			}
             else {
 	            incre = (String)(incre.substring(0, 2) + (char)(incre.charAt(2)+1));
-			}	
+			}
             session.move(nodePath, basisFolerNode.getPath() + "/" + basisFolerNode.getName() + "-" + incre);
 			srcNode.setProperty("exo:name", basisFolerNode.getName() + "-" + incre);
-            srcNode.setProperty("exo:title", basisFolerNode.getName() + "-" + incre);
+            srcNode.setProperty("exo:title", basisFolerNode.getProperty("exo:title").getString() + "-" + incre);
 			session.save();
 		} catch (Exception e) {
 			logger.warning("Error in RenameDocumentInterceptor script : " + e.getMessage());

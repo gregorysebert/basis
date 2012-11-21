@@ -6,54 +6,6 @@
             <supertype>nt:base</supertype>
         </supertypes>
         <propertyDefinitions>
-            <propertyDefinition name="basis:docType" requiredType="String" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition>
-            <propertyDefinition name="basis:docRegistrationDate" requiredType="Date" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition>
-            <propertyDefinition name="basis:docDate" requiredType="Date" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition>
-            <propertyDefinition name="basis:docReference" requiredType="String" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition>
-            <propertyDefinition name="basis:docKeywords" requiredType="String" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="true">
-                <valueConstraints/>
-            </propertyDefinition>
-            <propertyDefinition name="basis:docSenderType" requiredType="String" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition>
-            <propertyDefinition name="basis:docInternSender" requiredType="String" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition>
-            <propertyDefinition name="basis:docExternSenderName" requiredType="String" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition>
-            <propertyDefinition name="basis:docExternSenderAdress" requiredType="String" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition>
-            <propertyDefinition name="basis:docExternSenderZipCode" requiredType="String" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition>
-            <propertyDefinition name="basis:docExternSenderCity" requiredType="String" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition> 
-            <propertyDefinition name="basis:docExternSenderCountry" requiredType="String" autoCreated="false" mandatory="false"
-                                onParentVersion="COPY" protected="false" multiple="false">
-                <valueConstraints/>
-            </propertyDefinition>
             <propertyDefinition name="basis:folderLanguage" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
@@ -77,14 +29,11 @@
             <propertyDefinition name="basis:folderStatus" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
-            </propertyDefinition>                                                                 
-        </propertyDefinitions>
-    </nodeType>
-    <nodeType name="basis:basisDocument" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-        <supertypes>
-            <supertype>nt:base</supertype>
-        </supertypes>
-        <propertyDefinitions>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docInOut" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
             <propertyDefinition name="basis:docType" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
@@ -110,6 +59,101 @@
                 <valueConstraints/>
             </propertyDefinition>
             <propertyDefinition name="basis:docInternSender" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docPredefinedExternSender" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docExternSenderName" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docExternSenderAdress" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docExternSenderZipCode" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docExternSenderCity" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition> 
+            <propertyDefinition name="basis:docExternSenderCountry" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:followSendDate" requiredType="Date" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:followEditorType" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:followInternEditor" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:followExternEditor" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:followRequiredAction" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:followComments" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:followAnswerByDate" requiredType="Date" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>                                                                 
+        </propertyDefinitions>
+    </nodeType>
+    <nodeType name="basis:basisDocument" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+        <supertypes>
+            <supertype>nt:unstructured</supertype>
+        </supertypes>
+        <propertyDefinitions>
+        	<propertyDefinition name="basis:docInOut" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docType" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docRegistrationDate" requiredType="Date" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docDate" requiredType="Date" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docReference" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docKeywords" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="true">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docSenderType" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docInternSender" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docPredefinedExternSender" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
@@ -165,13 +209,6 @@
                 <valueConstraints/>
             </propertyDefinition>
         </propertyDefinitions>
-        <childNodeDefinitions>
-	        <childNodeDefinition name="*" defaultPrimaryType="basis:basisDocument" autoCreated="false" mandatory="false" onParentVersion="VERSION" protected="false" sameNameSiblings="false">
-	            <requiredPrimaryTypes>
-	              <requiredPrimaryType>basis:basisDocument</requiredPrimaryType>
-	            </requiredPrimaryTypes>
-	        </childNodeDefinition>
-    	</childNodeDefinitions>
     </nodeType>
     <nodeType name="basis:basisFollow" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
         <supertypes>
@@ -182,7 +219,15 @@
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:followEditor" requiredType="String" autoCreated="false" mandatory="false"
+            <propertyDefinition name="basis:followEditorType" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:followInternEditor" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:followExternEditor" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>

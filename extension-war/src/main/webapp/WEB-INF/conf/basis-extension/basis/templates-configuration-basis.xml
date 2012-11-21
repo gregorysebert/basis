@@ -178,7 +178,7 @@
                                             <boolean>true</boolean>
                                         </field>
                                         <field name="label">
-                                            <string>Basis Configuration</string>
+                                            <string>Basis Intro</string>
                                         </field>
                                         <field name="referencedView">
                                             <collection type="java.util.ArrayList">

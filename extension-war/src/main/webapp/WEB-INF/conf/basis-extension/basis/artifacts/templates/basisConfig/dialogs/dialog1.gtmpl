@@ -1,29 +1,84 @@
 <%
-	import javax.jcr.Node;
-	import org.exoplatform.webui.form.UIFormStringInput;
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
 	import org.exoplatform.webui.form.UIFormSelectBox;
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
-
-	Node dir=uicomponent.getCurrentNode();
-	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String todayS=sdf.format(new Date());
-	String folderName= dir.getName();
-	String text="";
 	private String getTimestampName() {
 		   Calendar now = Calendar.getInstance();
 		   SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd '-' hh'h'mm'm'ss");
 		   return formatter.format(now.getTime());
-		 }
+	}
 	String timestampName = getTimestampName();
 %>
 <% uicomponent.addInterceptor("ecm-explorer/interceptor/CreateFolderTreeInterceptor.groovy", "post");%>
+<style type="text/css">
+    .Search16x16Icon {
+        background: url('/ecmexplorer/skin/webui/component/explorer/../../../icons/16x16/DefaultSkin/SearchPage.gif') no-repeat left center;
+        width: 16px;
+        height: 16px;
+    }
+</style>
 
-<div class="UIForm FormLayout">
-	<% uiform.begin() %> 
-		<div class="HorizontalLayout">
+<%/*Begin UITabPane*/%>
+<div class="UITabPane">
+<%/*Begin TabPaneContent*/%>
+<div class="TabPaneContent"> 
+<%/*Begin WorkingArea*/%>
+<div class="WorkingAreaWithHelp">
+	<%/*Begin Tabs*/%>
+		  <div class="UIHorizontalTabs" style="margin-top:5px;">
+			<div class="LeftHorizontalTabs">
+				<div class="RightHorizontalTabs">
+					<div class="CenterHorizontalTabs">
+						<div class="TabsContainer">
+							<div class="UITab NormalTabStyle">
+							  <div class="SelectedTab">
+								<div class="LeftTab">
+								  <div class="RightTab">                
+									<div class="MiddleTab" id="Tab1" onClick="tempSelectedTab='Tab1';eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("basisFolder.label")%></div>
+								  </div>
+								</div>
+							  </div>
+							</div>
+							<div class="UITab NormalTabStyle">
+							  <div class="NormalTab">
+								<div class="LeftTab">
+								  <div class="RightTab">                
+									<div class="MiddleTab" id="Tab2" onClick="tempSelectedTab='Tab2';eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("basisDocument.label")%></div>
+								  </div>
+								</div>
+							  </div>
+							</div>       			
+							<div class="UITab NormalTabStyle">
+							  <div class="NormalTab">
+								<div class="LeftTab">
+								  <div class="RightTab">                
+									<div class="MiddleTab" id="Tab3" onClick="tempSelectedTab='Tab3';eXo.webui.UIHorizontalTabs.displayTabContent(this);"><%=_ctx.appRes("basisFollow.label")%></div>
+								  </div>
+								</div>
+							  </div>
+							</div>  
+						</div>
+					  </div>
+					</div>
+				</div>
+			</div>
+<script>
+	if(tempSelectedTab) 
+	{
+		var selectedTab = document.getElementById(tempSelectedTab);
+		eXo.webui.UIHorizontalTabs.displayTabContent(selectedTab);
+	}
+</script>
+<%/*End UIHorizontalTabs*/%>
+<%/*Start UITabContentContainer*/%>
+<% uiform.begin() %> 
+<div class="HorizontalLayout">	  
+	<div class="UITabContentContainer">
+		<div class="UITabContent" style="display: block;" >
 			<table class="UIFormGrid">
 			    <tr style="display:none;">
 		          <td class="FieldComponent">
@@ -88,6 +143,20 @@
 				        %>
 				    </td>
 				</tr>
+			</table>
+		</div> 
+					
+		<div class="UITabContent" style="display: none;" >
+			<table class="UIFormGrid">	
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docInOut")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] docInOutField = ["jcrPath=/node/basis:docInOut", "options=In,Out", "onchange=false"];
+				        uicomponent.addSelectBoxField("docInOut", docInOutField);
+				        %>
+				    </td>
+				</tr>
 				<tr>
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docType")%></td>
 				    <td class="FieldComponent" colspan="6">
@@ -137,7 +206,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docSenderType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docSenderTypeField = ["jcrPath=/node/basis:docSenderType", "options=intern,extern", "onchange=true"];
+				        String[] docSenderTypeField = ["jcrPath=/node/basis:docSenderType", "options=intern,predefined extern,extern", "onchange=true"];
 				        uicomponent.addSelectBoxField("docSenderType", docSenderTypeField);
 				        %>
 				    </td>
@@ -155,7 +224,19 @@
 			          	%>
 			        </td>
 			    </tr>
-			    <% } else {%>
+			    <% } 
+				else if(docSenderTypeSelectBox.getValue().equals("predefined extern")){
+				%>	
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "options=predefinedExternSender1,predefinedExternSender2,predefinedExternSender3", "onchange=false"];
+				        uicomponent.addSelectBoxField("docPredefinedExternSender", docPredefinedExternSenderField);
+				        %>
+				    </td>
+				</tr>	
+				<%} else {%>
 				<tr>
 					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%></td>
 					<td class="FieldComponent">
@@ -231,8 +312,83 @@
 				        %>
 				    </td>
 				</tr>
-			   <% } %>					 																				
+			   <% } %>
 			</table>
+		</div>
+		<div class="UITabContent" style="display: none;" >
+			<table class="UIFormGrid">  
+			   	<tr style="display:none;">
+					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followSendDate")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] followSendDateField = ["jcrPath=/node/basis:followSendDate", ("defaultValues="+todayS)];
+						uicomponent.addCalendarField("followSendDate", followSendDateField);
+						%>
+					</td>
+				</tr>
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followEditorType")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] followEditorTypeField = ["jcrPath=/node/basis:followEditorType", "options=intern,extern", "onchange=true"];
+				        uicomponent.addSelectBoxField("followEditorType", followEditorTypeField);
+				        %>
+				    </td>
+				</tr>
+				<%
+				UIFormSelectBox followEditorTypeSelectBox = uicomponent.findComponentById("followEditorType");
+				if(followEditorTypeSelectBox.getValue().equals("intern")){
+				%>
+			    <tr>
+			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followInternEditor")%></td>
+			        <td class="FieldComponent">
+			          	<%
+			          	 String[] followInternEditorField = ["jcrPath=/node/basis:followInternEditor", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			           	uicomponent.addActionField("followInternEditor", followInternEditorField);
+			          	%>
+			        </td>
+			    </tr>
+			    <%} else {%>
+			    <tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "options=externEditor1,externEditor2,externEditor3", "onchange=false"];
+				        uicomponent.addSelectBoxField("followExternEditor", followExternEditorField);
+				        %>
+				    </td>
+				</tr>	
+				<% } %> 
+			    <tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "options=action1,action2,action3", "onchange=false"];
+				        uicomponent.addSelectBoxField("followRequiredAction", followRequiredActionField);
+				        %>
+				    </td>
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followComments")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] followCommentsField = ["jcrPath=/node/basis:followComments"];
+						uicomponent.addTextAreaField("followComments", followCommentsField);;
+						%>
+					</td>
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followAnswerByDate")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] followAnswerByDateField = ["jcrPath=/node/basis:followAnswerByDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];
+						uicomponent.addCalendarField("followAnswerByDate", followAnswerByDateField);
+						%>
+					</td>
+				</tr>				 																				
+			</table>
+		</div>
+	</div>		
 	<div class="UIAction"> 
 					<table class="ActionContainer">
 						<tr>
@@ -254,8 +410,13 @@
 						</td>
 					  </tr>
 					</table>
-				  </div>
+	</div>
 				<%/*end render action*/%>    
-		</div>
-	<%uiform.end()%>
 </div>
+<%uiform.end()%>
+</div>  
+<%/*End WorkingArea*/%>
+</div>  
+<%/*End TabPaneContent*/%>
+</div>  
+<%/*End UITabPane*/%>

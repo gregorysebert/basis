@@ -1,22 +1,14 @@
 <%
-	import javax.jcr.Node;
-	import org.exoplatform.webui.form.UIFormStringInput;
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
 	import org.exoplatform.webui.form.UIFormSelectBox;
-	def rcontext = _ctx.getRequestContext() ;
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
-
-	Node dir=uicomponent.getCurrentNode();
-	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String todayS=sdf.format(new Date());
-	String folderName= dir.getName();
-	String text="";
 	private String getTimestampName() {
 		   Calendar now = Calendar.getInstance();
 		   SimpleDateFormat formatter = new SimpleDateFormat("hh'h'mm'm'ss'.00000000'");
 		   return formatter.format(now.getTime());
-		 }
+	}
 	String timestampName = getTimestampName();
 %>
 
@@ -47,8 +39,10 @@
 					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderRegistrationDate")%></td>
 					<td class="FieldComponent">
 						<%
+						if(!uicomponent.isEditing()) {
 						String[] folderRegistrationDateField = ["jcrPath=/node/basis:folderRegistrationDate", ("defaultValues="+todayS)];
 						uicomponent.addCalendarField("folderRegistrationDate", folderRegistrationDateField);
+						}
 						%>
 					</td>
 				</tr>

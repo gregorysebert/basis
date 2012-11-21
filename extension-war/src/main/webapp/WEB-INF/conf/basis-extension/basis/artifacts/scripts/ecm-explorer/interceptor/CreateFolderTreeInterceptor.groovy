@@ -10,8 +10,9 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 
     private final String BO_ROOT_PATH = "Files/BO/";
 	private final String FOLDER_NODETYPE = "nt:unstructured";
-	private final String BASIS_DOCUMENT_NODETYPE = "basis:basisDocument";
 	private final String BASIS_FOLDER_NODETYPE = "basis:basisFolder";
+	private final String BASIS_DOCUMENT_NODETYPE = "basis:basisDocument";
+	private final String BASIS_FOLLOW_NODETYPE = "basis:basisFollow";
 	private static Logger logger = Logger.getLogger("CreateFolderTreeInterceptor");
 	private RepositoryService repositoryService_;
 
@@ -53,7 +54,6 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			}
 			//Add basis folder
 			Node parentNode = nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1] + "/" + alist[0]);
-			
 			NodeIterator it = parentNode.getNodes();
 			Node basisFolderNode;
 			String incre = "";
@@ -93,8 +93,8 @@ public class CreateFolderTreeInterceptor implements CmsScript {
                 incre = "00000000";
             }
             basisFolderNode = parentNode.addNode(BOName + "." + incre, BASIS_FOLDER_NODETYPE);
-            basisFolderNode.setProperty("exo:title", BOName + "." + incre.substring(0, 2) + "." + incre.substring(2, 5) + "." + incre.substring(5));
-            
+            String basisFolderNodeTitle = BOName + "." + incre.substring(0, 2) + "." + incre.substring(2, 5) + "." + incre.substring(5);
+            basisFolderNode.setProperty("exo:title", basisFolderNodeTitle);
 			if (srcNode.hasProperty("basis:folderLanguage")) {
 			basisFolderNode.setProperty("basis:folderLanguage", srcNode.getProperty("basis:folderLanguage").getString());
 			}
@@ -113,9 +113,13 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			if (srcNode.hasProperty("basis:folderStatus")) {
 			basisFolderNode.setProperty("basis:folderStatus", srcNode.getProperty("basis:folderStatus").getString());
 			}
+			
 			//Add basis document
 			Node basisDocumentNode = basisFolderNode.addNode(basisFolderNode.getName() + "-000", BASIS_DOCUMENT_NODETYPE);
-
+			basisDocumentNode.setProperty("exo:title", basisFolderNodeTitle + "-000");
+			if (srcNode.hasProperty("basis:docInOut")) {
+			basisDocumentNode.setProperty("basis:docInOut", srcNode.getProperty("basis:docInOut").getString());
+			}
 			if (srcNode.hasProperty("basis:docType")) {
 			basisDocumentNode.setProperty("basis:docType", srcNode.getProperty("basis:docType").getString());
 			}
@@ -136,6 +140,9 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			}
 			if (srcNode.hasProperty("basis:docInternSender")) {
 			basisDocumentNode.setProperty("basis:docInternSender", srcNode.getProperty("basis:docInternSender").getString());
+			}
+			if (srcNode.hasProperty("basis:docPredefinedExternSender")) {
+			basisDocumentNode.setProperty("basis:docPredefinedExternSender", srcNode.getProperty("basis:docPredefinedExternSender").getString());
 			}	
 			if (srcNode.hasProperty("basis:docExternSenderName")) {
 			basisDocumentNode.setProperty("basis:docExternSenderName", srcNode.getProperty("basis:docExternSenderName").getString());
@@ -151,7 +158,32 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			}	
 			if (srcNode.hasProperty("basis:docExternSenderCountry")) {
 			basisDocumentNode.setProperty("basis:docExternSenderCountry", srcNode.getProperty("basis:docExternSenderCountry").getString());
+			}
+			
+			//Add basis follow
+			Node basisFollowNode = basisFolderNode.addNode("FU" + "-000", BASIS_FOLLOW_NODETYPE);
+			if (srcNode.hasProperty("basis:followSendDate")) {
+			basisFollowNode.setProperty("basis:followSendDate", srcNode.getProperty("basis:followSendDate").getDate());
+			}
+			if (srcNode.hasProperty("basis:followEditorType")) {
+			basisFollowNode.setProperty("basis:followEditorType", srcNode.getProperty("basis:followEditorType").getString());
+			}
+			if (srcNode.hasProperty("basis:followInternEditor")) {
+			basisFollowNode.setProperty("basis:followInternEditor", srcNode.getProperty("basis:followInternEditor").getString());
+			}
+			if (srcNode.hasProperty("basis:followExternEditor")) {
+			basisFollowNode.setProperty("basis:followExternEditor", srcNode.getProperty("basis:followExternEditor").getValues());
+			}
+			if (srcNode.hasProperty("basis:followRequiredAction")) {
+			basisFollowNode.setProperty("basis:followRequiredAction", srcNode.getProperty("basis:followRequiredAction").getString());
+			}
+			if (srcNode.hasProperty("basis:followComments")) {
+			basisFollowNode.setProperty("basis:followComments", srcNode.getProperty("basis:followComments").getString());
+			}
+			if (srcNode.hasProperty("basis:followAnswerByDate")) {
+			basisFollowNode.setProperty("basis:followAnswerByDate", srcNode.getProperty("basis:followAnswerByDate").getDate());
 			}	
+				
 			srcNode.remove();
 			session.save();
 		} catch (Exception e) {

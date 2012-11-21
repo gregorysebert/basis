@@ -33,7 +33,7 @@
                                             <string>BO</string>
                                         </field>
                                         <field name="parentId">
-                                            <string>/BO</string>
+                                            <string></string>
                                         </field>
                                         <field name="description">
                                             <string>the /BO group</string>

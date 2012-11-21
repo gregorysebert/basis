@@ -19,6 +19,19 @@ import javax.jcr.Value;
 					<td class="FieldComponent">${name}</td>
 				</tr>
 				<%
+				 if (node.hasProperty("basis:docInOut")) {
+					 valueDisplay = node.getProperty("basis:docInOut").getString();
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docInOut")%>:</td>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					 }
+				 }
+				%>
+				<%
 				 if (node.hasProperty("basis:docType")) {
 					 valueDisplay = node.getProperty("basis:docType").getString();
 					 if (!valueDisplay.equals("")){
@@ -97,6 +110,19 @@ import javax.jcr.Value;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docInternSender")%>:</td>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+				<%
+				 if (node.hasProperty("basis:docPredefinedExternSender")) {
+					 valueDisplay = node.getProperty("basis:docPredefinedExternSender").getString();
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%>:</td>
 					<td class="FieldComponent">${valueDisplay}</td>
 				</tr>
 				<%

@@ -1,25 +1,21 @@
 <%
-	import javax.jcr.Node;
-	import org.exoplatform.webui.form.UIFormStringInput;
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
 	import org.exoplatform.webui.form.UIFormSelectBox;
-	def rcontext = _ctx.getRequestContext() ;
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
-
-	Node dir=uicomponent.getCurrentNode();
 	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     String todayS=sdf.format(new Date());
-	String folderName= dir.getName();
-	String text="";
 	private String getTimestampName() {
 		   Calendar now = Calendar.getInstance();
 		   SimpleDateFormat formatter = new SimpleDateFormat("hh'h'mm'm'ss'-000'");
 		   return formatter.format(now.getTime());
-		 }
+	}
 	String timestampName = getTimestampName();
 %>
-<% uicomponent.addInterceptor("ecm-explorer/interceptor/RenameFollowInterceptor.groovy", "post");%>
+<% 
+if(!uicomponent.isEditing()) {
+uicomponent.addInterceptor("ecm-explorer/interceptor/RenameFollowInterceptor.groovy", "post");
+}
+%>
 <div class="UIForm FormLayout">
 	<% uiform.begin() %> 
 		<div class="HorizontalLayout">
@@ -42,15 +38,39 @@
 						%>
 					</td>
 				</tr>
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followEditorType")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] followEditorTypeField = ["jcrPath=/node/basis:followEditorType", "options=intern,extern", "onchange=true"];
+				        uicomponent.addSelectBoxField("followEditorType", followEditorTypeField);
+				        %>
+				    </td>
+				</tr>
+				<%
+				UIFormSelectBox followEditorTypeSelectBox = uicomponent.findComponentById("followEditorType");
+				if(followEditorTypeSelectBox.getValue().equals("intern")){
+				%>
 			    <tr>
-			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followEditor")%></td>
+			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followInternEditor")%></td>
 			        <td class="FieldComponent">
 			          	<%
-			          	 String[] followEditorField = ["jcrPath=/node/basis:followEditor", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
-			           	uicomponent.addActionField("followEditor", followEditorField);
+			          	 String[] followInternEditorField = ["jcrPath=/node/basis:followInternEditor", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			           	uicomponent.addActionField("followInternEditor", followInternEditorField);
 			          	%>
 			        </td>
 			    </tr>
+			    <%} else {%>
+			    <tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "options=externEditor1,externEditor2,externEditor3", "onchange=false"];
+				        uicomponent.addSelectBoxField("followExternEditor", followExternEditorField);
+				        %>
+				    </td>
+				</tr>	
+				<% } %> 
 			    <tr>
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
 				    <td class="FieldComponent" colspan="6">

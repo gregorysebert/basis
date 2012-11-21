@@ -7,7 +7,7 @@ import javax.jcr.Session;
 import org.exoplatform.services.jcr.RepositoryService;
 
 public class RenameDocumentInterceptor implements CmsScript {
-	private static Logger logger = Logger.getLogger("RenameDocumentInterceptor");
+	private static Logger logger = Logger.getLogger("RenameFollowInterceptor");
 	private RepositoryService repositoryService_;
 
 	public RenameDocumentInterceptor(RepositoryService repositoryService) {
@@ -31,7 +31,7 @@ public class RenameDocumentInterceptor implements CmsScript {
 			String incre = "";
             while (it.hasNext()) {
                 Node basisFollowNode = (Node) it.next();
-                if ((basisFollowNode.getName().split("-")[0].equals("Suivi"))&&(basisFollowNode.getName().split("-")[1].compareTo(incre) > 0)) {
+                if ((basisFollowNode.getName().split("-")[0].equals("FU"))&&(basisFollowNode.getName().split("-")[1].compareTo(incre) > 0)) {
                 	incre = basisFollowNode.getName().split("-")[1];
                 }
             }
@@ -49,9 +49,9 @@ public class RenameDocumentInterceptor implements CmsScript {
 			else {
                 incre = "000";
             }		
-            session.move(nodePath, basisFolerNode.getPath() + "/" + "Suivi-" + incre);
-			srcNode.setProperty("exo:name", "Suivi-" + incre);
-            srcNode.setProperty("exo:title", "Suivi-" + incre);
+            session.move(nodePath, basisFolerNode.getPath() + "/" + "FU-" + incre);
+			srcNode.setProperty("exo:name", "FU-" + incre);
+            srcNode.setProperty("exo:title", "FU-" + incre);
 			session.save();
 		} catch (Exception e) {
 			logger.warning("Error in RenameDocumentInterceptor script : " + e.getMessage());

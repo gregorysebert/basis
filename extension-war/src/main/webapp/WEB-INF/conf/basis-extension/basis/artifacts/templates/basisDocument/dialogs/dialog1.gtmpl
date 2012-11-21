@@ -1,25 +1,21 @@
 <%
-	import javax.jcr.Node;
-	import org.exoplatform.webui.form.UIFormStringInput;
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
 	import org.exoplatform.webui.form.UIFormSelectBox;
-	def rcontext = _ctx.getRequestContext() ;
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
-
-	Node dir=uicomponent.getCurrentNode();
-	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String todayS=sdf.format(new Date());
-	String folderName= dir.getName();
-	String text="";
 	private String getTimestampName() {
 		   Calendar now = Calendar.getInstance();
 		   SimpleDateFormat formatter = new SimpleDateFormat("hh'h'mm'm'ss'-000'");
 		   return formatter.format(now.getTime());
-		 }
+	}
 	String timestampName = getTimestampName();
 %>
-<% uicomponent.addInterceptor("ecm-explorer/interceptor/RenameDocumentInterceptor.groovy", "post");%>
+<% 
+if(!uicomponent.isEditing()) {
+uicomponent.addInterceptor("ecm-explorer/interceptor/RenameDocumentInterceptor.groovy", "post");
+}
+%>
 <div class="UIForm FormLayout">
 	<% uiform.begin() %> 
 		<div class="HorizontalLayout">
@@ -34,6 +30,15 @@
 		            %></div>
 		          </td>
         		</tr>
+        		<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docInOut")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] docInOutField = ["jcrPath=/node/basis:docInOut", "options=In,Out", "onchange=false"];
+				        uicomponent.addSelectBoxField("docInOut", docInOutField);
+				        %>
+				    </td>
+				</tr>
 				<tr>
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docType")%></td>
 				    <td class="FieldComponent" colspan="6">
@@ -47,8 +52,10 @@
 					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docRegistrationDate")%></td>
 					<td class="FieldComponent">
 						<%
+						if(!uicomponent.isEditing()) {
 						String[] docRegistrationDateField = ["jcrPath=/node/basis:docRegistrationDate", ("defaultValues="+todayS)];
 						uicomponent.addCalendarField("docRegistrationDate", docRegistrationDateField);
+						}
 						%>
 					</td>
 				</tr>
@@ -83,7 +90,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docSenderType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docSenderTypeField = ["jcrPath=/node/basis:docSenderType", "options=intern,extern", "onchange=true"];
+				        String[] docSenderTypeField = ["jcrPath=/node/basis:docSenderType", "options=intern,predefined extern,extern", "onchange=true"];
 				        uicomponent.addSelectBoxField("docSenderType", docSenderTypeField);
 				        %>
 				    </td>
@@ -101,7 +108,19 @@
 			          	%>
 			        </td>
 			    </tr>
-			    <% } else {%>
+			    <% } 
+				else if(docSenderTypeSelectBox.getValue().equals("predefined extern")){
+				%>	
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "options=predefinedExternSender1,predefinedExternSender2,predefinedExternSender3", "onchange=false"];
+				        uicomponent.addSelectBoxField("docPredefinedExternSender", docPredefinedExternSenderField);
+				        %>
+				    </td>
+				</tr>	
+				<%} else {%>
 				<tr>
 					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%></td>
 					<td class="FieldComponent">
