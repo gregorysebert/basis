@@ -168,11 +168,14 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			if (srcNode.hasProperty("basis:followEditorType")) {
 			basisFollowNode.setProperty("basis:followEditorType", srcNode.getProperty("basis:followEditorType").getString());
 			}
-			if (srcNode.hasProperty("basis:followInternEditor")) {
-			basisFollowNode.setProperty("basis:followInternEditor", srcNode.getProperty("basis:followInternEditor").getString());
+			if (srcNode.hasProperty("basis:followUserInternEditor")) {
+			basisFollowNode.setProperty("basis:followUserInternEditor", srcNode.getProperty("basis:followUserInternEditor").getString());
+			}
+			if (srcNode.hasProperty("basis:followGroupInternEditor")) {
+			basisFollowNode.setProperty("basis:followGroupInternEditor", srcNode.getProperty("basis:followGroupInternEditor").getString());
 			}
 			if (srcNode.hasProperty("basis:followExternEditor")) {
-			basisFollowNode.setProperty("basis:followExternEditor", srcNode.getProperty("basis:followExternEditor").getValues());
+			basisFollowNode.setProperty("basis:followExternEditor", srcNode.getProperty("basis:followExternEditor").getString());
 			}
 			if (srcNode.hasProperty("basis:followRequiredAction")) {
 			basisFollowNode.setProperty("basis:followRequiredAction", srcNode.getProperty("basis:followRequiredAction").getString());

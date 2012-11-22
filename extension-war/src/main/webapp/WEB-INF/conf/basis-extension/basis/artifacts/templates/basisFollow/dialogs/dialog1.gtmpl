@@ -42,25 +42,37 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/RenameFollowInterceptor.gro
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followEditorType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followEditorTypeField = ["jcrPath=/node/basis:followEditorType", "options=intern,extern", "onchange=true"];
+				        String[] followEditorTypeField = ["jcrPath=/node/basis:followEditorType", "options=intern user, intern group, extern", "onchange=true"];
 				        uicomponent.addSelectBoxField("followEditorType", followEditorTypeField);
 				        %>
 				    </td>
 				</tr>
 				<%
 				UIFormSelectBox followEditorTypeSelectBox = uicomponent.findComponentById("followEditorType");
-				if(followEditorTypeSelectBox.getValue().equals("intern")){
+				if(followEditorTypeSelectBox.getValue().equals("intern user")){
 				%>
 			    <tr>
-			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followInternEditor")%></td>
+			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
 			        <td class="FieldComponent">
 			          	<%
-			          	 String[] followInternEditorField = ["jcrPath=/node/basis:followInternEditor", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
-			           	uicomponent.addActionField("followInternEditor", followInternEditorField);
+			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			           	uicomponent.addActionField("followUserInternEditor", followUserInternEditorField);
 			          	%>
 			        </td>
 			    </tr>
-			    <%} else {%>
+			    <% } 
+				else if(followEditorTypeSelectBox.getValue().equals("intern group")){
+				%>	
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "options=internGroup1,internGroup2,internGroup3", "onchange=false"];
+				        uicomponent.addSelectBoxField("followGroupInternEditor", followGroupInternEditorField);
+				        %>
+				    </td>
+				</tr>	
+				<%} else {%>
 			    <tr>
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
@@ -99,29 +111,29 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/RenameFollowInterceptor.gro
 					</td>
 				</tr>
 			</table>
-	<div class="UIAction"> 
-					<table class="ActionContainer">
-						<tr>
-							<td>
-						  <% for(action in uicomponent.getActions()) { 
-								 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
-										 String link = uicomponent.event(action) ;
-						  %>
-							<div onclick="$link" class="ActionButton LightBlueStyle">
-								<div class="ButtonLeft">
-									<div class="ButtonRight">
-										<div class="ButtonMiddle">
-											<a href="javascript:void(0);">$actionLabel</a>
+			<div class="UIAction"> 
+							<table class="ActionContainer">
+								<tr>
+									<td>
+								  <% for(action in uicomponent.getActions()) { 
+										 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+										 String link = uicomponent.event(action);
+								  %>
+									<div onclick="$link" class="ActionButton LightBlueStyle">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle">
+													<a href="javascript:void(0);">$actionLabel</a>
+												</div>
+											</div>
 										</div>
 									</div>
-								</div>
-							</div>
-						<%}%>          
-						</td>
-					  </tr>
-					</table>
-				  </div>
-				<%/*end render action*/%>    
-		</div>
+								<%}%>          
+								</td>
+							  </tr>
+							</table>
+			</div>
+			<%/*end render action*/%>
+  		</div>
 	<%uiform.end()%>
 </div>

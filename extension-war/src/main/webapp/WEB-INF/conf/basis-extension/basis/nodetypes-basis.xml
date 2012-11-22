@@ -94,7 +94,11 @@
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:followInternEditor" requiredType="String" autoCreated="false" mandatory="false"
+            <propertyDefinition name="basis:followUserInternEditor" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:followGroupInternEditor" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
@@ -223,7 +227,11 @@
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:followInternEditor" requiredType="String" autoCreated="false" mandatory="false"
+            <propertyDefinition name="basis:followUserInternEditor" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:followGroupInternEditor" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>

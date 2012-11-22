@@ -2,6 +2,7 @@
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
 	import org.exoplatform.webui.form.UIFormSelectBox;
+	import org.exoplatform.webui.form.UIFormStringInput;
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String todayS=sdf.format(new Date());
 	private String getTimestampName() {
@@ -11,6 +12,45 @@
 	}
 	String timestampName = getTimestampName();
 %>
+
+<script type="text/javascript">	
+	function saveRNN(source,destination)
+	{
+		var inputFolderRNN = document.getElementById(source);
+		var folderRNN = document.getElementById(destination);
+		if((inputFolderRNN != null)&&(folderRNN!=null)){
+			folderRNN.value=inputFolderRNN.value;
+		}
+	}
+
+	function checkFieldRNN(source,destination,link)
+	{
+		var field = document.getElementById(source);
+		saveRNN(source,destination);
+		if((field!= null)&&(field.value!='')){
+            var str2 = field.value.replace(/[^0-9]/g, "");
+            if(97-((parseInt(str2.substring(0, str2.length-2), 10) % 97)) != (parseInt(str2.substring(str2.length-2, str2.length), 10))){
+                field.focus();
+                alert('RNN is not Valid!');
+            }
+            else
+            {
+                if (str2.length == 11){
+                    field.value = str2.substring(0, 2) + '.' + str2.substring(2, 4) + '.' + str2.substring(4, 6) + '-' + str2.substring(6, 9) + '.' + str2.substring(9, 11);
+                    saveRNN(source,destination);
+					eval(link);
+                }
+                else{
+                    field.focus();
+                    alert('RNN is not Valid!');
+                }
+            }
+		}
+		else {
+		eval(link);
+		}
+	}
+</script>
 
 <div class="UIForm FormLayout">
 	<% uiform.begin() %> 
@@ -58,10 +98,21 @@
 				<tr>
 					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderRNN")%></td>
 					<td class="FieldComponent">
+					    <div style="display:none;">
+							<%
+							String[] folderRNNField = ["jcrPath=/node/basis:folderRNN"];
+							uicomponent.addTextField("folderRNN", folderRNNField);
+							%>
+						</div>
 						<%
-						String[] folderRNNField = ["jcrPath=/node/basis:folderRNN"];
-						uicomponent.addTextField("folderRNN", folderRNNField);
+						UIFormStringInput folderRNNFieldStringInput = uicomponent.findComponentById("folderRNN");
+						String folderRNNVal ="''"; 
+						if (folderRNNFieldStringInput.getValue()!=null)
+						{
+						folderRNNVal = folderRNNFieldStringInput.getValue(); 
+						}
 						%>
+						<input id="inputfolderRNN" type="text" name="inputfolderRNN"  value=<%=folderRNNVal%> onchange="javascript:checkFieldRNN('inputfolderRNN','folderRNN','')">
 					</td>
 				</tr>
 				<tr>
@@ -83,29 +134,43 @@
 				    </td>
 				</tr>
 			</table>
-	<div class="UIAction"> 
+			<div class="UIAction"> 
 					<table class="ActionContainer">
 						<tr>
 							<td>
 						  <% for(action in uicomponent.getActions()) { 
-								 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
-										 String link = uicomponent.event(action) ;
-						  %>
-							<div onclick="$link" class="ActionButton LightBlueStyle">
-								<div class="ButtonLeft">
-									<div class="ButtonRight">
-										<div class="ButtonMiddle">
-											<a href="javascript:void(0);">$actionLabel</a>
+								 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+								 String link = uicomponent.event(action);
+								 if (!action.equals("Close")) {
+								 link=link.replace("'", "\\'");
+								  %>
+								    <a href="javascript:checkFieldRNN('inputfolderRNN','folderRNN','$link')" class="ActionButton LightBlueStyle">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle">
+													$actionLabel
+												</div>
+											</div>
 										</div>
-									</div>
-								</div>
-							</div>
-						<%}%>          
+									</a>
+									
+								<%} else {%>
+									<div onclick="$link" class="ActionButton LightBlueStyle">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle">
+													<a href="javascript:void(0);">$actionLabel</a>
+												</div>
+											</div>
+										</div>
+									</div> 
+								 <%}
+							}%>          
 						</td>
 					  </tr>
 					</table>
-				  </div>
-				<%/*end render action*/%>    
+			</div>
+		    <%/*end render action*/%>    
 		</div>
 	<%uiform.end()%>
 </div>

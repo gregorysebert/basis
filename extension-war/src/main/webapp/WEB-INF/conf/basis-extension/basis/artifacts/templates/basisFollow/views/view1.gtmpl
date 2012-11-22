@@ -28,12 +28,25 @@ import javax.jcr.Value;
 				 }	 
 				%>
 				<%
-				 if (node.hasProperty("basis:followInternEditor")) {
-					 valueDisplay = node.getProperty("basis:followInternEditor").getString();
+				 if (node.hasProperty("basis:followUserInternEditor")) {
+					 valueDisplay = node.getProperty("basis:followUserInternEditor").getString();
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFollow.label.followInternEditor")%>:</td>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%>:</td>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+				<%
+				 if (node.hasProperty("basis:followGroupInternEditor")) {
+					 valueDisplay = node.getProperty("basis:followGroupInternEditor").getString();
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%>:</td>
 					<td class="FieldComponent">${valueDisplay}</td>
 				</tr>
 				<%

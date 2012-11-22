@@ -2,6 +2,7 @@
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
 	import org.exoplatform.webui.form.UIFormSelectBox;
+	import org.exoplatform.webui.form.UIFormStringInput;
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -14,6 +15,7 @@
 	String timestampName = getTimestampName();
 %>
 <% uicomponent.addInterceptor("ecm-explorer/interceptor/CreateFolderTreeInterceptor.groovy", "post");%>
+
 <style type="text/css">
     .Search16x16Icon {
         background: url('/ecmexplorer/skin/webui/component/explorer/../../../icons/16x16/DefaultSkin/SearchPage.gif') no-repeat left center;
@@ -22,6 +24,45 @@
     }
 </style>
 
+<script type="text/javascript">	
+	function saveRNN(source,destination)
+	{
+		var inputFolderRNN = document.getElementById(source);
+		var folderRNN = document.getElementById(destination);
+		if((inputFolderRNN != null)&&(folderRNN!=null)){
+			folderRNN.value=inputFolderRNN.value;
+		}
+	}
+
+	function checkFieldRNN(source,destination,link)
+	{
+		var field = document.getElementById(source);
+		saveRNN(source,destination);
+		if((field!= null)&&(field.value!='')){
+            var str2 = field.value.replace(/[^0-9]/g, "");
+            if(97-((parseInt(str2.substring(0, str2.length-2), 10) % 97)) != (parseInt(str2.substring(str2.length-2, str2.length), 10))){
+                field.focus();
+                alert('RNN is not Valid!');
+            }
+            else
+            {
+                if (str2.length == 11){
+                    field.value = str2.substring(0, 2) + '.' + str2.substring(2, 4) + '.' + str2.substring(4, 6) + '-' + str2.substring(6, 9) + '.' + str2.substring(9, 11);
+                    saveRNN(source,destination);
+					eval(link);
+                }
+                else{
+                    field.focus();
+                    alert('RNN is not Valid!');
+                }
+            }
+		}
+		else {
+		eval(link);
+		}
+	}
+</script>
+	
 <%/*Begin UITabPane*/%>
 <div class="UITabPane">
 <%/*Begin TabPaneContent*/%>
@@ -119,10 +160,21 @@
 				<tr>
 					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderRNN")%></td>
 					<td class="FieldComponent">
+					    <div style="display:none;">
+							<%
+							String[] folderRNNField = ["jcrPath=/node/basis:folderRNN"];
+							uicomponent.addTextField("folderRNN", folderRNNField);
+							%>
+						</div>
 						<%
-						String[] folderRNNField = ["jcrPath=/node/basis:folderRNN"];
-						uicomponent.addTextField("folderRNN", folderRNNField);
+						UIFormStringInput folderRNNFieldStringInput = uicomponent.findComponentById("folderRNN");
+						String folderRNNVal ="''"; 
+						if (folderRNNFieldStringInput.getValue()!=null)
+						{
+						folderRNNVal = folderRNNFieldStringInput.getValue(); 
+						}
 						%>
+						<input id="inputfolderRNN" type="text" name="inputfolderRNN"  value=<%=folderRNNVal%> onchange="javascript:checkFieldRNN('inputfolderRNN','folderRNN','')">
 					</td>
 				</tr>
 				<tr>
@@ -330,25 +382,37 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followEditorType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followEditorTypeField = ["jcrPath=/node/basis:followEditorType", "options=intern,extern", "onchange=true"];
+				        String[] followEditorTypeField = ["jcrPath=/node/basis:followEditorType", "options=intern user, intern group, extern", "onchange=true"];
 				        uicomponent.addSelectBoxField("followEditorType", followEditorTypeField);
 				        %>
 				    </td>
 				</tr>
 				<%
 				UIFormSelectBox followEditorTypeSelectBox = uicomponent.findComponentById("followEditorType");
-				if(followEditorTypeSelectBox.getValue().equals("intern")){
+				if(followEditorTypeSelectBox.getValue().equals("intern user")){
 				%>
 			    <tr>
-			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followInternEditor")%></td>
+			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
 			        <td class="FieldComponent">
 			          	<%
-			          	 String[] followInternEditorField = ["jcrPath=/node/basis:followInternEditor", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
-			           	uicomponent.addActionField("followInternEditor", followInternEditorField);
+			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			           	uicomponent.addActionField("followUserInternEditor", followUserInternEditorField);
 			          	%>
 			        </td>
 			    </tr>
-			    <%} else {%>
+			    <% } 
+				else if(followEditorTypeSelectBox.getValue().equals("intern group")){
+				%>	
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "options=internGroup1,internGroup2,internGroup3", "onchange=false"];
+				        uicomponent.addSelectBoxField("followGroupInternEditor", followGroupInternEditorField);
+				        %>
+				    </td>
+				</tr>	
+				<%} else {%>
 			    <tr>
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
@@ -358,7 +422,7 @@
 				        %>
 				    </td>
 				</tr>	
-				<% } %> 
+				<% } %>
 			    <tr>
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
 				    <td class="FieldComponent" colspan="6">
@@ -394,24 +458,38 @@
 						<tr>
 							<td>
 						  <% for(action in uicomponent.getActions()) { 
-								 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) ;
-										 String link = uicomponent.event(action) ;
-						  %>
-							<div onclick="$link" class="ActionButton LightBlueStyle">
-								<div class="ButtonLeft">
-									<div class="ButtonRight">
-										<div class="ButtonMiddle">
-											<a href="javascript:void(0);">$actionLabel</a>
+								 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+								 String link = uicomponent.event(action);
+								 if (!action.equals("Close")) {
+								 link=link.replace("'", "\\'");
+								  %>
+								    <a href="javascript:checkFieldRNN('inputfolderRNN','folderRNN','$link')" class="ActionButton LightBlueStyle">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle">
+													$actionLabel
+												</div>
+											</div>
 										</div>
-									</div>
-								</div>
-							</div>
-						<%}%>          
+									</a>
+									
+								<%} else {%>
+									<div onclick="$link" class="ActionButton LightBlueStyle">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle">
+													<a href="javascript:void(0);">$actionLabel</a>
+												</div>
+											</div>
+										</div>
+									</div> 
+								 <%}
+							}%>          
 						</td>
 					  </tr>
 					</table>
 	</div>
-				<%/*end render action*/%>    
+    <%/*end render action*/%>    
 </div>
 <%uiform.end()%>
 </div>  
