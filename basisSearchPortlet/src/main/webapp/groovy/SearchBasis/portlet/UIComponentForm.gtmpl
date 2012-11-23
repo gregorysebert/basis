@@ -1,0 +1,48 @@
+<% String fieldName; %>
+<div class="UIForm $uicomponent.id">
+	<%uiform.begin()%>
+	<div class="HorizontalLayout">
+		<div class="FormContainer">
+			<table class="UIFormGrid" style="width: 60%">
+				<% 
+					for(field in uiform.getChildren()) { 
+						if(field.isRendered() && !field.getName().equals("searchType") && !field.getName().equals("operator")) {
+				%>
+							<tr>
+								<%fieldName = uicomponent.getLabel(field.getName());%>
+								<%
+									if(fieldName != null && fieldName.length() > 0) {
+								%>												
+									<td class="FieldLabel">
+									   <label for="$field.id">
+										<%=uicomponent.getLabel(field.getName()) %>
+										</label>
+									</td>
+									<td style="width: 100px"><% uiform.renderField("searchType") %></td>
+									<td class="FieldComponent"><% uiform.renderField(field) %></td></tr>
+									<tr>
+									<td class="FieldLabel">
+                                        <label for="operator">
+                                        <%=uicomponent.getLabel("operator") %>
+                                        </label>
+                                    </td>
+									<td style="width: 100px"><% uiform.renderField("searchType") %></td>
+								<%}%>
+							</tr>
+				<%
+						}
+					}
+				%>
+			</table>
+			 <div class="UIAction">
+                    <% for(action in uicomponent.getActions()) {
+                    String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action)
+                    String link = uicomponent.event(action) ;
+                    %>
+                        <a href="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
+                    <%}%>
+            </div>
+		</div>
+	</div>
+	<%uiform.end()%>
+</div>

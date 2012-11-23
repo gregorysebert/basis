@@ -1,0 +1,6 @@
+<div id="<%=uicomponent.getId();%>">
+    <div class="UIAction">
+        <a class="ActionButton LightBlueStyle" href="<%=uicomponent.event("Search","")%>">Search</a>
+        <a class="ActionButton LightBlueStyle" href="<%=uicomponent.event("Cancel","")%>">Cancel</a>
+     </div>
+</div>
