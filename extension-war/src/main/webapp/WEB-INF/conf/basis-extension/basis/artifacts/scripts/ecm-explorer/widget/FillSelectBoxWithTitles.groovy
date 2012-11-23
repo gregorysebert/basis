@@ -1,5 +1,3 @@
-package be.bull.exo.scripts;
-
 import java.util.List;
 import java.util.ArrayList;
 

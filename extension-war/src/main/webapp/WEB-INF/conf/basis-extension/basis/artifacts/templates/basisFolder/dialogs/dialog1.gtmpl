@@ -3,6 +3,8 @@
 	import java.util.Calendar;
 	import org.exoplatform.webui.form.UIFormSelectBox;
 	import org.exoplatform.webui.form.UIFormStringInput;
+	import org.exoplatform.webui.core.model.SelectItemOption;
+	import javax.jcr.Node;
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String todayS=sdf.format(new Date());
 	private String getTimestampName() {
@@ -11,6 +13,17 @@
 		   return formatter.format(now.getTime());
 	}
 	String timestampName = getTimestampName();
+	Node currentNode = uicomponent.getCurrentNode();
+	private Node getBONode(Node currentNode) {
+		   Node parentNode = currentNode.getParent();
+		   if (! parentNode.isNodeType("basis:basisBO")) {
+			   return getBONode(parentNode); 
+		   }
+		   return parentNode;
+	}
+	Node BONode = getBONode(currentNode);
+	String BONodePath = BONode.getPath();
+	String BOWorkspaceName = BONode.getSession().getWorkspace().getName();
 %>
 
 <script type="text/javascript">	
@@ -51,7 +64,6 @@
 		}
 	}
 </script>
-
 <div class="UIForm FormLayout">
 	<% uiform.begin() %> 
 		<div class="HorizontalLayout">
@@ -70,8 +82,18 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderLanguage")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] folderLanguageField = ["jcrPath=/node/basis:folderLanguage", "options=NL,FR,EN", "onchange=false"];
+				        String[] folderLanguageField = ["jcrPath=/node/basis:folderLanguage", "options=NL,FR,DE,EN", "onchange=true"];
 				        uicomponent.addSelectBoxField("folderLanguage", folderLanguageField);
+				        UIFormSelectBox folderLanguageSelectBox = uicomponent.findComponentById("folderLanguage");
+			            String folderLanguageSelectBoxValue1 = "status1_" + folderLanguageSelectBox.getValue();
+			            String folderLanguageSelectBoxValue2 = "status2_" + folderLanguageSelectBox.getValue();
+
+			            UIFormSelectBox folderStatusSelectBox = uicomponent.findComponentById("folderStatus");
+			            if(folderStatusSelectBox!=null) {
+				            List<SelectItemOption<String>> optionsList = new ArrayList<SelectItemOption<String>>();
+				            optionsList.add(new SelectItemOption(folderLanguageSelectBoxValue1));
+				            optionsList.add(new SelectItemOption(folderLanguageSelectBoxValue2));
+			            folderStatusSelectBox.setOptions(optionsList);}
 				        %>
 				    </td>
 				</tr>
@@ -128,7 +150,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderStatus")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] folderStatusField = ["jcrPath=/node/basis:folderStatus", "options=status1,status2,status3", "onchange=false"];
+				        String[] folderStatusField = ["jcrPath=/node/basis:folderStatus", "options="+folderLanguageSelectBoxValue1 + "," + folderLanguageSelectBoxValue2, "validate=empty", "onchange=false"];
 				        uicomponent.addSelectBoxField("folderStatus", folderStatusField);
 				        %>
 				    </td>

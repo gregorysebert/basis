@@ -7,7 +7,7 @@ import javax.jcr.Value;
 </style>
 <%
 	def node = uicomponent.getNode();
-	def name = node.getName();
+	def title = node.getProperty("exo:title").getString();
 	def valueDisplay;
 	def dateFormat = new SimpleDateFormat() ;
 	dateFormat.applyPattern("dd/MM/yyyy");
@@ -16,7 +16,7 @@ import javax.jcr.Value;
 			<table class="UIFormGrid">
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderNumber")%>:</td>
-					<td class="FieldComponent">${name}</td>
+					<td class="FieldComponent">${title}</td>
 				</tr>
 				<%
 				 if (node.hasProperty("basis:folderLanguage")) {

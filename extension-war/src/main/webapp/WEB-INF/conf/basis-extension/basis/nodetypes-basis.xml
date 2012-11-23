@@ -252,5 +252,16 @@
                 <valueConstraints/>
             </propertyDefinition>
         </propertyDefinitions>
+    </nodeType>
+    <nodeType name="basis:basisBO" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+        <supertypes>
+            <supertype>nt:unstructured</supertype>
+        </supertypes>
+    	<propertyDefinitions>
+            <propertyDefinition name="basis:BOCount" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+        </propertyDefinitions>
     </nodeType>        
 </nodeTypes>

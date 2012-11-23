@@ -1,0 +1,48 @@
+<div class="UIForm FormLayout">
+	<% uiform.begin() %> 
+		<div class="HorizontalLayout">
+			<table class="UIFormGrid">
+			    <tr>
+		          <td class="FieldLabel"><%=_ctx.appRes("basisBO.label.name")%></td>
+		          <td class="FieldComponent">
+		               <div><%
+		              String[] BONameField = ["jcrPath=/node", "options=noSanitization", "editable=if-null", "validate=empty,name"] ;
+		              uicomponent.addTextField("name", BONameField) ;
+		            %></div>
+		          </td>
+        		</tr>
+        		<tr style="display:none;">
+		          <td class="FieldComponent"> 
+		               <div style="display:none;"><%
+		              String[] BOCountField = ["jcrPath=/node/basis:BOCount", "00000000"] ;
+		              uicomponent.addTextField("BOCount", BOCountField) ;
+		            %></div>
+		          </td>
+        		</tr>
+			</table>
+		</div>
+		<div class="UIAction">
+							<table class="ActionContainer">
+								<tr>
+									<td>
+								  <% for(action in uicomponent.getActions()) { 
+										 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
+										 String link = uicomponent.event(action);
+								  %>
+									<div onclick="$link" class="ActionButton LightBlueStyle">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle">
+													<a href="javascript:void(0);">$actionLabel</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								<%}%>          
+								</td>
+							  </tr>
+							</table>
+		</div>
+		<%/*end render action*/%>  		    
+	<%uiform.end()%>
+</div>

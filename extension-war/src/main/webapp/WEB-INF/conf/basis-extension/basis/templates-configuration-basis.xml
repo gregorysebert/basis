@@ -79,8 +79,7 @@
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisDocument/skins/Stylesheet-lt.css
-                                                            </string>
+                                                            <string>/basisDocument/skins/Stylesheet-lt.css</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
@@ -90,8 +89,7 @@
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisDocument/skins/Stylesheet-rt.css
-                                                            </string>
+                                                            <string>/basisDocument/skins/Stylesheet-rt.css</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
@@ -146,8 +144,7 @@
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisFolder/skins/Stylesheet-lt.css
-                                                            </string>
+                                                            <string>/basisFolder/skins/Stylesheet-lt.css</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
@@ -157,8 +154,7 @@
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisFolder/skins/Stylesheet-rt.css
-                                                            </string>
+                                                            <string>/basisFolder/skins/Stylesheet-rt.css</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
@@ -213,8 +209,7 @@
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisConfig/skins/Stylesheet-lt.css
-                                                            </string>
+                                                            <string>/basisConfig/skins/Stylesheet-lt.css</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
@@ -224,8 +219,7 @@
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisConfig/skins/Stylesheet-rt.css
-                                                            </string>
+                                                            <string>/basisConfig/skins/Stylesheet-rt.css</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
@@ -280,8 +274,7 @@
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisFollow/skins/Stylesheet-lt.css
-                                                            </string>
+                                                            <string>/basisFollow/skins/Stylesheet-lt.css</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
@@ -291,8 +284,72 @@
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisFollow/skins/Stylesheet-rt.css
-                                                            </string>
+                                                            <string>/basisFollow/skins/Stylesheet-rt.css</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                    </object>
+                                </value>
+                                <value>
+                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
+                                        <field name="nodetypeName">
+                                            <string>basis:basisBO</string>
+                                        </field>
+                                        <field name="documentTemplate">
+                                            <boolean>true</boolean>
+                                        </field>
+                                        <field name="label">
+                                            <string>Basis BO</string>
+                                        </field>
+                                        <field name="referencedView">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisBO/views/view1.gtmpl</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                        <field name="referencedDialog">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisBO/dialogs/dialog1.gtmpl</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                        <field name="referencedSkin">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisBO/skins/Stylesheet-lt.css</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisBO/skins/Stylesheet-rt.css</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
