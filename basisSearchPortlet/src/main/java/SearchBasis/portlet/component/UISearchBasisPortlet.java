@@ -36,10 +36,10 @@ public class UISearchBasisPortlet extends UIPortletApplication {
 
 
     public UISearchBasisPortlet( ) throws Exception {
-        addChild(UIComponentForm.class, null, "Advanced search");
         addChild(UISimpleSearchForm.class,null,"Simple search");
+        addChild(UIComponentForm.class, null, "Advanced search");
         addChild(UIResultForm.class,null,"Result");
-        setRenderedChild("Advanced search");
+        setRenderedChild("Simple search");
 
 
     }

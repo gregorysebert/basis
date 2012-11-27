@@ -97,7 +97,7 @@ public class UIComponentForm extends UIForm  {
         addUIFormInput(new UIFormStringInput(FIELD_FOLLOW_COMMENT, FIELD_FOLLOW_COMMENT, null));
         addUIFormInput(new UIFormStringInput(FIELD_FOLLOW_ANSWER, FIELD_FOLLOW_ANSWER, null));
 
-        setActions(new String[]{"Search", "Save", "Cancel"}) ;
+        setActions(new String[]{"Search", "Cancel"}) ;
         setRendered(true);
     }
 

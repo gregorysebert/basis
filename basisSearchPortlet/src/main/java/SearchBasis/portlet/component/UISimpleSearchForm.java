@@ -44,13 +44,11 @@ public class UISimpleSearchForm extends UIForm {
 
     private  static final String QUERY = "Query";
 
-    private static final String ARTICLE_XPATH_QUERY = "//element(*,exo:article)" ;
     private static final String BASIS_DOCUMENT_XPATH_QUERY = "//element(*,basis:basisDocument)" ;
 
     public UISimpleSearchForm() throws Exception {
         List<SelectItemOption<String>> lsOperator = new ArrayList<SelectItemOption<String>>() ;
         lsOperator.add(new SelectItemOption<String>(" ", " ")) ;
-        lsOperator.add(new SelectItemOption<String>("All article", ARTICLE_XPATH_QUERY)) ;
         lsOperator.add(new SelectItemOption<String>("All basis document", BASIS_DOCUMENT_XPATH_QUERY)) ;
         UIFormSelectBox uiSelectBoxOperator = new UIFormSelectBox(QUERY, QUERY, lsOperator) ;
         addUIFormInput(uiSelectBoxOperator);
