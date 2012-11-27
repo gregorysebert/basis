@@ -16,6 +16,10 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import javax.jcr.Node;
+import javax.jcr.query.QueryResult;
+import javax.portlet.PortletRequest;
+
 
 //this part is configuration of the portlet, we set the path to the template groovy.
 @ComponentConfig(
@@ -28,15 +32,35 @@ public class UISearchBasisPortlet extends UIPortletApplication {
 
     final public static String SWTCH_TAB = "SwitchTab".intern() ;
 
+    private QueryResult queryResult = null;
 
-    public UISearchBasisPortlet() throws Exception {
 
+    public UISearchBasisPortlet( ) throws Exception {
         addChild(UIComponentForm.class, null, "Advanced search");
         addChild(UISimpleSearchForm.class,null,"Simple search");
         addChild(UIResultForm.class,null,"Result");
         setRenderedChild("Advanced search");
 
 
+    }
+
+    public  void updateResult()throws Exception{
+        removeChildById("Result");
+        addChild(UIResultForm.class,null,"Result");
+        UIResultForm uiResultForm = getChild(UIResultForm.class);
+        //uiResultForm.reset();
+        uiResultForm.update();
+        //replaceChild("Result",getChild(UIResultForm.class));
+        setRenderedChild("Result");
+    }
+
+    public QueryResult getQueryResult() {
+        return queryResult;
+    }
+
+    public void setQueryResult(QueryResult queryResult) {
+        this.queryResult = queryResult;
+        System.out.println("Query result added");
     }
 
     static public class SwitchTabActionListener extends EventListener<UISearchBasisPortlet>

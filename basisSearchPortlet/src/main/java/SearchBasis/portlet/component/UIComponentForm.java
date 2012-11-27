@@ -117,7 +117,6 @@ public class UIComponentForm extends UIForm  {
             UIComponentForm uiComponentForm = event.getSource() ;
             UISearchBasisPortlet uiManager = uiComponentForm.getAncestorOfType(UISearchBasisPortlet.class) ;
             uiComponentForm.reset() ;
-            uiManager.removeChildById("uiComponentForm") ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
         }
     }

@@ -26,7 +26,7 @@
                                         <%=uicomponent.getLabel("operator") %>
                                         </label>
                                     </td>
-									<td style="width: 100px"><% uiform.renderField("searchType") %></td>
+									<td style="width: 100px"><% uiform.renderField("operator") %></td>
 								<%}%>
 							</tr>
 				<%

@@ -1,3 +1,53 @@
-<div id="<%=uicomponent.getId();%>">
-No result!
+<% String fieldName; %>
+<div class="UIForm $uicomponent.id">
+	<%uiform.begin()%>
+	<div class="HorizontalLayout">
+		<div class="FormContainer">
+			<table class="UIFormGrid" style="width: 60%">
+			<th>Name</th>     <th>Path</th>   <th>Action</th>
+				<%   def i = 0;
+					for(field in uiform.getChildren()) { 
+						if(field.isRendered()) {
+						i++;
+
+						if(i%2!=0){
+				%>
+							<tr>
+								<%fieldName = uicomponent.getLabel(field.getName());%>
+								<%
+									if(fieldName != null && fieldName.length() > 0) {
+								%>												
+									<td class="FieldLabel">
+									   <label for="$field.id">
+										<%=uicomponent.getLabel(field.getName()) %>
+										</label>
+									</td>
+				<%
+                                    }
+						}
+						else {%>
+						        <%fieldName = uicomponent.getLabel(field.getName());%>
+                                <%
+                                    if(fieldName != null && fieldName.length() > 0) {
+                                %>
+                                    <td class="FieldLabel">
+                                       <label for="$field.id">
+                                        <%=uicomponent.getLabel(field.getName()) %>
+                                        </label>
+                                    </td>
+                                    <td class="FieldLabel">
+                                        <a href="/portal/g/:platform:web-contributors/siteExplorer?path=collaboration$field.id">View document</a>
+                                    </td>
+                                <%}%>
+                            </tr>
+
+						 <% }
+
+						}
+					}
+				%>
+			</table>
+		</div>
+	</div>
+	<%uiform.end()%>
 </div>
