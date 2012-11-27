@@ -60,7 +60,6 @@ public class UISearchBasisPortlet extends UIPortletApplication {
 
     public void setQueryResult(QueryResult queryResult) {
         this.queryResult = queryResult;
-        System.out.println("Query result added");
     }
 
     static public class SwitchTabActionListener extends EventListener<UISearchBasisPortlet>

@@ -40,7 +40,6 @@ public class UIResultForm extends UIForm {
                     Node node = nodeIterator.nextNode();
                     addUIFormInput(new UIFormStringInput(node.getName(), node.getName(), null));
                     addUIFormInput(new UIFormStringInput(node.getPath(), node.getPath(), null));
-                    System.out.print("node : " + node);
                 }
             }
         }

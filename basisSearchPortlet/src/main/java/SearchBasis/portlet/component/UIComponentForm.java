@@ -108,7 +108,6 @@ public class UIComponentForm extends UIForm  {
         public void execute(Event<UIComponentForm> event) throws Exception {
             UIComponentForm uiComponentForm = event.getSource();
             String name = uiComponentForm.getUIStringInput(FIELD_DOC_TYPE).getValue();
-            System.out.println(name);
         }
     }
 

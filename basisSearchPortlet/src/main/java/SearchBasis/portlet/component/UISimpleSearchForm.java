@@ -70,7 +70,6 @@ public class UISimpleSearchForm extends UIForm {
                 queryManager = session.getWorkspace().getQueryManager();
                 String xpathStatement = uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue();
                 if(!xpathStatement.equals(null)){
-                    System.out.println("Query : " + xpathStatement);
                     Query query = queryManager.createQuery(xpathStatement, Query.XPATH);
 
                     QueryResult result = query.execute();
@@ -89,7 +88,6 @@ public class UISimpleSearchForm extends UIForm {
                     return;
                 }
             } catch (RepositoryException e) {
-                    System.out.print("ActionServiceContainer - Query Manager Factory of workspace not found. Check configuration." + e);
             }
         }
     }
