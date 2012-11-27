@@ -2,6 +2,8 @@
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
 	import org.exoplatform.webui.form.UIFormSelectBox;
+	import basis.selector.service.BasisSelectorService;
+	import javax.jcr.Node;
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String todayS=sdf.format(new Date());
 	private String getTimestampName() {
@@ -10,6 +12,28 @@
 		   return formatter.format(now.getTime());
 	}
 	String timestampName = getTimestampName();
+	Node currentNode = uicomponent.getCurrentNode();
+	private Node getBONode(Node currentNode) {
+		   Node parentNode = currentNode.getParent();
+		   if (! parentNode.isNodeType("basis:basisBO")) {
+			   return getBONode(parentNode); 
+		   }
+		   return parentNode;
+	}
+	Node documentSelectorNode = getBONode(currentNode).getNode("documentSelector.txt");
+	String language;
+	if (!uicomponent.isEditing()) {
+		language = currentNode.getProperty("basis:folderLanguage").getString();
+	}
+	else {
+		language = currentNode.getParent().getProperty("basis:folderLanguage").getString();
+	}
+	BasisSelectorService basisSelectorService = new BasisSelectorService(documentSelectorNode, "Type", language);
+    String typeOptions = basisSelectorService.getOptions();
+    basisSelectorService = new BasisSelectorService(documentSelectorNode, "Keywords", language);
+    String keywordsOptions = basisSelectorService.getOptions();
+    basisSelectorService = new BasisSelectorService(documentSelectorNode, "PredefinedExternSender", language);
+    String predefinedExternSenderOptions = basisSelectorService.getOptions();
 %>
 <% 
 if(!uicomponent.isEditing()) {
@@ -43,7 +67,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/RenameDocumentInterceptor.g
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docTypeField = ["jcrPath=/node/basis:docType", "options=type1,type2,type3", "onchange=false"];
+				        String[] docTypeField = ["jcrPath=/node/basis:docType", "options="+typeOptions, "onchange=false"];
 				        uicomponent.addSelectBoxField("docType", docTypeField);
 				        %>
 				    </td>
@@ -81,7 +105,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/RenameDocumentInterceptor.g
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docKeywords")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docKeywordsField = ["jcrPath=/node/basis:docKeywords", "options=keyword1,keyword2,keyword3", "multiValues=true", "onchange=false"];
+				        String[] docKeywordsField = ["jcrPath=/node/basis:docKeywords", "options="+keywordsOptions, "multiValues=true", "onchange=false"];
 				        uicomponent.addSelectBoxField("docKeywords", docKeywordsField);
 				        %>
 				    </td>
@@ -115,7 +139,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/RenameDocumentInterceptor.g
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "options=predefinedExternSender1,predefinedExternSender2,predefinedExternSender3", "onchange=false"];
+				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "options="+predefinedExternSenderOptions, "onchange=false"];
 				        uicomponent.addSelectBoxField("docPredefinedExternSender", docPredefinedExternSenderField);
 				        %>
 				    </td>

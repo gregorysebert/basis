@@ -35,8 +35,8 @@
             <type>org.exoplatform.services.deployment.plugins.XMLDeploymentPlugin</type>
             <description>XML Deployment Plugin</description>
             <init-params>
-                <!--object-param>
-                    <name>Ruling conf resources</name>
+                <object-param>
+                    <name>Basis conf resources</name>
                     <description>Deployment Descriptor</description>
                     <object type="org.exoplatform.services.deployment.DeploymentDescriptor">
                         <field name="target">
@@ -45,21 +45,21 @@
                                     <string>repository</string>
                                 </field>
                                 <field name="workspace">
-                                    <string>dev-monit</string>
+                                    <string>collaboration</string>
                                 </field>
                                 <field name="nodePath">
-                                    <string>/</string>
+                                    <string>/Files/BO</string>
                                 </field>
                             </object>
                         </field>
                         <field name="sourcePath">
-                            <string>war:/conf/start-extension/spff/eruling-regularisation/ruling-resources.xml</string>
+                            <string>war:/conf/basis-extension/basis/artifacts/resources/BOTemplate.xml</string>
                         </field>
                         <field name="cleanupPublication">                                           
                             <boolean>true</boolean>                                             
                         </field>
                     </object>
-                </object-param-->
+                </object-param>
             </init-params>
         </component-plugin>
     </external-component-plugins>

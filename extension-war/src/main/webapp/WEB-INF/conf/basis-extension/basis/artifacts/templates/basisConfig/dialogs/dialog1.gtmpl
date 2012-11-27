@@ -3,6 +3,9 @@
 	import java.util.Calendar;
 	import org.exoplatform.webui.form.UIFormSelectBox;
 	import org.exoplatform.webui.form.UIFormStringInput;
+	import org.exoplatform.webui.core.model.SelectItemOption;
+	import basis.selector.service.BasisSelectorService;
+	import javax.jcr.Node;
 	def rcontext = _ctx.getRequestContext() ;
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -13,6 +16,7 @@
 		   return formatter.format(now.getTime());
 	}
 	String timestampName = getTimestampName();
+	Node currentNode = uicomponent.getCurrentNode();
 %>
 <% uicomponent.addInterceptor("ecm-explorer/interceptor/CreateFolderTreeInterceptor.groovy", "post");%>
 
@@ -134,8 +138,92 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderLanguage")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] folderLanguageField = ["jcrPath=/node/basis:folderLanguage", "options=NL,FR,EN", "onchange=false"];
+				        String[] folderLanguageField = ["jcrPath=/node/basis:folderLanguage", "options=NL,FR,EN", "onchange=true"];
 				        uicomponent.addSelectBoxField("folderLanguage", folderLanguageField);
+				        UIFormSelectBox folderLanguageSelectBox = uicomponent.findComponentById("folderLanguage");
+				        String language = folderLanguageSelectBox.getValue();
+				        // basis folder
+				        BasisSelectorService basisSelectorService = new BasisSelectorService(currentNode.getNode("folderSelector.txt"), "Status", language);
+			            String statusOptions = basisSelectorService.getOptions();
+			            UIFormSelectBox folderStatusSelectBox = uicomponent.findComponentById("folderStatus");
+			            if(folderStatusSelectBox != null) {
+				            List<SelectItemOption<String>> optionsList = new ArrayList<SelectItemOption<String>>();
+				            String[] statusOptionsList = statusOptions.split(',');
+			                for(String statusOption:statusOptionsList){
+			                    optionsList.add(new SelectItemOption<String>(statusOption,statusOption));
+			                }    
+			            	folderStatusSelectBox.setOptions(optionsList);
+			            }
+			            // basis document
+			            Node documentSelectorNode = currentNode.getNode("documentSelector.txt");
+			            basisSelectorService = new BasisSelectorService(documentSelectorNode, "Type", language);
+			            String typeOptions = basisSelectorService.getOptions();
+			            UIFormSelectBox docTypeSelectBox = uicomponent.findComponentById("docType");
+			            if(docTypeSelectBox != null) {
+				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            String[] typeOptionsList = typeOptions.split(',');
+			                for(String typeOption:typeOptionsList){
+			                    optionsList.add(new SelectItemOption<String>(typeOption,typeOption));
+			                }    
+			                docTypeSelectBox.setOptions(optionsList);
+			            }
+			            basisSelectorService = new BasisSelectorService(documentSelectorNode, "Keywords", language);
+			            String keywordsOptions = basisSelectorService.getOptions();
+			            UIFormSelectBox docKeywordsSelectBox = uicomponent.findComponentById("docKeywords");
+			            if(docKeywordsSelectBox != null) {
+				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            String[] keywordsOptionsList = keywordsOptions.split(',');
+			                for(String keywordsOption:keywordsOptionsList){
+			                    optionsList.add(new SelectItemOption<String>(keywordsOption,keywordsOption));
+			                }    
+			                docKeywordsSelectBox.setOptions(optionsList);
+			            }
+			            basisSelectorService = new BasisSelectorService(documentSelectorNode, "PredefinedExternSender", language);
+			            String predefinedExternSenderOptions = basisSelectorService.getOptions();
+			            UIFormSelectBox docPredefinedExternSenderSelectBox = uicomponent.findComponentById("docPredefinedExternSender");
+			            if(docPredefinedExternSenderSelectBox != null) {
+				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            String[] predefinedExternSenderOptionsList = predefinedExternSenderOptions.split(',');
+			                for(String predefinedExternSenderOption:predefinedExternSenderOptionsList){
+			                    optionsList.add(new SelectItemOption<String>(predefinedExternSenderOption,predefinedExternSenderOption));
+			                }    
+			                docPredefinedExternSenderSelectBox.setOptions(optionsList);
+			            }
+			         	// basis follow
+			            Node followSelectorNode = currentNode.getNode("followSelector.txt");
+			            basisSelectorService = new BasisSelectorService(followSelectorNode, "GroupInternEditor", language);
+			            String groupInternEditorOptions = basisSelectorService.getOptions();
+			            UIFormSelectBox followGroupInternEditorSelectBox = uicomponent.findComponentById("followGroupInternEditor");
+			            if(followGroupInternEditorSelectBox != null) {
+				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            String[] groupInternEditorOptionsList = groupInternEditorOptions.split(',');
+			                for(String groupInternEditorOption:groupInternEditorOptionsList){
+			                    optionsList.add(new SelectItemOption<String>(groupInternEditorOption,groupInternEditorOption));
+			                }    
+			                followGroupInternEditorSelectBox.setOptions(optionsList);
+			            }
+			            basisSelectorService = new BasisSelectorService(followSelectorNode, "ExternEditor", language);
+			            String externEditorOptions = basisSelectorService.getOptions();
+			            UIFormSelectBox followExternEditorSelectBox = uicomponent.findComponentById("followExternEditor");
+			            if(followExternEditorSelectBox != null) {
+				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            String[] externEditorOptionsList = externEditorOptions.split(',');
+			                for(String externEditorOption:externEditorOptionsList){
+			                    optionsList.add(new SelectItemOption<String>(externEditorOption,externEditorOption));
+			                }    
+			                followExternEditorSelectBox.setOptions(optionsList);
+			            }
+			            basisSelectorService = new BasisSelectorService(followSelectorNode, "RequiredAction", language);
+			            String requiredActionOptions = basisSelectorService.getOptions();
+			            UIFormSelectBox followRequiredActionSelectBox = uicomponent.findComponentById("followRequiredAction");
+			            if(followRequiredActionSelectBox != null) {
+				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            String[] requiredActionOptionsList = requiredActionOptions.split(',');
+			                for(String requiredActionOption:requiredActionOptionsList){
+			                    optionsList.add(new SelectItemOption<String>(requiredActionOption,requiredActionOption));
+			                }    
+			                followRequiredActionSelectBox.setOptions(optionsList);
+			            }
 				        %>
 				    </td>
 				</tr>
@@ -190,7 +278,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderStatus")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] folderStatusField = ["jcrPath=/node/basis:folderStatus", "options=status1,status2,status3", "onchange=false"];
+				        String[] folderStatusField = ["jcrPath=/node/basis:folderStatus", "options="+statusOptions, "onchange=false"];
 				        uicomponent.addSelectBoxField("folderStatus", folderStatusField);
 				        %>
 				    </td>
@@ -213,7 +301,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docTypeField = ["jcrPath=/node/basis:docType", "options=type1,type2,type3", "onchange=false"];
+				        String[] docTypeField = ["jcrPath=/node/basis:docType", "options="+typeOptions, "onchange=false"];
 				        uicomponent.addSelectBoxField("docType", docTypeField);
 				        %>
 				    </td>
@@ -249,7 +337,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docKeywords")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docKeywordsField = ["jcrPath=/node/basis:docKeywords", "options=keyword1,keyword2,keyword3", "multiValues=true", "onchange=false"];
+				        String[] docKeywordsField = ["jcrPath=/node/basis:docKeywords", "options="+keywordsOptions, "multiValues=true", "onchange=false"];
 				        uicomponent.addSelectBoxField("docKeywords", docKeywordsField);
 				        %>
 				    </td>
@@ -283,7 +371,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "options=predefinedExternSender1,predefinedExternSender2,predefinedExternSender3", "onchange=false"];
+				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "options="+predefinedExternSenderOptions, "onchange=false"];
 				        uicomponent.addSelectBoxField("docPredefinedExternSender", docPredefinedExternSenderField);
 				        %>
 				    </td>
@@ -407,7 +495,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "options=internGroup1,internGroup2,internGroup3", "onchange=false"];
+				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "options="+groupInternEditorOptions, "onchange=false"];
 				        uicomponent.addSelectBoxField("followGroupInternEditor", followGroupInternEditorField);
 				        %>
 				    </td>
@@ -417,7 +505,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "options=externEditor1,externEditor2,externEditor3", "onchange=false"];
+				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "options="+externEditorOptions, "onchange=false"];
 				        uicomponent.addSelectBoxField("followExternEditor", followExternEditorField);
 				        %>
 				    </td>
@@ -427,7 +515,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "options=action1,action2,action3", "onchange=false"];
+				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "options="+requiredActionOptions, "onchange=false"];
 				        uicomponent.addSelectBoxField("followRequiredAction", followRequiredActionField);
 				        %>
 				    </td>

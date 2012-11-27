@@ -11,6 +11,7 @@
 	<modules>
 	 	<module>basisSearchPortlet</module>
 	 	<module>migrationService</module>
+		<module>basisSelectorService</module>
         <module>extension-jar</module>
         <module>extension-war</module>
         <module>basis-ear</module>

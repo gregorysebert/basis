@@ -15,7 +15,8 @@
 	<import>war:/conf/basis-extension/common-configuration.xml</import>    
 	<import>war:/conf/basis-extension/namespace-configuration.xml</import>
 	<import>war:/conf/basis-extension/organization-configuration.xml</import>
-	<import>war:/conf/basis-extension/basis/basis-cms-configuration.xml</import>    
+	<import>war:/conf/basis-extension/basis/basis-cms-configuration.xml</import>
+	<import>war:/conf/basis-extension/basis/basis-deployment-configuration.xml</import>       
     <import>war:/conf/basis-extension/basis/nodetypes-configuration.xml</import>
     <import>war:/conf/basis-extension/basis/scripts-configuration.xml</import>
     <import>war:/conf/basis-extension/basis/templates-configuration-basis.xml</import>

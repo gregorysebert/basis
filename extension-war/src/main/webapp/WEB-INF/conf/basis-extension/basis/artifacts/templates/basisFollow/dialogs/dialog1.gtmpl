@@ -2,6 +2,8 @@
 	import java.text.SimpleDateFormat;
 	import java.util.Calendar;
 	import org.exoplatform.webui.form.UIFormSelectBox;
+	import basis.selector.service.BasisSelectorService;
+	import javax.jcr.Node;
 	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     String todayS=sdf.format(new Date());
 	private String getTimestampName() {
@@ -10,6 +12,35 @@
 		   return formatter.format(now.getTime());
 	}
 	String timestampName = getTimestampName();
+	Node currentNode = uicomponent.getCurrentNode();
+	private Node getBONode(Node currentNode) {
+		   Node parentNode = currentNode.getParent();
+		   if (! parentNode.isNodeType("basis:basisBO")) {
+			   return getBONode(parentNode); 
+		   }
+		   return parentNode;
+	}
+	private Node getBasisFolderNode(Node currentNode) {
+		   Node parentNode = currentNode.getParent();
+		   if (! parentNode.isNodeType("basis:basisFolder")) {
+			   return getBasisFolderNode(parentNode); 
+		   }
+		   return parentNode;
+	}
+	Node followSelectorNode = getBONode(currentNode).getNode("followSelector.txt");
+	String language;
+	if (currentNode.hasProperty("basis:folderLanguage")) {
+		language = currentNode.getProperty("basis:folderLanguage").getString();
+	}
+	else {
+		language = getBasisFolderNode(currentNode).getProperty("basis:folderLanguage").getString();
+	}
+	BasisSelectorService basisSelectorService = new BasisSelectorService(followSelectorNode, "GroupInternEditor", language);
+    String groupInternEditorOptions = basisSelectorService.getOptions();
+    basisSelectorService = new BasisSelectorService(followSelectorNode, "ExternEditor", language);
+    String externEditorOptions = basisSelectorService.getOptions();
+    basisSelectorService = new BasisSelectorService(followSelectorNode, "RequiredAction", language);
+    String requiredActionOptions = basisSelectorService.getOptions();
 %>
 <% 
 if(!uicomponent.isEditing()) {
@@ -67,7 +98,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/RenameFollowInterceptor.gro
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "options=internGroup1,internGroup2,internGroup3", "onchange=false"];
+				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "options="+groupInternEditorOptions, "onchange=false"];
 				        uicomponent.addSelectBoxField("followGroupInternEditor", followGroupInternEditorField);
 				        %>
 				    </td>
@@ -77,7 +108,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/RenameFollowInterceptor.gro
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "options=externEditor1,externEditor2,externEditor3", "onchange=false"];
+				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "options="+externEditorOptions, "onchange=false"];
 				        uicomponent.addSelectBoxField("followExternEditor", followExternEditorField);
 				        %>
 				    </td>
@@ -87,7 +118,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/RenameFollowInterceptor.gro
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "options=action1,action2,action3", "onchange=false"];
+				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "options="+requiredActionOptions, "onchange=false"];
 				        uicomponent.addSelectBoxField("followRequiredAction", followRequiredActionField);
 				        %>
 				    </td>

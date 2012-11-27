@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4.0.0.xsd
+http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <groupId>org.exoplatform</groupId>
+        <artifactId>basis</artifactId>
+        <version>trunk</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.exoplatform</groupId>
+    <artifactId>basis-selectorService</artifactId>
+    <packaging>jar</packaging>
+    <name>basis Selector Service</name>
+    <version>${org.exoplatform.basis.version}</version>
+    <description>basis Selector Service</description>
+
+    <dependencies>
+        <dependency>
+            <artifactId>exo.kernel.container</artifactId>
+            <groupId>org.exoplatform.kernel</groupId>
+            <version>${org.exoplatform.kernel.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <artifactId>jcr</artifactId>
+            <groupId>jcr</groupId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <artifactId>exo.jcr.component.core</artifactId>
+            <groupId>org.exoplatform.jcr</groupId>
+            <version>${org.exoplatform.jcr.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.exoplatform.portal</groupId>
+            <artifactId>exo.portal.webui.core</artifactId>
+            <version>${org.exoplatform.portal.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>
