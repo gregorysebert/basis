@@ -123,6 +123,7 @@
     <nodeType name="basis:basisDocument" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
         <supertypes>
             <supertype>nt:unstructured</supertype>
+            <supertype>mix:versionable</supertype>
         </supertypes>
         <propertyDefinitions>
         	<propertyDefinition name="basis:docInOut" requiredType="String" autoCreated="false" mandatory="false"
@@ -186,6 +187,7 @@
 	<nodeType name="basis:basisFolder" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
         <supertypes>
             <supertype>nt:unstructured</supertype>
+            <supertype>mix:versionable</supertype>
         </supertypes>
         <propertyDefinitions>
             <propertyDefinition name="basis:folderLanguage" requiredType="String" autoCreated="false" mandatory="false"
@@ -217,6 +219,7 @@
     <nodeType name="basis:basisFollow" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
         <supertypes>
             <supertype>nt:base</supertype>
+            <supertype>mix:versionable</supertype>
         </supertypes>
         <propertyDefinitions>
             <propertyDefinition name="basis:followSendDate" requiredType="Date" autoCreated="false" mandatory="false"

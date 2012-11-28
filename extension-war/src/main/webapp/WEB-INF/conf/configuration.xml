@@ -20,4 +20,5 @@
     <import>war:/conf/basis-extension/basis/nodetypes-configuration.xml</import>
     <import>war:/conf/basis-extension/basis/scripts-configuration.xml</import>
     <import>war:/conf/basis-extension/basis/templates-configuration-basis.xml</import>
+    <import>war:/conf/basis-extension/basis/basis-filter.xml</import>
 </configuration>

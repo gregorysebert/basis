@@ -26,6 +26,8 @@ public class RenameDocumentInterceptor implements CmsScript {
 		try {
 			session = repositoryService_.getCurrentRepository().getSystemSession(workspace);
 			Node srcNode = (Node) session.getItem(nodePath);
+			srcNode.checkin();
+			srcNode.checkout();
 			Node basisFolerNode = srcNode.getParent();
 			NodeIterator it = basisFolerNode.getNodes();
 			String incre = "";

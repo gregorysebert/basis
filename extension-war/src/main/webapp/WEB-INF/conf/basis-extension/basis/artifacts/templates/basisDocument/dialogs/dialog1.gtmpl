@@ -39,6 +39,9 @@
 if(!uicomponent.isEditing()) {
 uicomponent.addInterceptor("ecm-explorer/interceptor/RenameDocumentInterceptor.groovy", "post");
 }
+else {
+uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.groovy", "post");
+}
 %>
 <div class="UIForm FormLayout">
 	<% uiform.begin() %> 
@@ -49,7 +52,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/RenameDocumentInterceptor.g
 		          <td class="FieldComponent">
 		            $timestampName 
 		               <div style="display:none;"><%
-		              String[] docNameField = ["jcrPath=/node", "mixintype=mix:i18n", "editable=if-null", timestampName] ;
+		              String[] docNameField = ["jcrPath=/node", "mixintype=mix:versionable", "editable=if-null", timestampName] ;
 		              uicomponent.addTextField("name", docNameField) ;
 		            %></div>
 		          </td>

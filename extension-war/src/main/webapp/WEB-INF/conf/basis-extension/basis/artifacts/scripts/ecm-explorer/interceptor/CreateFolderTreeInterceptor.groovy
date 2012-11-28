@@ -54,10 +54,8 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			//Add basis folder
 			Node parentNode = nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1] + "/" + alist[0]);
 			NodeIterator it = parentNode.getNodes();
-			Node basisFolderNode;
 			String incre = srcNode.getParent().getProperty("basis:BOCount").getString();
-			
-            basisFolderNode = parentNode.addNode(BOName + "." + incre, BASIS_FOLDER_NODETYPE);
+            Node basisFolderNode = parentNode.addNode(BOName + "." + incre, BASIS_FOLDER_NODETYPE);
             String basisFolderNodeTitle = BOName + "." + incre.substring(0, 2) + "." + incre.substring(2, 5) + "." + incre.substring(5);
             basisFolderNode.setProperty("exo:title", basisFolderNodeTitle);
 			if (srcNode.hasProperty("basis:folderLanguage")) {
@@ -103,7 +101,6 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 	            incre = (String)(incre.substring(0, 7) + (char)(incre.charAt(7)+1));
 	        }
 			srcNode.getParent().setProperty("basis:BOCount", incre);
-			
 			//Add basis document
 			Node basisDocumentNode = basisFolderNode.addNode(basisFolderNode.getName() + "-000", BASIS_DOCUMENT_NODETYPE);
 			basisDocumentNode.setProperty("exo:title", basisFolderNodeTitle + "-000");
@@ -179,6 +176,12 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 				
 			srcNode.remove();
 			session.save();
+			basisFolderNode.checkin();
+			basisFolderNode.checkout();
+		    basisDocumentNode.checkin();
+			basisDocumentNode.checkout();
+			basisFollowNode.checkin();
+			basisFollowNode.checkout();
 		} catch (Exception e) {
 			logger.warning("Error in CreateFolderTreeInterceptor script : " + e.getMessage());
 		} finally {

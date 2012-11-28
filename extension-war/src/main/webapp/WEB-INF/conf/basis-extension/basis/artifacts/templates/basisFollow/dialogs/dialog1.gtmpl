@@ -46,6 +46,9 @@
 if(!uicomponent.isEditing()) {
 uicomponent.addInterceptor("ecm-explorer/interceptor/RenameFollowInterceptor.groovy", "post");
 }
+else {
+uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.groovy", "post");
+}
 %>
 <div class="UIForm FormLayout">
 	<% uiform.begin() %> 
@@ -55,7 +58,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/RenameFollowInterceptor.gro
 		          <td class="FieldComponent">
 		            $timestampName 
 		               <div style="display:none;"><%
-		              String[] followNameField = ["jcrPath=/node", "mixintype=mix:i18n", "editable=if-null", timestampName] ;
+		              String[] followNameField = ["jcrPath=/node", "mixintype=mix:versionable", "editable=if-null", timestampName] ;
 		              uicomponent.addTextField("name", followNameField) ;
 		            %></div>
 		          </td>
@@ -127,8 +130,8 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/RenameFollowInterceptor.gro
 					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followComments")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] followCommentsField = ["jcrPath=/node/basis:followComments"];
-						uicomponent.addTextAreaField("followComments", followCommentsField);;
+						String[] followCommentsField = ["jcrPath=/node/basis:followComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;
+						uicomponent.addRichtextField("followComments", followCommentsField);;
 						%>
 					</td>
 				</tr>

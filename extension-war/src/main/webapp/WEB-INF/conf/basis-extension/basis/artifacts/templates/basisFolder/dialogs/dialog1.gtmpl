@@ -23,6 +23,11 @@
 		   return parentNode;
 	}
 %>
+<% 
+if(uicomponent.isEditing()) {
+uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.groovy", "post");
+}
+%>
 <script type="text/javascript">	
 	function saveRNN(source,destination)
 	{
@@ -70,7 +75,7 @@
 		          <td class="FieldComponent">
 		            $timestampName 
 		               <div style="display:none;"><%
-		              String[] folderNumberField = ["jcrPath=/node", "mixintype=mix:i18n", "editable=if-null", timestampName] ;
+		              String[] folderNumberField = ["jcrPath=/node", "mixintype=mix:versionable", "editable=if-null", timestampName] ;
 		              uicomponent.addTextField("name", folderNumberField) ;
 		            %></div>
 		          </td>

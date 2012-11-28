@@ -1,6 +1,7 @@
 <%
 import java.text.SimpleDateFormat ;
 import javax.jcr.Value;
+import org.exoplatform.ecm.webui.utils.Utils ;
 %>
 <style>
 	<% _ctx.include(uicomponent.getTemplateSkin("basis:basisFollow", "Stylesheet")); %>
@@ -12,6 +13,14 @@ import javax.jcr.Value;
 	def dateFormat = new SimpleDateFormat() ;
 	dateFormat.applyPattern("dd/MM/yyyy");
 %>
+		<div style="font-weight:bold;">
+			          <%=_ctx.appRes("basis.label.version")%>:
+			          <%
+			            if(Utils.isVersionable(node) && !uicomponent.getVersionName(node).equals("jcr:rootVersion")) {
+			              println uicomponent.getVersionName(node) ;
+			            }
+			          %>
+		</div>
 		<div id="$uicomponent.id">
 			<table class="UIFormGrid">
 				<%

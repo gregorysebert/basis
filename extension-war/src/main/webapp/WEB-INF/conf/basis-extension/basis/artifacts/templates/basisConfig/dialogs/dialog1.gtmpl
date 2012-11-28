@@ -129,7 +129,7 @@
 		          <td class="FieldComponent">
 		            $timestampName 
 		               <div style="display:none;"><%
-		              String[] configNameField = ["jcrPath=/node", "mixintype=mix:i18n", "editable=if-null", timestampName] ;
+		              String[] configNameField = ["jcrPath=/node", "editable=if-null", timestampName] ;
 		              uicomponent.addTextField("name", configNameField) ;
 		            %></div>
 		          </td>
