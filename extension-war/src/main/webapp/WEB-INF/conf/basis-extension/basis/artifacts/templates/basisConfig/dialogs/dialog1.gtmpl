@@ -292,7 +292,7 @@
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docInOut")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docInOutField = ["jcrPath=/node/basis:docInOut", "options=In,Out", "onchange=false"];
+				        String[] docInOutField = ["jcrPath=/node/basis:docInOut", "options=IN,OUT", "onchange=false"];
 				        uicomponent.addSelectBoxField("docInOut", docInOutField);
 				        %>
 				    </td>
@@ -524,8 +524,8 @@
 					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followComments")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] followCommentsField = ["jcrPath=/node/basis:followComments"];
-						uicomponent.addTextAreaField("followComments", followCommentsField);;
+						String[] followCommentsField = ["jcrPath=/node/basis:followComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;
+						uicomponent.addRichtextField("followComments", followCommentsField);
 						%>
 					</td>
 				</tr>

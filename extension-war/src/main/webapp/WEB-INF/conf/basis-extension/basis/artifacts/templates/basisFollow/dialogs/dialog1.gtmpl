@@ -4,7 +4,7 @@
 	import org.exoplatform.webui.form.UIFormSelectBox;
 	import basis.selector.service.BasisSelectorService;
 	import javax.jcr.Node;
-	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     String todayS=sdf.format(new Date());
 	private String getTimestampName() {
 		   Calendar now = Calendar.getInstance();
@@ -131,7 +131,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					<td class="FieldComponent">
 						<%
 						String[] followCommentsField = ["jcrPath=/node/basis:followComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;
-						uicomponent.addRichtextField("followComments", followCommentsField);;
+						uicomponent.addRichtextField("followComments", followCommentsField);
 						%>
 					</td>
 				</tr>

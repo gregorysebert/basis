@@ -6,11 +6,11 @@ import javax.jcr.Session;
 
 import org.exoplatform.services.jcr.RepositoryService;
 
-public class RenameDocumentInterceptor implements CmsScript {
+public class RenameFollowInterceptor implements CmsScript {
 	private static Logger logger = Logger.getLogger("RenameFollowInterceptor");
 	private RepositoryService repositoryService_;
 
-	public RenameDocumentInterceptor(RepositoryService repositoryService) {
+	public RenameFollowInterceptor(RepositoryService repositoryService) {
 		repositoryService_ = repositoryService;
 	}
 
@@ -26,8 +26,6 @@ public class RenameDocumentInterceptor implements CmsScript {
 		try {
 			session = repositoryService_.getCurrentRepository().getSystemSession(workspace);
 			Node srcNode = (Node) session.getItem(nodePath);
-			srcNode.checkin();
-			srcNode.checkout();
 			Node basisFolerNode = srcNode.getParent();
 			NodeIterator it = basisFolerNode.getNodes();
 			String incre = "";
@@ -55,8 +53,10 @@ public class RenameDocumentInterceptor implements CmsScript {
 			srcNode.setProperty("exo:name", "FU-" + incre);
             srcNode.setProperty("exo:title", "FU-" + incre);
 			session.save();
+			srcNode.checkin();
+			srcNode.checkout();
 		} catch (Exception e) {
-			logger.warning("Error in RenameDocumentInterceptor script : " + e.getMessage());
+			logger.warning("Error in RenameFollowInterceptor script : " + e.getMessage());
 		} finally {
 			if (session != null) {
 				session.logout();

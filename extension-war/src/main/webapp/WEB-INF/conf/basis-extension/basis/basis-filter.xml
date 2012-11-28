@@ -21,22 +21,6 @@
                     <value>repository</value>
                 </value-param>
                 <object-param>
-                    <name>basisDocument</name>
-                    <description>only basisFollow nodetype can be created in basisDocument</description>
-                    <object type="org.exoplatform.services.cms.templates.ContentTypeFilterPlugin$FolderFilterConfig">
-                        <field name="folderType">
-                            <string>basis:basisDocument</string>
-                        </field>
-                        <field name="contentTypes">
-                            <collection type="java.util.ArrayList">
-                                <value>
-                                    <string>basis:basisFollow</string>
-                                </value>
-                            </collection>
-                        </field>
-                    </object>
-                </object-param>
-                <object-param>
                     <name>FilterBasisBO</name>
                     <description>only basisConfig nodetype can be created in basisBO</description>
                     <object type="org.exoplatform.services.cms.templates.ContentTypeFilterPlugin$FolderFilterConfig">
@@ -52,6 +36,39 @@
                         </field>
                     </object>
                 </object-param>
+                <object-param>
+                    <name>FilterBasisFolder</name>
+                    <description>only basisFolderConfig nodetype can be created in basisFolder</description>
+                    <object type="org.exoplatform.services.cms.templates.ContentTypeFilterPlugin$FolderFilterConfig">
+                        <field name="folderType">
+                            <string>basis:basisFolder</string>
+                        </field>
+                        <field name="contentTypes">
+                            <collection type="java.util.ArrayList">
+                                <value>
+                                    <string>basis:basisFolderConfig</string>
+                                </value>
+                            </collection>
+                        </field>
+                    </object>
+                </object-param>
+                <object-param>
+                    <name>basisDocument</name>
+                    <description>only basisFollow nodetype can be created in basisDocument</description>
+                    <object type="org.exoplatform.services.cms.templates.ContentTypeFilterPlugin$FolderFilterConfig">
+                        <field name="folderType">
+                            <string>basis:basisDocument</string>
+                        </field>
+                        <field name="contentTypes">
+                            <collection type="java.util.ArrayList">
+                                <value>
+                                    <string>basis:basisFollow</string>
+                                </value>
+                            </collection>
+                        </field>
+                    </object>
+                </object-param>
+                
             </init-params>
         </component-plugin>
     </external-component-plugins>

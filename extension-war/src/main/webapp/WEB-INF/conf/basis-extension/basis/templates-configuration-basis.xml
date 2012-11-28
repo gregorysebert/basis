@@ -35,23 +35,23 @@
                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig">
                         <field name="nodeTypes">
                             <collection type="java.util.ArrayList">
-                                <value>
+                            	<value>
                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
                                         <field name="nodetypeName">
-                                            <string>basis:basisDocument</string>
+                                            <string>basis:basisBO</string>
                                         </field>
                                         <field name="documentTemplate">
                                             <boolean>true</boolean>
                                         </field>
                                         <field name="label">
-                                            <string>Basis Document</string>
+                                            <string>Basis BO</string>
                                         </field>
                                         <field name="referencedView">
                                             <collection type="java.util.ArrayList">
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisDocument/views/view1.gtmpl</string>
+                                                            <string>/basisBO/views/view1.gtmpl</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
@@ -65,7 +65,7 @@
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisDocument/dialogs/dialog1.gtmpl</string>
+                                                            <string>/basisBO/dialogs/dialog1.gtmpl</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
@@ -79,7 +79,7 @@
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisDocument/skins/Stylesheet-lt.css</string>
+                                                            <string>/basisBO/skins/Stylesheet-lt.css</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
@@ -89,72 +89,7 @@
                                                 <value>
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
-                                                            <string>/basisDocument/skins/Stylesheet-rt.css</string>
-                                                        </field>
-                                                        <field name="roles">
-                                                            <string>*</string>
-                                                        </field>
-                                                    </object>
-                                                </value>
-                                            </collection>
-                                        </field>
-                                    </object>
-                                </value>
-                                <value>
-                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
-                                        <field name="nodetypeName">
-                                            <string>basis:basisFolder</string>
-                                        </field>
-                                        <field name="documentTemplate">
-                                            <boolean>true</boolean>
-                                        </field>
-                                        <field name="label">
-                                            <string>Basis Folder</string>
-                                        </field>
-                                        <field name="referencedView">
-                                            <collection type="java.util.ArrayList">
-                                                <value>
-                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
-                                                        <field name="templateFile">
-                                                            <string>/basisFolder/views/view1.gtmpl</string>
-                                                        </field>
-                                                        <field name="roles">
-                                                            <string>*</string>
-                                                        </field>
-                                                    </object>
-                                                </value>
-                                            </collection>
-                                        </field>
-                                        <field name="referencedDialog">
-                                            <collection type="java.util.ArrayList">
-                                                <value>
-                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
-                                                        <field name="templateFile">
-                                                            <string>/basisFolder/dialogs/dialog1.gtmpl</string>
-                                                        </field>
-                                                        <field name="roles">
-                                                            <string>*</string>
-                                                        </field>
-                                                    </object>
-                                                </value>
-                                            </collection>
-                                        </field>
-                                        <field name="referencedSkin">
-                                            <collection type="java.util.ArrayList">
-                                                <value>
-                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
-                                                        <field name="templateFile">
-                                                            <string>/basisFolder/skins/Stylesheet-lt.css</string>
-                                                        </field>
-                                                        <field name="roles">
-                                                            <string>*</string>
-                                                        </field>
-                                                    </object>
-                                                </value>
-                                                <value>
-                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
-                                                        <field name="templateFile">
-                                                            <string>/basisFolder/skins/Stylesheet-rt.css</string>
+                                                            <string>/basisBO/skins/Stylesheet-rt.css</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>
@@ -233,6 +168,201 @@
                                 <value>
                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
                                         <field name="nodetypeName">
+                                            <string>basis:basisFolderConfig</string>
+                                        </field>
+                                        <field name="documentTemplate">
+                                            <boolean>true</boolean>
+                                        </field>
+                                        <field name="label">
+                                            <string>Basis Intro Folder</string>
+                                        </field>
+                                        <field name="referencedView">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisFolderConfig/views/view1.gtmpl</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                        <field name="referencedDialog">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisFolderConfig/dialogs/dialog1.gtmpl</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                        <field name="referencedSkin">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisFolderConfig/skins/Stylesheet-lt.css</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisFolderConfig/skins/Stylesheet-rt.css</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                    </object>
+                                </value>
+                                <value>
+                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
+                                        <field name="nodetypeName">
+                                            <string>basis:basisFolder</string>
+                                        </field>
+                                        <field name="documentTemplate">
+                                            <boolean>true</boolean>
+                                        </field>
+                                        <field name="label">
+                                            <string>Basis Folder</string>
+                                        </field>
+                                        <field name="referencedView">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisFolder/views/view1.gtmpl</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                        <field name="referencedDialog">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisFolder/dialogs/dialog1.gtmpl</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                        <field name="referencedSkin">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisFolder/skins/Stylesheet-lt.css</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisFolder/skins/Stylesheet-rt.css</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                    </object>
+                                </value>
+                                <value>
+                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
+                                        <field name="nodetypeName">
+                                            <string>basis:basisDocument</string>
+                                        </field>
+                                        <field name="documentTemplate">
+                                            <boolean>true</boolean>
+                                        </field>
+                                        <field name="label">
+                                            <string>Basis Document</string>
+                                        </field>
+                                        <field name="referencedView">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisDocument/views/view1.gtmpl</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                        <field name="referencedDialog">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisDocument/dialogs/dialog1.gtmpl</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                        <field name="referencedSkin">
+                                            <collection type="java.util.ArrayList">
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisDocument/skins/Stylesheet-lt.css</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                                <value>
+                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
+                                                        <field name="templateFile">
+                                                            <string>/basisDocument/skins/Stylesheet-rt.css</string>
+                                                        </field>
+                                                        <field name="roles">
+                                                            <string>*</string>
+                                                        </field>
+                                                    </object>
+                                                </value>
+                                            </collection>
+                                        </field>
+                                    </object>
+                                </value>
+                                <value>
+                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
+                                        <field name="nodetypeName">
                                             <string>basis:basisFollow</string>
                                         </field>
                                         <field name="documentTemplate">
@@ -285,71 +415,6 @@
                                                     <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
                                                         <field name="templateFile">
                                                             <string>/basisFollow/skins/Stylesheet-rt.css</string>
-                                                        </field>
-                                                        <field name="roles">
-                                                            <string>*</string>
-                                                        </field>
-                                                    </object>
-                                                </value>
-                                            </collection>
-                                        </field>
-                                    </object>
-                                </value>
-                                <value>
-                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$NodeType">
-                                        <field name="nodetypeName">
-                                            <string>basis:basisBO</string>
-                                        </field>
-                                        <field name="documentTemplate">
-                                            <boolean>true</boolean>
-                                        </field>
-                                        <field name="label">
-                                            <string>Basis BO</string>
-                                        </field>
-                                        <field name="referencedView">
-                                            <collection type="java.util.ArrayList">
-                                                <value>
-                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
-                                                        <field name="templateFile">
-                                                            <string>/basisBO/views/view1.gtmpl</string>
-                                                        </field>
-                                                        <field name="roles">
-                                                            <string>*</string>
-                                                        </field>
-                                                    </object>
-                                                </value>
-                                            </collection>
-                                        </field>
-                                        <field name="referencedDialog">
-                                            <collection type="java.util.ArrayList">
-                                                <value>
-                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
-                                                        <field name="templateFile">
-                                                            <string>/basisBO/dialogs/dialog1.gtmpl</string>
-                                                        </field>
-                                                        <field name="roles">
-                                                            <string>*</string>
-                                                        </field>
-                                                    </object>
-                                                </value>
-                                            </collection>
-                                        </field>
-                                        <field name="referencedSkin">
-                                            <collection type="java.util.ArrayList">
-                                                <value>
-                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
-                                                        <field name="templateFile">
-                                                            <string>/basisBO/skins/Stylesheet-lt.css</string>
-                                                        </field>
-                                                        <field name="roles">
-                                                            <string>*</string>
-                                                        </field>
-                                                    </object>
-                                                </value>
-                                                <value>
-                                                    <object type="org.exoplatform.services.cms.templates.impl.TemplateConfig$Template">
-                                                        <field name="templateFile">
-                                                            <string>/basisBO/skins/Stylesheet-rt.css</string>
                                                         </field>
                                                         <field name="roles">
                                                             <string>*</string>

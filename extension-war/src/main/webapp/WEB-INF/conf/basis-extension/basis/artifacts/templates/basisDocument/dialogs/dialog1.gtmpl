@@ -61,7 +61,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docInOut")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docInOutField = ["jcrPath=/node/basis:docInOut", "options=In,Out", "onchange=false"];
+				        String[] docInOutField = ["jcrPath=/node/basis:docInOut", "options=IN,OUT", "onchange=false"];
 				        uicomponent.addSelectBoxField("docInOut", docInOutField);
 				        %>
 				    </td>

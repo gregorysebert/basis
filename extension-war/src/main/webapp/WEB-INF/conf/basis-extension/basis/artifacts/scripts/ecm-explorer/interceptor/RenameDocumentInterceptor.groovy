@@ -26,8 +26,6 @@ public class RenameDocumentInterceptor implements CmsScript {
 		try {
 			session = repositoryService_.getCurrentRepository().getSystemSession(workspace);
 			Node srcNode = (Node) session.getItem(nodePath);
-			srcNode.checkin();
-			srcNode.checkout();
 			Node basisFolerNode = srcNode.getParent();
 			NodeIterator it = basisFolerNode.getNodes();
 			String incre = "000";
@@ -50,6 +48,8 @@ public class RenameDocumentInterceptor implements CmsScript {
 			srcNode.setProperty("exo:name", basisFolerNode.getName() + "-" + incre);
             srcNode.setProperty("exo:title", basisFolerNode.getProperty("exo:title").getString() + "-" + incre);
 			session.save();
+			srcNode.checkin();
+			srcNode.checkout();
 		} catch (Exception e) {
 			logger.warning("Error in RenameDocumentInterceptor script : " + e.getMessage());
 		} finally {
