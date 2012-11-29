@@ -95,7 +95,7 @@ public class CreateFolderConfigTreeInterceptor implements CmsScript {
 		            incre = (String)(incre.substring(0, 2) + (char)(incre.charAt(2)+1));
 				}
 				Node basisDocumentNode = basisFolderNode.addNode(basisFolderNode.getName() + "-" + incre, BASIS_DOCUMENT_NODETYPE);
-				basisDocumentNode.setProperty("exo:title", basisFolderNode.getProperty("exo:title").getString() + incre);
+				basisDocumentNode.setProperty("exo:title", basisFolderNode.getProperty("exo:title").getString() + "-" + incre);
 				if (srcNode.hasProperty("basis:docInOut")) {
 					basisDocumentNode.setProperty("basis:docInOut", srcNode.getProperty("basis:docInOut").getString());
 				}
