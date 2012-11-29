@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+  <BasisInfo>
+    <newBasisFolderNumber>Le numéro de votre dernier dossier Basis est:</newBasisFolderNumber>
+	<noNewBasisFolder>Aucun nouveau dossier Basis.</noNewBasisFolder>
+    <newBasisDocumentId>L'id de votre dernier document Basis est:</newBasisDocumentId>
+	<noNewBasisDocument>Aucun nouveau document Basis.</noNewBasisDocument>
+  </BasisInfo>
+</bundle>

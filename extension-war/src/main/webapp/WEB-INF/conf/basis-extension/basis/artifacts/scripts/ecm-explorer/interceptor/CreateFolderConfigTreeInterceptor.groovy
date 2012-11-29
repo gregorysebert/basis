@@ -4,6 +4,8 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import org.exoplatform.services.cms.scripts.CmsScript;
 import org.exoplatform.services.jcr.RepositoryService;
+import javax.servlet.http.HttpSession;
+import org.exoplatform.portal.webui.util.Util;
 
 public class CreateFolderConfigTreeInterceptor implements CmsScript {
 
@@ -141,6 +143,8 @@ public class CreateFolderConfigTreeInterceptor implements CmsScript {
 				session.save();
 				basisDocumentNode.checkin();
 				basisDocumentNode.checkout();
+				HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
+			    httpSession.setAttribute("basisDocumentId", basisDocumentNode.getProperty("exo:title").getString());
 				if (srcNode.getProperty("basis:folderConfigFollowDoc").getBoolean()){//Add basis follow document
 					Node basisFollowNode = basisDocumentNode.addNode("FU" + "-000", BASIS_FOLLOW_NODETYPE);
 					if (srcNode.hasProperty("basis:folderConfigFollowDocSendDate")) {
@@ -169,7 +173,7 @@ public class CreateFolderConfigTreeInterceptor implements CmsScript {
 					}
 					session.save();
 					basisFollowNode.checkin();
-					basisFollowNode.checkout();					
+					basisFollowNode.checkout();
 				}	
 			}				
 			srcNode.remove();

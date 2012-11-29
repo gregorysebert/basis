@@ -28,9 +28,9 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.exoplatform</groupId>
-    <artifactId>basis-searchPortlet</artifactId>
+    <artifactId>basis-portlets</artifactId>
    	<packaging>war</packaging>
-  	<name>Basis Search Portlet</name>
+  	<name>Basis Portlets</name>
   	<version>${org.exoplatform.basis.version}</version>
     <dependencies>
         <dependency>
@@ -54,7 +54,7 @@
     </dependencies>
 
     <build>
-    <finalName>basis-searchPortlet</finalName>
+    <finalName>basis-portlets</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

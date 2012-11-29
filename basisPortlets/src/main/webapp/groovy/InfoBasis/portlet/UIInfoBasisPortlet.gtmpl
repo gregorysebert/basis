@@ -1,0 +1,21 @@
+<% 
+String folderNumber = uicomponent.getFolderNumber();
+String documentId = uicomponent.getDocumentId();
+%>
+<center><p style="font-family: arial; font-size: 20px;">
+<%if (folderNumber != null) {%>
+<%=_ctx.appRes("BasisInfo.newBasisFolderNumber")%> $folderNumber
+<%}
+else {
+%>
+<%=_ctx.appRes("BasisInfo.noNewBasisFolder")%>
+<%}%>
+<br/>
+<%if (documentId != null) {%>
+<%=_ctx.appRes("BasisInfo.newBasisDocumentId")%> $documentId
+<%}
+else {
+%>
+<%=_ctx.appRes("BasisInfo.noNewBasisDocument")%>
+<%}%>
+</p></center>

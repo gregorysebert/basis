@@ -5,6 +5,8 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import org.exoplatform.services.cms.scripts.CmsScript;
 import org.exoplatform.services.jcr.RepositoryService;
+import javax.servlet.http.HttpSession;
+import org.exoplatform.portal.webui.util.Util;
 
 public class CreateFolderTreeInterceptor implements CmsScript {
 
@@ -173,7 +175,6 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			if (srcNode.hasProperty("basis:followAnswerByDate")) {
 				basisFollowNode.setProperty("basis:followAnswerByDate", srcNode.getProperty("basis:followAnswerByDate").getDate());
 			}	
-				
 			srcNode.remove();
 			session.save();
 			basisFolderNode.checkin();
@@ -182,6 +183,9 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			basisDocumentNode.checkout();
 			basisFollowNode.checkin();
 			basisFollowNode.checkout();
+			HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
+			httpSession.setAttribute("basisFolderNumber", basisFolderNodeTitle);
+			httpSession.setAttribute("basisDocumentId", basisDocumentNode.getProperty("exo:title").getString());
 		} catch (Exception e) {
 			logger.warning("Error in CreateFolderTreeInterceptor script : " + e.getMessage());
 		} finally {

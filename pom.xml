@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
 
 	<modules>
-	 	<module>basisSearchPortlet</module>
+	 	<module>basisPortlets</module>
 	 	<module>migrationService</module>
 		<module>basisSelectorService</module>
         <module>extension-jar</module>
