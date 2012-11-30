@@ -16,11 +16,13 @@ public class MigrationServiceImpl implements MigrationService
     protected static Log log = ExoLogger.getLogger("basis.migration.service.MigrationServiceImpl");
     private String path;
     private String jcrpath;
+    private String documentsErrorPath;
 
     public MigrationServiceImpl() {
         log.debug("basis.migration.service.MigrationServiceImpl");
         Properties prop = getPropsFile("conf/application.properties");
         this.path = prop.getProperty("basis.documentsPath");
+        this.documentsErrorPath = prop.getProperty("basis.documentsErrorPath");
         this.jcrpath = prop.getProperty("basis.jcrPath");
     }
 
@@ -52,7 +54,7 @@ public class MigrationServiceImpl implements MigrationService
             rootNode = session.getRootNode().getNode(jcrpath);
 
 
-        if (!rootNode.hasNode(jcrpath + "/" + BO))
+        if (!rootNode.hasNode(BO))
         {
             rootNode.addNode(BO, "nt:unstructured");
             session.save();
@@ -68,7 +70,7 @@ public class MigrationServiceImpl implements MigrationService
         {
               log.info("Migrating file : " + fileName);
 
-                MigrationUtil.addBasisDocument(session, BO, path + "/" + fileName,jcrpath);
+                MigrationUtil.addBasisDocument(session, BO, path + "/" + fileName,jcrpath,documentsErrorPath);
 
 
         }

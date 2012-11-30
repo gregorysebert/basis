@@ -46,7 +46,6 @@ public class MigrationUtil {
     DIESER
     DOCDAT
     DOCNUM
-    DOSNUM
     INSDAT
     KEYWDS
     KLANUM
@@ -61,9 +60,9 @@ public class MigrationUtil {
     ZAAAFF*/
 
 
-    private static final String doctype = "docType";
     private static final String docRegistrationDate = "docRegistrationDate";
     private static final String docDate = "docDate";
+    private static final String DOSNUM  =   "DOSNUM";
     private static final String docReference = "docReference";
     private static final String docKeywords = "docKeywords";
     private static final String docInternSender = "docInternSender";
@@ -72,7 +71,8 @@ public class MigrationUtil {
     private static final String docExternSenderZipCode = "docExternSenderZipCode";
     private static final String docExternSenderCity = "docExternSenderCity";
     private static final String docExternSenderCountry = "docExternSenderCountry";
-    private static final String sysDate = "SYSDAT";
+    private static final String SYSDAT = "SYSDAT";
+    private static final String DOCNUM = "DOCNUM";
 
     public static Session getSession()
     {
@@ -105,14 +105,16 @@ public class MigrationUtil {
         return filesList;
     }
 
-    public static boolean addBasisDocument(Session session, String BO, String path, String jcrpath) {
-        HashMap<String, String>  mapDoc=  readBasisFile(path);
+    public static boolean addBasisDocument(Session session, String BO, String path, String jcrpath,String documentsErrorPath) {
+        HashMap<String, String>  mapDoc=  readBasisFile(path,documentsErrorPath);
         try {
 
+       BasisFolder basisFolder =   getBasisFolder(BO,mapDoc);
+       BasisDocument  basisDoc =   getBasisDoc(BO,mapDoc);
 
-       BasisDocument  basisDoc =   getBasisDoc(mapDoc);
-
-       createDateFolder(basisDoc.getSysDate(),session,jcrpath + "/" + BO);
+       String basisFolderPath = createDateFolder(basisDoc.getSysDate(),session,jcrpath + "/" + BO);
+       String folderPath = createBasisFolder(session,basisFolderPath,basisFolder);
+       createBasisDocument(session,folderPath,basisDoc);
 
        session.save();
 
@@ -124,7 +126,7 @@ public class MigrationUtil {
         return true;
     }
 
-    public static HashMap<String, String> readBasisFile(String path)
+    public static HashMap<String, String> readBasisFile(String path,String documentsErrorPath)
     {
         File file = new File(path);
         FileInputStream fis = null;
@@ -146,8 +148,19 @@ public class MigrationUtil {
                 {
                     field = field.replace("<#FIELD NAME = ","");
                     String[] temp = field.split(">");
-                    System.out.println(temp[0]+":"+temp[1]);
+
+                    if (temp.length == 2)
+                    {
                     dataBasis.put(temp[0],temp[1]);
+                    }
+                    else
+                    {
+                        fis.close();
+                        bis.close();
+                        dis.close();
+                        file.renameTo(new File(documentsErrorPath+"/"+file.getName()));
+                        log.error("Unable to read file" + path);
+                    }
                 }
 
             }
@@ -161,11 +174,14 @@ public class MigrationUtil {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } catch (Exception e){
+        e.printStackTrace();
+    }
+
     return dataBasis;
     }
 
-    public static void createDateFolder(Date date, Session session, String path) throws RepositoryException {
+    public static String createDateFolder(Date date, Session session, String path) throws RepositoryException {
         Node rootNode = session.getRootNode().getNode(path);
 
 
@@ -193,12 +209,52 @@ public class MigrationUtil {
             rootNode.addNode(dayFormat.format(date),"nt:unstructured");
             session.save();
         }
+        return rootNode.getNode(dayFormat.format(date)).getPath().substring(1,rootNode.getNode(dayFormat.format(date)).getPath().length());
     }
 
-    public static BasisDocument getBasisDoc(HashMap<String, String> docMap)
+    public static BasisDocument getBasisDoc(String BO,HashMap<String, String> docMap)
     {
         BasisDocument basisDoc= new BasisDocument();
+        basisDoc.setDocId(BO+"-"+docMap.get(DOSNUM)+"-"+docMap.get(DOCNUM));
         basisDoc.setSysDate(new Date());
         return basisDoc;
     }
-}
+
+    public static BasisFolder getBasisFolder(String BO,HashMap<String, String> docMap)
+    {
+        BasisFolder basisFodler= new BasisFolder();
+        basisFodler.setFolderId(BO+"-"+docMap.get(DOSNUM));
+        return basisFodler;
+    }
+
+    public static String createBasisFolder(Session session, String path, BasisFolder basisFolder) throws RepositoryException {
+        Node rootNode = session.getRootNode().getNode(path);
+        Node nodeBasisFolder = null;
+        String folderPath = "";
+        if   (!rootNode.hasNode(basisFolder.getFolderId()))
+        {
+            nodeBasisFolder = rootNode.addNode(basisFolder.getFolderId(),"basis:basisFolder");
+            nodeBasisFolder.setProperty("exo:title",basisFolder.getFolderId() ) ;
+            nodeBasisFolder.setProperty("exo:name",basisFolder.getFolderId() ) ;
+        }
+        else  nodeBasisFolder =  rootNode.getNode(basisFolder.getFolderId());
+
+        path = nodeBasisFolder.getPath().substring(1,nodeBasisFolder.getPath().length());
+        session.save();
+
+        return path;
+        }
+    public static void createBasisDocument(Session session, String path, BasisDocument basisDocument) throws RepositoryException {
+        Node rootNode = session.getRootNode().getNode(path);
+        if   (!rootNode.hasNode(basisDocument.getDocId()))
+        {
+            Node nodeBasisFolder = rootNode.addNode(basisDocument.getDocId(),"basis:basisDocument");
+            nodeBasisFolder.setProperty("exo:title",basisDocument.getDocId() ) ;
+            nodeBasisFolder.setProperty("exo:name",basisDocument.getDocId() ) ;
+        }
+
+        session.save();
+    }
+
+    }
+

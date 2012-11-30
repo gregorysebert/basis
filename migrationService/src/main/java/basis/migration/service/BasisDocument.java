@@ -11,6 +11,7 @@ import java.util.Date;
  */
 public class BasisDocument {
 
+    private String docId;
     private String docType;
     private Date docRegistrationDate;
     private Date docDate;
@@ -24,6 +25,13 @@ public class BasisDocument {
     private String docExternSenderCountry;
     private Date sysDate;
 
+    public String getDocId() {
+        return docId;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
+    }
 
     public Date getSysDate() {
         return sysDate;
