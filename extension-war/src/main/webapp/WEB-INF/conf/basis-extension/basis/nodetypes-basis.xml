@@ -27,7 +27,7 @@
             <supertype>basis:basisFollow</supertype>
         </supertypes>
         <propertyDefinitions>
-            <propertyDefinition name="basis:folderConfigType" requiredType="String" autoCreated="false" mandatory="false"
+            <propertyDefinition name="basis:folderConfigFollowFolder" requiredType="Boolean" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
@@ -91,11 +91,19 @@
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
+            <propertyDefinition name="basis:folderInternSender" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
             <propertyDefinition name="basis:folderExternalReference" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
             <propertyDefinition name="basis:folderStatus" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:folderComments" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
@@ -160,6 +168,10 @@
                 <valueConstraints/>
             </propertyDefinition> 
             <propertyDefinition name="basis:docExternSenderCountry" requiredType="String" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
+            <propertyDefinition name="basis:docComments" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>                                                                 

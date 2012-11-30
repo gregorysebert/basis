@@ -24,12 +24,6 @@ http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <artifactId>jcr</artifactId>
-            <groupId>jcr</groupId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <artifactId>exo.jcr.component.core</artifactId>
             <groupId>org.exoplatform.jcr</groupId>
             <version>${org.exoplatform.jcr.version}</version>

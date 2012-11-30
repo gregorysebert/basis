@@ -74,6 +74,16 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderRNN")%>:</td>
 					<td class="FieldComponent">${valueDisplay}</td>
+					<%
+				 	if (node.hasProperty("basis:folderInternSender")) {
+					 	valueDisplay = node.getProperty("basis:folderInternSender").getString();
+					 	if (!valueDisplay.equals("")){
+					%>
+					<td class="FieldComponent">${valueDisplay}</td>
+					<%
+						}
+				 	}	 
+					%>
 				</tr>
 				<%
 					}
@@ -99,6 +109,19 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderStatus")%>:</td>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+				<%
+				 if (node.hasProperty("basis:folderComments")) {
+					 valueDisplay = node.getProperty("basis:folderComments").getString();
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basis.label.comments")%>:</td>
 					<td class="FieldComponent">${valueDisplay}</td>
 				</tr>
 				<%

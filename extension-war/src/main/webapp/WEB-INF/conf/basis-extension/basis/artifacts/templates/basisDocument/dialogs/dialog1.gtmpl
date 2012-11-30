@@ -223,7 +223,16 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				        %>
 				    </td>
 				</tr>																			    
-			   <% } %> 																				
+			   <% } %>
+			    <tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] docCommentsField = ["jcrPath=/node/basis:docComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;
+						uicomponent.addRichtextField("docComments", docCommentsField);
+						%>
+					</td>
+				</tr> 																				
 			</table>
 			<div class="UIAction"> 
 							<table class="ActionContainer">

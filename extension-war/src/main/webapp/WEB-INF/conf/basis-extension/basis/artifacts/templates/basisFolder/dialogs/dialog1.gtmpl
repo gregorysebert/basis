@@ -140,6 +140,12 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 						%>
 						<input id="inputfolderRNN" type="text" name="inputfolderRNN"  value=<%=folderRNNVal%> onchange="javascript:checkFieldRNN('inputfolderRNN','folderRNN','')">
 					</td>
+					<td class="FieldComponent">
+			          	<%
+			          	 String[] folderInternSenderField = ["jcrPath=/node/basis:folderInternSender", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			           	uicomponent.addActionField("folderInternSender", folderInternSenderField);
+			          	%>
+			        </td>
 				</tr>
 				<tr>
 					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderExternalReference")%></td>
@@ -158,6 +164,15 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				        uicomponent.addSelectBoxField("folderStatus", folderStatusField);
 				        %>
 				    </td>
+				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] folderCommentsField = ["jcrPath=/node/basis:folderComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;
+						uicomponent.addRichtextField("folderComments", folderCommentsField);
+						%>
+					</td>
 				</tr>
 			</table>
 			<div class="UIAction"> 

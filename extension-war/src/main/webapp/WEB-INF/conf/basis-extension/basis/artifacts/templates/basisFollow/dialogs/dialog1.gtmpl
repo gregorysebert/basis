@@ -127,7 +127,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    </td>
 				</tr>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followComments")%></td>
+					<td class="FieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] followCommentsField = ["jcrPath=/node/basis:followComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;

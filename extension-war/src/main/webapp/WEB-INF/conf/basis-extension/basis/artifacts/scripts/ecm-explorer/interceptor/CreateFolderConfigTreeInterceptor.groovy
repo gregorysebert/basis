@@ -35,7 +35,7 @@ public class CreateFolderConfigTreeInterceptor implements CmsScript {
 			NodeIterator it = basisFolderNode.getNodes();
 			String incre = "000";
             
-			if (srcNode.getProperty("basis:folderConfigType").getString().equals("FollowFolder")) {//Add basis follow folder
+			if (srcNode.getProperty("basis:folderConfigFollowFolder").getBoolean()) {//Add basis follow folder
 			    while (it.hasNext()) {
 	                Node basisFollowNode = (Node) it.next();
 	                if ((basisFollowNode.getName().split("-")[0].equals("FU"))&&(basisFollowNode.getName().split("-")[1].compareTo(incre) > 0)) {
@@ -139,6 +139,9 @@ public class CreateFolderConfigTreeInterceptor implements CmsScript {
 				}	
 				if (srcNode.hasProperty("basis:docExternSenderCountry")) {
 					basisDocumentNode.setProperty("basis:docExternSenderCountry", srcNode.getProperty("basis:docExternSenderCountry").getString());
+				}
+				if (srcNode.hasProperty("basis:docComments")) {
+				basisDocumentNode.setProperty("basis:docComments", srcNode.getProperty("basis:docComments").getString());
 				}
 				session.save();
 				basisDocumentNode.checkin();

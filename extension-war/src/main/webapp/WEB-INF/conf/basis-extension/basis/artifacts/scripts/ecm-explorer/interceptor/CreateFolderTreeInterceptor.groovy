@@ -72,11 +72,17 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			if (srcNode.hasProperty("basis:folderRNN")) {
 				basisFolderNode.setProperty("basis:folderRNN", srcNode.getProperty("basis:folderRNN").getString());
 			}
+			if (srcNode.hasProperty("basis:folderInternSender")) {
+				basisFolderNode.setProperty("basis:folderInternSender", srcNode.getProperty("basis:folderInternSender").getString());
+			}
 			if (srcNode.hasProperty("basis:folderExternalReference")) {
 				basisFolderNode.setProperty("basis:folderExternalReference", srcNode.getProperty("basis:folderExternalReference").getString());
 			}
 			if (srcNode.hasProperty("basis:folderStatus")) {
 				basisFolderNode.setProperty("basis:folderStatus", srcNode.getProperty("basis:folderStatus").getString());
+			}
+			if (srcNode.hasProperty("basis:folderComments")) {
+				basisFolderNode.setProperty("basis:folderComments", srcNode.getProperty("basis:folderComments").getString());
 			}
 			if (incre.charAt(7) == '9' && incre.charAt(6) != '9') {
 		        incre = (String)(incre.substring(0, 6) + (char)(incre.charAt(6)+1)) + "0";
@@ -148,7 +154,9 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			if (srcNode.hasProperty("basis:docExternSenderCountry")) {
 				basisDocumentNode.setProperty("basis:docExternSenderCountry", srcNode.getProperty("basis:docExternSenderCountry").getString());
 			}
-			
+			if (srcNode.hasProperty("basis:docComments")) {
+				basisDocumentNode.setProperty("basis:docComments", srcNode.getProperty("basis:docComments").getString());
+			}
 			//Add basis follow
 			Node basisFollowNode = basisFolderNode.addNode("FU" + "-000", BASIS_FOLLOW_NODETYPE);
 			if (srcNode.hasProperty("basis:followSendDate")) {

@@ -94,7 +94,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFollow.label.followComments")%>:</td>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basis.label.comments")%>:</td>
 					<td class="FieldComponent">${valueDisplay}</td>
 				</tr>
 				<%

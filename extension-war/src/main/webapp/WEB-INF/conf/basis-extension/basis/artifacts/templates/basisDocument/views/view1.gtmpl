@@ -203,5 +203,18 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					}
 				 }	 
 				%>
+				<%
+				 if (node.hasProperty("basis:docComments")) {
+					 valueDisplay = node.getProperty("basis:docComments").getString();
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basis.label.comments")%>:</td>
+					<td class="FieldComponent">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
 			</table>
 		</div>
