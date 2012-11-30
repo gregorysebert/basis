@@ -16,9 +16,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-import javax.jcr.Node;
 import javax.jcr.query.QueryResult;
-import javax.portlet.PortletRequest;
 
 
 //this part is configuration of the portlet, we set the path to the template groovy.
@@ -48,9 +46,7 @@ public class UISearchBasisPortlet extends UIPortletApplication {
         removeChildById("Result");
         addChild(UIResultForm.class,null,"Result");
         UIResultForm uiResultForm = getChild(UIResultForm.class);
-        //uiResultForm.reset();
         uiResultForm.update();
-        //replaceChild("Result",getChild(UIResultForm.class));
         setRenderedChild("Result");
     }
 

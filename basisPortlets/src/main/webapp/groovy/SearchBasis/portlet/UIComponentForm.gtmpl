@@ -19,7 +19,8 @@
 										</label>
 									</td>
 									<td style="width: 100px"><% uiform.renderField("searchType") %></td>
-									<td class="FieldComponent"><% uiform.renderField(field) %></td></tr>
+									<td class="FieldComponent"><% uiform.renderField(field) %></td>
+									<td class="FieldComponent"><a href="<%=uicomponent.event("AddField")%>" class="ActionButton LightBlueStyle">Add</a></td></tr>
 									<tr>
 									<td class="FieldLabel">
                                         <label for="operator">
