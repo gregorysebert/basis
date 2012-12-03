@@ -17,6 +17,13 @@
 	}
 	String timestampName = getTimestampName();
 	Node currentNode = uicomponent.getCurrentNode();
+	private Node getBONode(Node currentNode) {
+		   if (! currentNode.isNodeType("basis:basisBO")) {
+		   	   Node parentNode = currentNode.getParent();
+			   return getBONode(parentNode); 
+		   }
+		   return currentNode;
+	}
 %>
 <% uicomponent.addInterceptor("ecm-explorer/interceptor/CreateFolderTreeInterceptor.groovy", "post");%>
 
@@ -143,7 +150,7 @@
 				        UIFormSelectBox folderLanguageSelectBox = uicomponent.findComponentById("folderLanguage");
 				        String language = folderLanguageSelectBox.getValue();
 				        // basis folder
-				        BasisSelectorService basisSelectorService = new BasisSelectorService(currentNode.getNode("folderSelector.txt"), "Status", language);
+				        BasisSelectorService basisSelectorService = new BasisSelectorService(getBONode(currentNode).getNode("folderSelector.txt"), "Status", language);
 			            String statusOptions = basisSelectorService.getOptions();
 			            UIFormSelectBox folderStatusSelectBox = uicomponent.findComponentById("folderStatus");
 			            if(folderStatusSelectBox != null) {
@@ -155,7 +162,7 @@
 			            	folderStatusSelectBox.setOptions(optionsList);
 			            }
 			            // basis document
-			            Node documentSelectorNode = currentNode.getNode("documentSelector.txt");
+			            Node documentSelectorNode = getBONode(currentNode).getNode("documentSelector.txt");
 			            basisSelectorService = new BasisSelectorService(documentSelectorNode, "Type", language);
 			            String typeOptions = basisSelectorService.getOptions();
 			            UIFormSelectBox docTypeSelectBox = uicomponent.findComponentById("docType");
@@ -190,7 +197,7 @@
 			                docPredefinedExternSenderSelectBox.setOptions(optionsList);
 			            }
 			         	// basis follow
-			            Node followSelectorNode = currentNode.getNode("followSelector.txt");
+			            Node followSelectorNode = getBONode(currentNode).getNode("followSelector.txt");
 			            basisSelectorService = new BasisSelectorService(followSelectorNode, "GroupInternEditor", language);
 			            String groupInternEditorOptions = basisSelectorService.getOptions();
 			            UIFormSelectBox followGroupInternEditorSelectBox = uicomponent.findComponentById("followGroupInternEditor");

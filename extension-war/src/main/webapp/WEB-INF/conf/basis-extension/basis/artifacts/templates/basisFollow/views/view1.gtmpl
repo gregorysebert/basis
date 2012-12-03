@@ -20,6 +20,8 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 			              println uicomponent.getVersionName(node) ;
 			            }
 			          %>
+			          <%=_ctx.appRes("basis.label.by")%>
+			          <%println node.getProperty("exo:lastModifier").getString();%>
 		</div>
 		<div id="$uicomponent.id">
 			<table class="UIFormGrid">

@@ -37,6 +37,22 @@
                     </object>
                 </object-param>
                 <object-param>
+                    <name>FilterBasisDate</name>
+                    <description>only basisConfig nodetype can be created in basisDate</description>
+                    <object type="org.exoplatform.services.cms.templates.ContentTypeFilterPlugin$FolderFilterConfig">
+                        <field name="folderType">
+                            <string>basis:basisDate</string>
+                        </field>
+                        <field name="contentTypes">
+                            <collection type="java.util.ArrayList">
+                                <value>
+                                    <string>basis:basisConfig</string>
+                                </value>
+                            </collection>
+                        </field>
+                    </object>
+                </object-param>
+                <object-param>
                     <name>FilterBasisFolder</name>
                     <description>only basisFolderConfig nodetype can be created in basisFolder</description>
                     <object type="org.exoplatform.services.cms.templates.ContentTypeFilterPlugin$FolderFilterConfig">

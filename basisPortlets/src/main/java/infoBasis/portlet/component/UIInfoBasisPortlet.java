@@ -9,22 +9,33 @@ import org.exoplatform.portal.webui.util.Util;
         lifecycle = UIApplicationLifecycle.class,
         template =  "app:/groovy/InfoBasis/portlet/UIInfoBasisPortlet.gtmpl")
 public class UIInfoBasisPortlet extends UIPortletApplication {
-
-    public UIInfoBasisPortlet( ) throws Exception {
+	
+    private String getSessionAttribute(String sessionAttribute){
+    	HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
+		if (httpSession.getAttribute(sessionAttribute) != null) {
+		   return httpSession.getAttribute(sessionAttribute).toString();
+		}
+		return null;
+    }
+	public UIInfoBasisPortlet( ) throws Exception {
     }
     public String getFolderNumber(){
-		HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
-		if (httpSession.getAttribute("basisFolderNumber") != null) {
-		   return httpSession.getAttribute("basisFolderNumber").toString();
-		}
-		return null;
+		return getSessionAttribute("basisFolderNumber");
 	}
     public String getDocumentId(){
-		HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
-		if (httpSession.getAttribute("basisDocumentId") != null) {
-		   return httpSession.getAttribute("basisDocumentId").toString();
-		}
-		return null;
-    }	
+		return getSessionAttribute("basisDocumentId");
+    }
+    public String getFolderNodePath(){
+    	if (getSessionAttribute("basisFolderNodePath") != null) {
+    		return Util.getPortalRequestContext().getRequestURI() + "?path=Order Desk" + getSessionAttribute("basisFolderNodePath");
+    	}
+    	return null;
+	}
+    public String getDocumentNodePath(){
+    	if (getSessionAttribute("basisDocumentNodePath") != null) {
+    		return Util.getPortalRequestContext().getRequestURI() + "?path=Order Desk" + getSessionAttribute("basisDocumentNodePath");
+    	}
+    	return null;
+    }
 }
 

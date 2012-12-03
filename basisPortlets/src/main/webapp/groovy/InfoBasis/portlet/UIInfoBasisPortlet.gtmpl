@@ -1,10 +1,12 @@
 <% 
 String folderNumber = uicomponent.getFolderNumber();
 String documentId = uicomponent.getDocumentId();
+String folderNodePath = uicomponent.getFolderNodePath();
+String documentNodePath = uicomponent.getDocumentNodePath();
 %>
 <center><p style="font-family: arial; font-size: 20px;">
 <%if (folderNumber != null) {%>
-<%=_ctx.appRes("BasisInfo.newBasisFolderNumber")%> $folderNumber
+<%=_ctx.appRes("BasisInfo.newBasisFolderNumber")%> <a href="$folderNodePath">$folderNumber</a>
 <%}
 else {
 %>
@@ -12,7 +14,7 @@ else {
 <%}%>
 <br/>
 <%if (documentId != null) {%>
-<%=_ctx.appRes("BasisInfo.newBasisDocumentId")%> $documentId
+<%=_ctx.appRes("BasisInfo.newBasisDocumentId")%> <a href="$documentNodePath">$documentId</a>
 <%}
 else {
 %>

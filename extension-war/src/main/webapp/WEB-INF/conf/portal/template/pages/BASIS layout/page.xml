@@ -30,6 +30,11 @@
         <application-ref>ecmexplorer</application-ref>
         <portlet-ref>FileExplorerPortlet</portlet-ref>
         <preferences>
+		        <preference>
+			        <name>path</name>     
+			        <value>/</value>        
+			        <read-only>false</read-only>
+		        </preference>
     			<preference>
     				<name>driveName</name>     
     				<value>Order Desk</value>        
@@ -47,7 +52,7 @@
     			</preference>        	
     			<preference>
     				<name>usecase</name>     
-    				<value>selection</value>        
+    				<value>parameterize</value>        
     				<read-only>false</read-only>
     			</preference>        	
 				<preference>

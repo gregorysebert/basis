@@ -11,6 +11,11 @@
                 <valueConstraints/>
             </propertyDefinition>
         </propertyDefinitions>
+    </nodeType>
+    <nodeType name="basis:basisDate" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+        <supertypes>
+            <supertype>nt:unstructured</supertype>
+        </supertypes>
     </nodeType>  
     <nodeType name="basis:basisConfig" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
         <supertypes>

@@ -11,13 +11,20 @@ import org.exoplatform.portal.webui.util.Util;
 public class CreateFolderTreeInterceptor implements CmsScript {
 
     private final String BO_ROOT_PATH = "Files/BO/";
-	private final String FOLDER_NODETYPE = "nt:unstructured";
-	private final String BASIS_FOLDER_NODETYPE = "basis:basisFolder";
+	private final String BASIS_DATE_NODETYPE = "basis:basisDate";
+	private final String BASIS_BASIS_DATE_NODETYPE = "basis:basisFolder";
 	private final String BASIS_DOCUMENT_NODETYPE = "basis:basisDocument";
 	private final String BASIS_FOLLOW_NODETYPE = "basis:basisFollow";
 	private static Logger logger = Logger.getLogger("CreateFolderTreeInterceptor");
 	private RepositoryService repositoryService_;
-
+	private Node getBONode(Node currentNode) {
+		   Node parentNode = currentNode.getParent();
+		   if (! parentNode.isNodeType("basis:basisBO")) {
+			   return getBONode(parentNode); 
+		   }
+		   return parentNode;
+	}
+	
 	public CreateFolderTreeInterceptor(RepositoryService repositoryService) {
 		repositoryService_ = repositoryService;
 	}
@@ -35,29 +42,29 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			session = repositoryService_.getCurrentRepository().getSystemSession(workspace);
 			Node nodeRoot = session.getRootNode();
 			Node srcNode = (Node) session.getItem(nodePath);
-			String BOName = srcNode.getParent().getName();
+			String BOName = getBONode(srcNode).getName();
 			SimpleDateFormat dateFormat = new SimpleDateFormat();
 			dateFormat.applyPattern("dd-MM-yyyy");
 			String[] alist = dateFormat.format(srcNode.getProperty("exo:dateCreated").getDate().getTime()).split("-");
 			if (!nodeRoot.hasNode(BO_ROOT_PATH + BOName + "/" + alist[2])) {
-				nodeRoot.getNode(BO_ROOT_PATH + BOName).addNode(alist[2], FOLDER_NODETYPE);
+				nodeRoot.getNode(BO_ROOT_PATH + BOName).addNode(alist[2], BASIS_DATE_NODETYPE);
 				session.save();
 			}
 
 			if (!nodeRoot.hasNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1])) {
-				nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2]).addNode(alist[1], FOLDER_NODETYPE);
+				nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2]).addNode(alist[1], BASIS_DATE_NODETYPE);
 				session.save();
 			}
 
 			if (!nodeRoot.hasNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1] + "/" + alist[0])) {
-				nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1]).addNode(alist[0], FOLDER_NODETYPE);
+				nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1]).addNode(alist[0], BASIS_DATE_NODETYPE);
 				session.save();
 			}
 			//Add basis folder
 			Node parentNode = nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1] + "/" + alist[0]);
 			NodeIterator it = parentNode.getNodes();
-			String incre = srcNode.getParent().getProperty("basis:BOCount").getString();
-            Node basisFolderNode = parentNode.addNode(BOName + "." + incre, BASIS_FOLDER_NODETYPE);
+			String incre = getBONode(srcNode).getProperty("basis:BOCount").getString();
+            Node basisFolderNode = parentNode.addNode(BOName + "." + incre, BASIS_BASIS_DATE_NODETYPE);
             String basisFolderNodeTitle = BOName + "." + incre.substring(0, 2) + "." + incre.substring(2, 5) + "." + incre.substring(5);
             basisFolderNode.setProperty("exo:title", basisFolderNodeTitle);
 			if (srcNode.hasProperty("basis:folderLanguage")) {
@@ -108,7 +115,7 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 	        else {
 	            incre = (String)(incre.substring(0, 7) + (char)(incre.charAt(7)+1));
 	        }
-			srcNode.getParent().setProperty("basis:BOCount", incre);
+			getBONode(srcNode).setProperty("basis:BOCount", incre);
 			//Add basis document
 			Node basisDocumentNode = basisFolderNode.addNode(basisFolderNode.getName() + "-000", BASIS_DOCUMENT_NODETYPE);
 			basisDocumentNode.setProperty("exo:title", basisFolderNodeTitle + "-000");
@@ -193,7 +200,10 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			basisFollowNode.checkout();
 			HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
 			httpSession.setAttribute("basisFolderNumber", basisFolderNodeTitle);
+			httpSession.setAttribute("basisFolderNodePath", basisFolderNode.getPath());
 			httpSession.setAttribute("basisDocumentId", basisDocumentNode.getProperty("exo:title").getString());
+			httpSession.setAttribute("basisDocumentNodePath", basisDocumentNode.getPath());
+			
 		} catch (Exception e) {
 			logger.warning("Error in CreateFolderTreeInterceptor script : " + e.getMessage());
 		} finally {

@@ -148,6 +148,7 @@ public class CreateFolderConfigTreeInterceptor implements CmsScript {
 				basisDocumentNode.checkout();
 				HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
 			    httpSession.setAttribute("basisDocumentId", basisDocumentNode.getProperty("exo:title").getString());
+			    httpSession.setAttribute("basisDocumentNodePath", basisDocumentNode.getPath());
 				if (srcNode.getProperty("basis:folderConfigFollowDoc").getBoolean()){//Add basis follow document
 					Node basisFollowNode = basisDocumentNode.addNode("FU" + "-000", BASIS_FOLLOW_NODETYPE);
 					if (srcNode.hasProperty("basis:folderConfigFollowDocSendDate")) {
