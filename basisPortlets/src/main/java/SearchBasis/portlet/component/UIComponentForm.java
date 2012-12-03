@@ -1,4 +1,4 @@
-package SearchBasis.portlet.component;
+package searchBasis.portlet.component;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -25,12 +25,12 @@ import java.util.List;
         template =  "app:/groovy/SearchBasis/portlet/UIComponentForm.gtmpl",
         events = {
                 @EventConfig(listeners = UIComponentForm.SearchActionListener.class),
-                @EventConfig(listeners = UIComponentForm.CancelActionListener.class)
+                @EventConfig(listeners = UIComponentForm.CancelActionListener.class),
+                @EventConfig(listeners = UIComponentForm.AddFieldActionListener.class)
         }
 )
 public class UIComponentForm extends UIForm  {
     public static final String FIELD_OPERATOR = "operator" ;
-    public static final String FIELD_SEARCH_TYPE = "searchType" ;
     public static final String FIELD_DOC_TYPE = "basis:docType" ;
     public static final String FIELD_DOC_REGISTRATION = "basis:docRegistrationDate" ;
     public static final String FIELD_DOC_DATE = "basis:docDate" ;
@@ -56,46 +56,39 @@ public class UIComponentForm extends UIForm  {
     public static final String FIELD_FOLLOW_ANSWER = "basis:followAnswerByDate" ;
 
     public UIComponentForm() throws Exception {
-        List<SelectItemOption<String>> lsSearch = new ArrayList<SelectItemOption<String>>() ;
+        /*List<SelectItemOption<String>> lsSearch = new ArrayList<SelectItemOption<String>>() ;
         lsSearch.add(new SelectItemOption<String>(" ", " ")) ;
         lsSearch.add(new SelectItemOption<String>("Equals", "=")) ;
         lsSearch.add(new SelectItemOption<String>("Contains", "Contains")) ;
         lsSearch.add(new SelectItemOption<String>("Not Equals", "!=")) ;
         lsSearch.add(new SelectItemOption<String>("Not Contains", "!Contains")) ;
         UIFormSelectBox uiSelectBoxSearch = new UIFormSelectBox(FIELD_SEARCH_TYPE, FIELD_SEARCH_TYPE, lsSearch) ;
-        addUIFormInput(uiSelectBoxSearch);
+        addUIFormInput(uiSelectBoxSearch);  */
 
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_TYPE, FIELD_DOC_TYPE, null));
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_TYPE);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_REGISTRATION);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_DATE);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_REFERENCE);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_KEYWORD);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_TYPE);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_INTERN);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_NAME);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_ADRESS);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_CP);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_CITY);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_COUNTRY);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_LANGUAGE);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_REGISTRATION);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_CLOSE);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_RNN);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_REFERENCE);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_STATUS);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLLOW_SEND_DATE);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLLOW_EDITOR);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLLOW_ACTION);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLLOW_COMMENT);
+        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLLOW_ANSWER);
 
-        List<SelectItemOption<String>> lsOperator = new ArrayList<SelectItemOption<String>>() ;
-        lsOperator.add(new SelectItemOption<String>(" ", " ")) ;
-        lsOperator.add(new SelectItemOption<String>("Et", "&&")) ;
-        lsOperator.add(new SelectItemOption<String>("Ou", "||")) ;
-        UIFormSelectBox uiSelectBoxOperator = new UIFormSelectBox(FIELD_OPERATOR, FIELD_OPERATOR, lsOperator) ;
-        addUIFormInput(uiSelectBoxOperator);
-
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_REGISTRATION, FIELD_DOC_REGISTRATION, null));
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_DATE, FIELD_DOC_DATE, null));
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_REFERENCE, FIELD_DOC_REFERENCE, null));
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_KEYWORD, FIELD_DOC_KEYWORD, null));
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_SENDER_TYPE, FIELD_DOC_SENDER_TYPE, null));
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_INTERN, FIELD_DOC_INTERN, null));
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_SENDER_NAME, FIELD_DOC_SENDER_NAME, null));
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_SENDER_ADRESS, FIELD_DOC_SENDER_ADRESS, null));
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_SENDER_CP, FIELD_DOC_SENDER_CP, null));
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_SENDER_CITY, FIELD_DOC_SENDER_CITY, null));
-        addUIFormInput(new UIFormStringInput(FIELD_DOC_SENDER_COUNTRY, FIELD_DOC_SENDER_COUNTRY, null));
-        addUIFormInput(new UIFormStringInput(FIELD_FOLDER_LANGUAGE, FIELD_FOLDER_LANGUAGE, null));
-        addUIFormInput(new UIFormStringInput(FIELD_FOLDER_REGISTRATION, FIELD_FOLDER_REGISTRATION, null));
-        addUIFormInput(new UIFormStringInput(FIELD_FOLDER_CLOSE, FIELD_FOLDER_CLOSE, null));
-        addUIFormInput(new UIFormStringInput(FIELD_FOLDER_RNN, FIELD_FOLDER_RNN, null));
-        addUIFormInput(new UIFormStringInput(FIELD_FOLDER_REFERENCE, FIELD_FOLDER_REFERENCE, null));
-        addUIFormInput(new UIFormStringInput(FIELD_FOLDER_STATUS, FIELD_FOLDER_STATUS, null));
-        addUIFormInput(new UIFormStringInput(FIELD_FOLLOW_SEND_DATE, FIELD_FOLLOW_SEND_DATE, null));
-        addUIFormInput(new UIFormStringInput(FIELD_FOLLOW_EDITOR, FIELD_FOLLOW_EDITOR, null));
-        addUIFormInput(new UIFormStringInput(FIELD_FOLLOW_ACTION, FIELD_FOLLOW_ACTION, null));
-        addUIFormInput(new UIFormStringInput(FIELD_FOLLOW_COMMENT, FIELD_FOLLOW_COMMENT, null));
-        addUIFormInput(new UIFormStringInput(FIELD_FOLLOW_ANSWER, FIELD_FOLLOW_ANSWER, null));
 
         setActions(new String[]{"Search", "Cancel"}) ;
         setRendered(true);
@@ -117,6 +110,21 @@ public class UIComponentForm extends UIForm  {
             UISearchBasisPortlet uiManager = uiComponentForm.getAncestorOfType(UISearchBasisPortlet.class) ;
             uiComponentForm.reset() ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
+        }
+    }
+
+    static public class AddFieldActionListener extends EventListener<UIComponentForm> {
+        public void execute(Event<UIComponentForm> event) throws Exception {
+            UIComponentForm uiComponentForm = event.getSource();
+
+            List<SelectItemOption<String>> lsOperator = new ArrayList<SelectItemOption<String>>() ;
+            lsOperator.add(new SelectItemOption<String>(" ", " ")) ;
+            lsOperator.add(new SelectItemOption<String>("Et", "&&")) ;
+            lsOperator.add(new SelectItemOption<String>("Ou", "||")) ;
+            UIFormSelectBox uiSelectBoxOperator = new UIFormSelectBox(FIELD_OPERATOR, FIELD_OPERATOR, lsOperator) ;
+            uiComponentForm.addUIFormInput(uiSelectBoxOperator);
+
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiComponentForm);
         }
     }
 }

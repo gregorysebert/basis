@@ -1,3 +1,28 @@
+<style type="text/css">
+  #Name {
+     text-align:center;
+     font-size: 15px;
+    }
+    #Path {
+     text-align:center;
+     font-size: 15px;
+    }
+  #Action{
+     text-align:center;
+     font-size: 15px;
+  }
+  th{
+    border : 1px solid black;
+    background-color: grey;
+    height : 20px;
+  }
+  tr{
+     border : 1px solid black;
+  }
+  td{
+     border-right : 1px solid black;
+  }
+  </style>
 <% String fieldName; %>
 <div class="UIForm $uicomponent.id">
 	<%uiform.begin()%>
@@ -8,41 +33,39 @@
 				<%   def i = 0;
 					for(field in uiform.getChildren()) { 
 						if(field.isRendered()) {
-						i++;
+							i++;
+							
+							fieldName = uicomponent.getLabel(field.getName());
+							if(fieldName != null && fieldName.length() > 0) {
 
-						if(i%2!=0){
-				%>
-							<tr>
-								<%fieldName = uicomponent.getLabel(field.getName());%>
-								<%
-									if(fieldName != null && fieldName.length() > 0) {
-								%>												
-									<td class="FieldLabel">
-									   <label for="$field.id">
-										<%=uicomponent.getLabel(field.getName()) %>
-										</label>
-									</td>
-				<%
-                                    }
-						}
-						else {%>
-						        <%fieldName = uicomponent.getLabel(field.getName());%>
-                                <%
-                                    if(fieldName != null && fieldName.length() > 0) {
-                                %>
-                                    <td class="FieldLabel">
-                                       <label for="$field.id">
-                                        <%=uicomponent.getLabel(field.getName()) %>
-                                        </label>
-                                    </td>
-                                    <td class="FieldLabel">
-                                        <a href="/portal/g/:platform:web-contributors/siteExplorer?path=collaboration$field.id">View document</a>
-                                    </td>
-                                <%}%>
-                            </tr>
+								if(i%2!=0){
+						%>
+									<tr>											
+											<td id="Name">
+											   <label id="Name">
+												<%=uicomponent.getLabel(field.getName()) %>
+												</label>
+											</td>
+						<%
+								}
+								else { 
+								%>
+											<td id="Path">
+											   <label id="Path">
+												<%=uicomponent.getLabel(field.getName()) %>
+												</label>
+											</td>
+											<td id="Action">
+												<a href="/portal/g/:platform:web-contributors/siteExplorer?path=collaboration/Files/BO$field.id">View document</a>
+											</td>
+									</tr>
 
-						 <% }
+								 <% }
 
+							}
+							else{%>
+								<tr><td class="FieldLabel"><label for="Error">No result!</label></td> </tr>
+						  <%}
 						}
 					}
 				%>

@@ -1,4 +1,4 @@
-package SearchBasis.portlet.component;
+package searchBasis.portlet.component;
 
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -39,7 +39,9 @@ public class UIResultForm extends UIForm {
                 while(nodeIterator.hasNext()){
                     Node node = nodeIterator.nextNode();
                     addUIFormInput(new UIFormStringInput(node.getName(), node.getName(), null));
-                    addUIFormInput(new UIFormStringInput(node.getPath(), node.getPath(), null));
+                    String path = node.getPath() ;
+                    String pathSlippted [] = path.split("/Files/BO");
+                    addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                 }
             }
         }

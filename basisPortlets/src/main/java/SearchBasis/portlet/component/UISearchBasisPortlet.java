@@ -1,4 +1,4 @@
-package SearchBasis.portlet.component;
+package searchBasis.portlet.component;
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,8 +38,6 @@ public class UISearchBasisPortlet extends UIPortletApplication {
         addChild(UIComponentForm.class, null, "Advanced search");
         addChild(UIResultForm.class,null,"Result");
         setRenderedChild("Simple search");
-
-
     }
 
     public  void updateResult()throws Exception{

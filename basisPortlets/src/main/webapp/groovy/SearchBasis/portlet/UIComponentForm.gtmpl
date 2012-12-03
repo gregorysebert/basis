@@ -3,38 +3,18 @@
 	<%uiform.begin()%>
 	<div class="HorizontalLayout">
 		<div class="FormContainer">
-			<table class="UIFormGrid" style="width: 60%">
-				<% 
-					for(field in uiform.getChildren()) { 
-						if(field.isRendered() && !field.getName().equals("searchType") && !field.getName().equals("operator")) {
+			<table style="width: 60%">
+				<% for(uiChild in uicomponent.getChildren()) {
+				        String labelId = uiChild.getId();%>
+				        <td class="FieldLabel">
+                           <label for="$labelId">
+                            <%=uicomponent.getLabel(uiChild.getId()) %>
+                            </label>
+                        </td>
+                        <%uicomponent.renderChild(uiChild) ;
+                   }
 				%>
-							<tr>
-								<%fieldName = uicomponent.getLabel(field.getName());%>
-								<%
-									if(fieldName != null && fieldName.length() > 0) {
-								%>												
-									<td class="FieldLabel">
-									   <label for="$field.id">
-										<%=uicomponent.getLabel(field.getName()) %>
-										</label>
-									</td>
-									<td style="width: 100px"><% uiform.renderField("searchType") %></td>
-									<td class="FieldComponent"><% uiform.renderField(field) %></td>
-									<td class="FieldComponent"><a href="<%=uicomponent.event("AddField")%>" class="ActionButton LightBlueStyle">Add</a></td></tr>
-									<tr>
-									<td class="FieldLabel">
-                                        <label for="operator">
-                                        <%=uicomponent.getLabel("operator") %>
-                                        </label>
-                                    </td>
-									<td style="width: 100px"><% uiform.renderField("operator") %></td>
-								<%}%>
-							</tr>
-				<%
-						}
-					}
-				%>
-			</table>
+				</table>
 			 <div class="UIAction">
                     <% for(action in uicomponent.getActions()) {
                     String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action)

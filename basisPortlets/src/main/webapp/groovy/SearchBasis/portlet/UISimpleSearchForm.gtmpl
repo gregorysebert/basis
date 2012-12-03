@@ -1,30 +1,48 @@
+<style type="text/css">
+  #Query {
+     width: 400px;
+     text-align:left;
+     font-size: 15px;
+    }
+    #Attribut {
+     width: 400px;
+     text-align:left;
+     font-size: 15px;
+    }
+  #TableQuerySimple{
+        width: 800px;
+       text-align:left;
+       margin-left: 50px;
+       margin-top: 25px;
+  }
+  </style>
 <% String fieldName; %>
 <div class="UIForm $uicomponent.id">
 <%uiform.begin()%>
-<div class="HorizontalLayout">
-    <div class="FormContainer">
-        <table class="UIFormGrid" style="width: 100%">
+        <table id="TableQuerySimple">
             <%
             for(field in uiform.getChildren()) {
-            if(field.isRendered() && !field.getName().equals("searchType") && !field.getName().equals("operator")) {
+            if(field.isRendered()) {
             %>
-            <tr>
+
                 <%fieldName = uicomponent.getLabel(field.getName());%>
                 <%
                 if(fieldName != null && fieldName.length() > 0) {
                 %>
-                <td class="FieldLabel">
-                    <label for="$field.id">
+                <tr><td id="FieldSimpleQueryBasis">
+                    <label id="$field.id">
                         <%=uicomponent.getLabel(field.getName()) %>
                     </label>
                 </td>
-                <td class="FieldComponent"><% uiform.renderField(field) %></td>
+                <td id="FieldSimpleQueryBasis"><% uiform.renderField(field) %></td> </tr>
                 <%}%>
-            </tr>
+
             <%
             }
             }
             %>
+
+
         </table>
         <div class="UIAction">
             <% for(action in uicomponent.getActions()) {
@@ -34,7 +52,7 @@
             <a href="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
             <%}%>
         </div>
-    </div>
-</div>
 <%uiform.end()%>
 </div>
+
+

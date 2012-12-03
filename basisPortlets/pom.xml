@@ -51,6 +51,12 @@
             <scope>provided</scope>
             <version>${org.exoplatform.portal.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.exoplatform</groupId>
+            <artifactId>basis-selectorService</artifactId>
+            <scope>provided</scope>
+            <version>${org.exoplatform.basis.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
