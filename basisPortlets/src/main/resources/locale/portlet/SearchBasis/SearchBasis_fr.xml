@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+    <UIResultForm>
+        <header>
+            <Name>Nom</Name>
+            <Path>Chemin</Path>
+            <Action>Action</Action>
+        </header>
+        <label>
+            <View>Voir document</View>
+            <NoResult>Pas de résultat!</NoResult>
+        </label>
+    </UIResultForm>
+
+    <UISearchBasisPortlet>
+        <simpleSearch>Recherche simple</simpleSearch>
+        <advancedSearch>Recherche avancée</advancedSearch>
+        <Result>Résultat</Result>
+    </UISearchBasisPortlet>
+
+    <UISimpleSearchForm>
+        <label>
+            <Query>Requête</Query>
+            <Language>Langue</Language>
+            <Attribut>Attribut</Attribut>
+        </label>
+        <action>
+            <Search>Rechercher</Search>
+            <Cancel>Annuler</Cancel>
+        </action>
+    </UISimpleSearchForm>
+
+    <UIAdvancedSearchForm>
+        <action>
+            <Search>Rechercher</Search>
+            <Cancel>Annuler</Cancel>
+        </action>
+    </UIAdvancedSearchForm>
+</bundle>

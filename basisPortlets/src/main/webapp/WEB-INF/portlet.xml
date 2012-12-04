@@ -19,7 +19,7 @@
             <portlet-mode>help</portlet-mode>
         </supports>
         <supported-locale>en</supported-locale>
-        <resource-bundle>locale.SearchBasisPortlet</resource-bundle>
+        <resource-bundle>locale.portlet.SearchBasis.SearchBasis</resource-bundle>
         <portlet-info>
             <title>SearchBasisPortlet</title>
             <short-title>SearchBasisPortlet</short-title>

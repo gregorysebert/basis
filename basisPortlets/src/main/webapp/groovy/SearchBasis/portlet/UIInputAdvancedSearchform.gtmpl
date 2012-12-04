@@ -1,0 +1,16 @@
+<% String fieldName; %>
+<div class="UIForm $uicomponent.id">
+	<%uiform.begin()%>
+	<div class="HorizontalLayout">
+		<div class="FormContainer">
+		<table class="UIFormGrid" style="width: 60%">
+                    <tr>
+                            <td style="width: 100px"><% uiform.renderField("searchType") %></td>
+                            <td class="FieldComponent"><% uiform.renderField("Query") %></td>
+                            <td class="FieldComponent"><a href="<%=uicomponent.event("AddField")%>" class="ActionButton LightBlueStyle">Add</a></td>
+                    </tr>
+			</table>
+		</div>
+	</div>
+	<%uiform.end()%>
+</div>

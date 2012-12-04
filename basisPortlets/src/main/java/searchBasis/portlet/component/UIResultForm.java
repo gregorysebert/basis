@@ -8,7 +8,6 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.query.QueryResult;
-import javax.portlet.PortletRequest;
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,7 +37,7 @@ public class UIResultForm extends UIForm {
 
                 while(nodeIterator.hasNext()){
                     Node node = nodeIterator.nextNode();
-                    addUIFormInput(new UIFormStringInput(node.getName(), node.getName(), null));
+                    addUIFormInput(new UIFormStringInput(node.getProperty("exo:title").getString(), node.getProperty("exo:title").getString(), null));
                     String path = node.getPath() ;
                     String pathSlippted [] = path.split("/Files/BO");
                     addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));

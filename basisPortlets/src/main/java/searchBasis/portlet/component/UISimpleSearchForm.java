@@ -48,7 +48,7 @@ import java.util.List;
 public class UISimpleSearchForm extends UIForm {
 
     private  static final String QUERY = "Query";
-
+    private  static final String LANGUAGE = "Language";
     private  static final String ATTRIBUT = "Attribut";
 
     private static final String BASIS_FOLDER_BY_CURRENT_USER_XPATH_QUERY = "currentUser" ;
@@ -57,14 +57,22 @@ public class UISimpleSearchForm extends UIForm {
     private static final String BASIS_FOLDER_BY_ACTION_XPATH_QUERY = "byAction" ;
 
     public UISimpleSearchForm() throws Exception {
+        List<SelectItemOption<String>> lsLanguage = new ArrayList<SelectItemOption<String>>() ;
+        lsLanguage.add(new SelectItemOption<String>("NL", "NL")) ;
+        lsLanguage.add(new SelectItemOption<String>("FR", "FR")) ;
+        lsLanguage.add(new SelectItemOption<String>("EN", "EN")) ;
+        UIFormSelectBox uiFormSelectBoxLanguage = new UIFormSelectBox(LANGUAGE,LANGUAGE,lsLanguage);
+        uiFormSelectBoxLanguage.setOnChange("Change");
+        addUIFormInput(uiFormSelectBoxLanguage);
+
         List<SelectItemOption<String>> lsQuery = new ArrayList<SelectItemOption<String>>() ;
         lsQuery.add(new SelectItemOption<String>("All folder where follow up editor is the current user", BASIS_FOLDER_BY_CURRENT_USER_XPATH_QUERY)) ;
         lsQuery.add(new SelectItemOption<String>("All folder where follow up editor is a specific group", BASIS_FOLDER_BY_GROUP_XPATH_QUERY)) ;
         lsQuery.add(new SelectItemOption<String>("All folder where follow up editor is a specific user", BASIS_FOLDER_BY_USER_XPATH_QUERY)) ;
         lsQuery.add(new SelectItemOption<String>("All folder where follow up editor is a specific action", BASIS_FOLDER_BY_ACTION_XPATH_QUERY)) ;
-        UIFormSelectBox uiFormSelectBox = new UIFormSelectBox(QUERY, QUERY, lsQuery) ;
-        uiFormSelectBox.setOnChange("Change");
-        addUIFormInput(uiFormSelectBox);
+        UIFormSelectBox uiFormSelectBoxQuery = new UIFormSelectBox(QUERY, QUERY, lsQuery) ;
+        uiFormSelectBoxQuery.setOnChange("Change");
+        addUIFormInput(uiFormSelectBoxQuery);
 
         setActions(new String[]{"Search", "Cancel"}) ;
 
@@ -126,7 +134,6 @@ public class UISimpleSearchForm extends UIForm {
                     uiSimpleSearchForm.setRendered(false);
                     uiSimpleSearchForm.reset();
 
-
                 }
                 else{
                     uiApp.addMessage(new ApplicationMessage("UISimpleSearchForm.msg.value-null", null, ApplicationMessage.WARNING));
@@ -151,77 +158,58 @@ public class UISimpleSearchForm extends UIForm {
     static public class ChangeActionListener extends EventListener<UISimpleSearchForm> {
         public void execute(Event<UISimpleSearchForm> event) throws Exception {
             UISimpleSearchForm uiSimpleSearchForm = event.getSource() ;
-
-            String language = Util.getPortalRequestContext().getLocale().getLanguage().toUpperCase();
-
-            /*ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
-            RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
-            Session session = (Session) rs.getRepository("repository").getSystemSession("collaboration");
-            QueryManager queryManager = null;
-            queryManager = session.getWorkspace().getQueryManager();
-            String xpathStatement = "/jcr:root/Files/BO//element (*, nt:file) [jcr:like(@exo:name,'followSelector.txt')]";
-            Query query = queryManager.createQuery(xpathStatement, Query.XPATH);
-            QueryResult result = query.execute();
-            NodeIterator nodeIterator = result.getNodes();
-            Node followSelectorNode = (Node) nodeIterator.nextNode();
-
-            BasisSelectorService basisSelectorService = new BasisSelectorService(followSelectorNode, "GroupInternEditor", language);  */
-
-
             uiSimpleSearchForm.removeChildById(ATTRIBUT);
+
+            String language = uiSimpleSearchForm.getUIFormSelectBox(LANGUAGE).getValue();
+
             if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("byGroup")){
                 List<SelectItemOption<String>> lsAttribut = new ArrayList<SelectItemOption<String>>() ;
-                lsAttribut.add(new SelectItemOption<String>("Administration générale de la fiscalité", "Administration générale de la fiscalité")) ;
-                lsAttribut.add(new SelectItemOption<String>("Administration générale des douanes et accises", "Administration générale des douanes et accises")) ;
-                lsAttribut.add(new SelectItemOption<String>("Administration général de la perception et du recouvrement", "Administration général de la perception et du recouvrement")) ;
-                lsAttribut.add(new SelectItemOption<String>("Administration général de la lutte contre la fraude fiscale", "Administration général de la lutte contre la fraude fiscale")) ;
-                lsAttribut.add(new SelectItemOption<String>("Administration général de la documentation patrimoniale", "Administration général de la documentation patrimoniale")) ;
-                lsAttribut.add(new SelectItemOption<String>("Administration général de la trésorerie", "Administration général de la trésorerie")) ;
-                lsAttribut.add(new SelectItemOption<String>("Service d'encadrement expertise et support stratégique", "Service d'encadrement expertise et support stratégique")) ;
-                lsAttribut.add(new SelectItemOption<String>("Service d'encadrement coordination stratégique et communication", "Service d'encadrement coordination stratégique et communication")) ;
-                lsAttribut.add(new SelectItemOption<String>("Service d'encadrement Personnel et Organisation", "Service d'encadrement Personnel et Organisation")) ;
-                lsAttribut.add(new SelectItemOption<String>("Service d'encadrement Budget et Contrôle de la Gestion", "Service d'encadrement Budget et Contrôle de la Gestion")) ;
-                lsAttribut.add(new SelectItemOption<String>("Service d'encadrement Technologie de l'information et de la Communication", "Service d'encadrement Technologie de l'information et de la Communication")) ;
-                lsAttribut.add(new SelectItemOption<String>("Service d'encadrement Logistique", "Service d'encadrement Logistique")) ;
-                lsAttribut.add(new SelectItemOption<String>("Service Prestation de services multicanaux", "Service Prestation de services multicanaux")) ;
-                lsAttribut.add(new SelectItemOption<String>("Cellule Fiscalité des investissements étrangers", "Cellule Fiscalité des investissements étrangers")) ;
-                lsAttribut.add(new SelectItemOption<String>("Service des décisions anticipées", "Service des décisions anticipées")) ;
-                lsAttribut.add(new SelectItemOption<String>("Service de concilation fiscale", "Service de concilation fiscale")) ;
-                lsAttribut.add(new SelectItemOption<String>("Observatoire de la fiscalité régionale", "Observatoire de la fiscalité régionale")) ;
-                lsAttribut.add(new SelectItemOption<String>("Service d'audit interne", "Service d'audit interne")) ;
-                lsAttribut.add(new SelectItemOption<String>("Service juridique central", "Service juridique central")) ;
-                lsAttribut.add(new SelectItemOption<String>("Services du Président", "Services du Président")) ;
-                lsAttribut.add(new SelectItemOption<String>("Ministre des Finances", "Ministre des Finances")) ;
-                lsAttribut.add(new SelectItemOption<String>("Secrétaire d'Etat à la modernisation du SPF Finances", "Secrétaire d'Etat à la modernisation du SPF Finances")) ;
-                lsAttribut.add(new SelectItemOption<String>("Cour des comptes ", "Cour des comptes ")) ;
-                lsAttribut.add(new SelectItemOption<String>("Médiateurs fédéraux", "Médiateurs fédéraux")) ;
-                lsAttribut.add(new SelectItemOption<String>("Autres", "Autres")) ;
-                lsAttribut.add(new SelectItemOption<String>("Privacy", "Privacy")) ;
-                lsAttribut.add(new SelectItemOption<String>("Développement durable", "Développement durable")) ;
-                lsAttribut.add(new SelectItemOption<String>("Inspection des finances", "Inspection des finances")) ;
+
+                ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
+                RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
+                Session session = (Session) rs.getRepository("repository").getSystemSession("collaboration");
+                QueryManager queryManager = null;
+                queryManager = session.getWorkspace().getQueryManager();
+                String xpathStatement = "/jcr:root/Files/BO//element (*, nt:file) [jcr:like(@exo:name,'followSelector.txt')]";
+                Query query = queryManager.createQuery(xpathStatement, Query.XPATH);
+                QueryResult result = query.execute();
+                NodeIterator nodeIterator = result.getNodes();
+                Node followSelectorNode = nodeIterator.nextNode();
+
+                BasisSelectorService basisSelectorService = new BasisSelectorService(followSelectorNode, "GroupInternEditor", language);
+                String groupInternEditorOptions = basisSelectorService.getOptions();
+                String[] groupInternEditorOptionsList = groupInternEditorOptions.split(",");
+                for(String groupInternEditorOption:groupInternEditorOptionsList){
+                    lsAttribut.add(new SelectItemOption<String>(groupInternEditorOption,groupInternEditorOption));
+                }
                 UIFormSelectBox uiFormSelectBox = new UIFormSelectBox(ATTRIBUT, ATTRIBUT, lsAttribut) ;
                 uiSimpleSearchForm.addUIFormInput(uiFormSelectBox);
+
             }
             else if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("byUser")){
                 uiSimpleSearchForm.addUIFormInput(new UIFormStringInput(ATTRIBUT, ATTRIBUT, null));
+                //uiSimpleSearchForm.addChild();
             }
             else if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("byAction")){
                 List<SelectItemOption<String>> lsAttribut = new ArrayList<SelectItemOption<String>>() ;
-                lsAttribut.add(new SelectItemOption<String>("Pour projet de réponse à signer par le Ministre", "Pour projet de réponse à signer par le Ministre")) ;
-                lsAttribut.add(new SelectItemOption<String>("Pour rapport circonstancié / succinct", "Pour rapport circonstancié / succinct")) ;
-                lsAttribut.add(new SelectItemOption<String>("Pour (enquête et) avis", "Pour (enquête et) avis")) ;
-                lsAttribut.add(new SelectItemOption<String>("Pour exécution avec prière de me tenir au courant", "Pour exécution avec prière de me tenir au courant")) ;
-                lsAttribut.add(new SelectItemOption<String>("Pour réponse à l'intéressé (copie Cabinet)", "Pour réponse à l'intéressé (copie Cabinet)")) ;
-                lsAttribut.add(new SelectItemOption<String>("Prendre contact avec le contribuable/receveur", "Prendre contact avec le contribuable/receveur")) ;
-                lsAttribut.add(new SelectItemOption<String>("Autre - à suivre", "Autre - à suivre")) ;
-                lsAttribut.add(new SelectItemOption<String>("Pour information", "Pour information")) ;
-                lsAttribut.add(new SelectItemOption<String>("Pour suite voulue", "Pour suite voulue")) ;
-                lsAttribut.add(new SelectItemOption<String>("Autre", "Autre")) ;
-                lsAttribut.add(new SelectItemOption<String>("Pour projet de réponse à signer par le Président", "Pour projet de réponse à signer par le Président")) ;
-                lsAttribut.add(new SelectItemOption<String>("RAPPEL", "RAPPEL")) ;
-                lsAttribut.add(new SelectItemOption<String>("Dossier ancien", "Dossier ancien")) ;
-                lsAttribut.add(new SelectItemOption<String>("Mail à suivre", "Mail à suivre")) ;
-                lsAttribut.add(new SelectItemOption<String>("Mail à ne pas suivre", "Mail à ne pas suivre")) ;
+
+                ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
+                RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
+                Session session = (Session) rs.getRepository("repository").getSystemSession("collaboration");
+                QueryManager queryManager = null;
+                queryManager = session.getWorkspace().getQueryManager();
+                String xpathStatement = "/jcr:root/Files/BO//element (*, nt:file) [jcr:like(@exo:name,'followSelector.txt')]";
+                Query query = queryManager.createQuery(xpathStatement, Query.XPATH);
+                QueryResult result = query.execute();
+                NodeIterator nodeIterator = result.getNodes();
+                Node followSelectorNode = nodeIterator.nextNode();
+
+                BasisSelectorService basisSelectorService = new BasisSelectorService(followSelectorNode, "RequiredAction", language);
+                String requiredActionOptions = basisSelectorService.getOptions();
+                String[] requiredActionOptionsList = requiredActionOptions.split(",");
+                for(String requiredActionOption:requiredActionOptionsList){
+                    lsAttribut.add(new SelectItemOption<String>(requiredActionOption,requiredActionOption));
+                }
                 UIFormSelectBox uiFormSelectBox = new UIFormSelectBox(ATTRIBUT, ATTRIBUT, lsAttribut) ;
                 uiSimpleSearchForm.addUIFormInput(uiFormSelectBox);
             }

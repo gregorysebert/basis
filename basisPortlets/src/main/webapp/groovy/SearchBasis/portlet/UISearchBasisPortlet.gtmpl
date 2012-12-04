@@ -23,7 +23,7 @@
 			              <div class="$style">
 			                <div class="LeftTab">
 			                  <div class="RightTab">
-			                    <div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '$paneId', '$tabId')">$tabId</div>
+			                    <div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '$paneId', '$tabId')"> <%=_ctx.appRes("UISearchBasisPortlet."+tabId)%></div>
 			                  </div>
 			                </div>
 			              </div>

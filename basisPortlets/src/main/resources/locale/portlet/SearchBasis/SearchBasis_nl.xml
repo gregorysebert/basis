@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+    <UIResultForm>
+        <header>
+            <Name>Naam</Name>
+            <Path>Pad</Path>
+            <Action>Actie</Action>
+        </header>
+        <label>
+            <View>Bekijk document</View>
+            <NoResult>Geen resultaat!</NoResult>
+        </label>
+    </UIResultForm>
+
+    <UISearchBasisPortlet>
+        <simpleSearch>Eenvoudige zoekopdracht</simpleSearch>
+        <advancedSearch>Uitgebreid zoeken</advancedSearch>
+        <Result>Resultaat</Result>
+    </UISearchBasisPortlet>
+
+    <UISimpleSearchForm>
+        <label>
+            <Query>Vraag</Query>
+            <Language>Taal</Language>
+            <Attribut>Attribuut</Attribut>
+        </label>
+        <action>
+            <Search>Zoeken</Search>
+            <Cancel>Annuleren</Cancel>
+        </action>
+    </UISimpleSearchForm>
+
+    <UIAdvancedSearchForm>
+        <action>
+            <Search>Zoeken</Search>
+            <Cancel>Annuleren</Cancel>
+        </action>
+    </UIAdvancedSearchForm>
+</bundle>

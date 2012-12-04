@@ -1,73 +1,89 @@
 <style type="text/css">
   #Name {
+     border : 1px solid black;
      text-align:center;
      font-size: 15px;
+     height : 20px;
+     font-weight:bold;
+     background-color: rgb(227,227,227);
     }
     #Path {
+     border : 1px solid black;
      text-align:center;
      font-size: 15px;
+     height : 20px;
+     background-color: rgb(227,227,227);
     }
   #Action{
+     border: 1px solid black;
      text-align:center;
      font-size: 15px;
+     height : 20px;
+     background-color: rgb(227,227,227);
+  }
+  #Error{
+    text-align:center;
+    font-size: 17px;
+    height : 30px;
+    color : red;
+    font-weight:bold;
   }
   th{
     border : 1px solid black;
     background-color: grey;
     height : 20px;
-  }
-  tr{
-     border : 1px solid black;
-  }
-  td{
-     border-right : 1px solid black;
+    font-weight:italic;
   }
   </style>
-<% String fieldName; %>
+<% import org.exoplatform.portal.webui.util.Util;
+String fieldName;
+ String url = Util.getPortalRequestContext().getRequestURI();%>
 <div class="UIForm $uicomponent.id">
 	<%uiform.begin()%>
 	<div class="HorizontalLayout">
 		<div class="FormContainer">
 			<table class="UIFormGrid" style="width: 60%">
-			<th>Name</th>     <th>Path</th>   <th>Action</th>
+			<th><%=_ctx.appRes("UIResultForm.header.Name")%></th>     <th><%=_ctx.appRes("UIResultForm.header.Path")%></th>   <th><%=_ctx.appRes("UIResultForm.header.Action")%></th>
 				<%   def i = 0;
-					for(field in uiform.getChildren()) { 
-						if(field.isRendered()) {
-							i++;
-							
-							fieldName = uicomponent.getLabel(field.getName());
-							if(fieldName != null && fieldName.length() > 0) {
+				    if(uiform.hasChildren()){
+                            for(field in uiform.getChildren()) {
+                                if(field.isRendered()) {
+                                    i++;
 
-								if(i%2!=0){
-						%>
-									<tr>											
-											<td id="Name">
-											   <label id="Name">
-												<%=uicomponent.getLabel(field.getName()) %>
-												</label>
-											</td>
-						<%
-								}
-								else { 
-								%>
-											<td id="Path">
-											   <label id="Path">
-												<%=uicomponent.getLabel(field.getName()) %>
-												</label>
-											</td>
-											<td id="Action">
-												<a href="/portal/g/:platform:web-contributors/siteExplorer?path=collaboration/Files/BO$field.id">View document</a>
-											</td>
-									</tr>
+                                    fieldName = uicomponent.getLabel(field.getName());
+                                    if(fieldName != null && fieldName.length() > 0) {
 
-								 <% }
+                                        if(i%2!=0){
+                                %>
+                                            <tr>
+                                                    <td id="Name">
+                                                       <label for="Name">
+                                                        <%=uicomponent.getLabel(field.getName()) %>
+                                                        </label>
+                                                    </td>
+                                <%
+                                        }
+                                        else {
+                                        %>
+                                                    <td id="Path">
+                                                       <label for="Path">
+                                                        <%=uicomponent.getLabel(field.getName()) %>
+                                                        </label>
+                                                    </td>
+                                                    <td id="Action">
+                                                        <a href="$url?path=Order Desk/Files/BO$field.id"><%=_ctx.appRes("UIResultForm.label.View")%></a>
+                                                    </td>
+                                            </tr>
 
-							}
-							else{%>
-								<tr><td class="FieldLabel"><label for="Error">No result!</label></td> </tr>
-						  <%}
-						}
-					}
+                                         <% }
+
+                                    }
+                                }
+                            }
+                    }
+                    else{%>
+                        <tr><td id="Error"><label for="Error"><%=_ctx.appRes("UIResultForm.label.NoResult")%></label></td> </tr>
+                    <%}
 				%>
 			</table>
 		</div>

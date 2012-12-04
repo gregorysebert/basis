@@ -9,6 +9,11 @@
      text-align:left;
      font-size: 15px;
     }
+    #Language{
+     width: 80px;
+     text-align:left;
+     font-size: 15px;
+    }
   #TableQuerySimple{
         width: 800px;
        text-align:left;
@@ -31,7 +36,7 @@
                 %>
                 <tr><td id="FieldSimpleQueryBasis">
                     <label id="$field.id">
-                        <%=uicomponent.getLabel(field.getName()) %>
+                        <%=_ctx.appRes("UISimpleSearchForm.label."+field.getName())%>
                     </label>
                 </td>
                 <td id="FieldSimpleQueryBasis"><% uiform.renderField(field) %></td> </tr>

@@ -8,7 +8,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
-import org.exoplatform.webui.form.UIFormStringInput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +21,14 @@ import java.util.List;
  */
 @ComponentConfig(
         lifecycle = UIFormLifecycle.class,
-        template =  "app:/groovy/SearchBasis/portlet/UIComponentForm.gtmpl",
+        template =  "app:/groovy/SearchBasis/portlet/UIAdvancedSearchForm.gtmpl",
         events = {
-                @EventConfig(listeners = UIComponentForm.SearchActionListener.class),
-                @EventConfig(listeners = UIComponentForm.CancelActionListener.class),
-                @EventConfig(listeners = UIComponentForm.AddFieldActionListener.class)
+                @EventConfig(listeners = UIAdvancedSearchForm.SearchActionListener.class),
+                @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class),
+                @EventConfig(listeners = UIAdvancedSearchForm.AddFieldActionListener.class)
         }
 )
-public class UIComponentForm extends UIForm  {
+public class UIAdvancedSearchForm extends UIForm  {
     public static final String FIELD_OPERATOR = "operator" ;
     public static final String FIELD_DOC_TYPE = "basis:docType" ;
     public static final String FIELD_DOC_REGISTRATION = "basis:docRegistrationDate" ;
@@ -55,7 +54,7 @@ public class UIComponentForm extends UIForm  {
     public static final String FIELD_FOLLOW_COMMENT = "basis:followComments" ;
     public static final String FIELD_FOLLOW_ANSWER = "basis:followAnswerByDate" ;
 
-    public UIComponentForm() throws Exception {
+    public UIAdvancedSearchForm() throws Exception {
         /*List<SelectItemOption<String>> lsSearch = new ArrayList<SelectItemOption<String>>() ;
         lsSearch.add(new SelectItemOption<String>(" ", " ")) ;
         lsSearch.add(new SelectItemOption<String>("Equals", "=")) ;
@@ -97,34 +96,34 @@ public class UIComponentForm extends UIForm  {
     /*public void update(Query query) throws Exception {
     }   */
 
-    static public class SearchActionListener extends EventListener<UIComponentForm> {
-        public void execute(Event<UIComponentForm> event) throws Exception {
-            UIComponentForm uiComponentForm = event.getSource();
-            String name = uiComponentForm.getUIStringInput(FIELD_DOC_TYPE).getValue();
+    static public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
+        public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
+            UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource();
+            String name = uiAdvancedSearchForm.getUIStringInput(FIELD_DOC_TYPE).getValue();
         }
     }
 
-    static public class CancelActionListener extends EventListener<UIComponentForm> {
-        public void execute(Event<UIComponentForm> event) throws Exception {
-            UIComponentForm uiComponentForm = event.getSource() ;
-            UISearchBasisPortlet uiManager = uiComponentForm.getAncestorOfType(UISearchBasisPortlet.class) ;
-            uiComponentForm.reset() ;
+    static public class CancelActionListener extends EventListener<UIAdvancedSearchForm> {
+        public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
+            UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource() ;
+            UISearchBasisPortlet uiManager = uiAdvancedSearchForm.getAncestorOfType(UISearchBasisPortlet.class) ;
+            uiAdvancedSearchForm.reset() ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
         }
     }
 
-    static public class AddFieldActionListener extends EventListener<UIComponentForm> {
-        public void execute(Event<UIComponentForm> event) throws Exception {
-            UIComponentForm uiComponentForm = event.getSource();
+    static public class AddFieldActionListener extends EventListener<UIAdvancedSearchForm> {
+        public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
+            UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource();
 
             List<SelectItemOption<String>> lsOperator = new ArrayList<SelectItemOption<String>>() ;
             lsOperator.add(new SelectItemOption<String>(" ", " ")) ;
             lsOperator.add(new SelectItemOption<String>("Et", "&&")) ;
             lsOperator.add(new SelectItemOption<String>("Ou", "||")) ;
             UIFormSelectBox uiSelectBoxOperator = new UIFormSelectBox(FIELD_OPERATOR, FIELD_OPERATOR, lsOperator) ;
-            uiComponentForm.addUIFormInput(uiSelectBoxOperator);
+            uiAdvancedSearchForm.addUIFormInput(uiSelectBoxOperator);
 
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiComponentForm);
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiAdvancedSearchForm);
         }
     }
 }
