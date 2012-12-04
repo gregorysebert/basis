@@ -28,6 +28,19 @@ if(uicomponent.isEditing()) {
 uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.groovy", "post");
 }
 %>
+<style type="text/css">
+    .UIJCRExplorerPortlet .UIPopupWindow .UIWindowContent .UISearch {
+        height: 39px !important;
+    }
+    .Search16x16Icon {
+        background: url('/ecmexplorer/skin/webui/component/explorer/../../../icons/16x16/DefaultSkin/SearchPage.gif') no-repeat left center;
+        width: 16px;
+        height: 16px;
+    }
+    .UIPopupWindow .PopupContent {
+    	height: 500px !important;
+	}
+</style>
 <script type="text/javascript">	
 	function saveRNN(source,destination)
 	{

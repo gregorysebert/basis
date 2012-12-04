@@ -37,7 +37,19 @@
     String requiredActionOptions = basisSelectorService.getOptions();
 %>
 <% uicomponent.addInterceptor("ecm-explorer/interceptor/CreateFolderConfigTreeInterceptor.groovy", "post");%>
-
+<style type="text/css">
+    .UIJCRExplorerPortlet .UIPopupWindow .UIWindowContent .UISearch {
+        height: 39px !important;
+    }
+    .Search16x16Icon {
+        background: url('/ecmexplorer/skin/webui/component/explorer/../../../icons/16x16/DefaultSkin/SearchPage.gif') no-repeat left center;
+        width: 16px;
+        height: 16px;
+    }
+    .UIPopupWindow .PopupContent {
+    	height: 500px !important;
+	}
+</style>
 <div class="UIForm FormLayout">
 	<% uiform.begin() %> 
 		<div class="HorizontalLayout">
@@ -269,7 +281,7 @@
 				 </tr>
 				 <%
 				 UIFormSelectBox followEditorTypeSelectBox = uicomponent.findComponentById("followEditorType");
-				 if(followEditorTypeSelectBox.getValue().equals("intern user")){
+				 if(followEditorTypeSelectBox.getValue().equals("intern user") || followEditorTypeSelectBox.getValue() == null){
 				 %>
 			     <tr>
 			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
@@ -353,7 +365,7 @@
 			 	 </tr>
 				 <%
 				 UIFormSelectBox followEditorTypeSelectBox = uicomponent.findComponentById("followEditorType");
-				 if(followEditorTypeSelectBox.getValue().equals("intern user")){
+				 if(followEditorTypeSelectBox.getValue().equals("intern user") || followEditorTypeSelectBox.getValue() == null){
 				 %>
 			     <tr>
 			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>

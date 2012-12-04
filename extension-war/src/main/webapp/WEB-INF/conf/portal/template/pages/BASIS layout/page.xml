@@ -59,7 +59,12 @@
 					<name>showFilterBar</name>
 					<value>false</value>
 					<read-only>false</read-only>
-			    </preference>      	
+			    </preference>
+			    <preference>
+		        	<name>showSideBar</name>
+		        	<value>false</value>
+		        	<read-only>false</read-only>
+		        </preference>
         </preferences>
       </portlet>
       <title>Site Explorer</title>
