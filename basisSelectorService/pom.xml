@@ -13,7 +13,7 @@ http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <artifactId>basis-selectorService</artifactId>
     <packaging>jar</packaging>
     <name>basis Selector Service</name>
-    <version>${org.exoplatform.basis.version}</version>
+    <version>1.0</version>
     <description>basis Selector Service</description>
 
     <dependencies>
@@ -36,4 +36,17 @@ http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
             <scope>provided</scope>
         </dependency>
     </dependencies>
+	<build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+	</build>
 </project>

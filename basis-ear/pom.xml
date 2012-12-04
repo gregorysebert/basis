@@ -16,7 +16,7 @@
     <artifactId>basis-ear</artifactId>
     <packaging>ear</packaging>
     <name>Basis Extension - EAR</name>
-    <version>${org.exoplatform.basis.version}</version>
+    <version>1.0</version>
     <dependencies>
         <dependency>
             <groupId>org.exoplatform</groupId>
@@ -87,6 +87,15 @@
                             <includeInApplicationXml>true</includeInApplicationXml>
                         </jarModule>
                     </modules>
+                </configuration>
+            </plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
         </plugins>

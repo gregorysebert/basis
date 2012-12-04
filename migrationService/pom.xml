@@ -11,7 +11,7 @@
     <artifactId>basis-migrationService</artifactId>
     <packaging>jar</packaging>
     <name>basis Migration Service</name>
-    <version>${org.exoplatform.basis.version}</version>
+    <version>1.0</version>
     <description>basis Migration Service</description>
     <dependencies>
         <dependency>
@@ -49,10 +49,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
-                    <optimize>true</optimize>
                 </configuration>
             </plugin>
             <plugin>

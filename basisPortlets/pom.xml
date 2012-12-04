@@ -31,7 +31,7 @@
     <artifactId>basis-portlets</artifactId>
    	<packaging>war</packaging>
   	<name>Basis Portlets</name>
-  	<version>${org.exoplatform.basis.version}</version>
+  	<version>1.0</version>
     <dependencies>
         <dependency>
             <groupId>javax.portlet</groupId>

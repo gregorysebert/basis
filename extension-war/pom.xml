@@ -28,7 +28,7 @@
         <version>trunk</version>
     </parent>
     <artifactId>basis-extension-war</artifactId>
-    <version>${org.exoplatform.basis.version}</version>
+    <version>1.0</version>
     <packaging>war</packaging>
     <name>Basis Extension War</name>
     <description>Basis Extension War</description>
