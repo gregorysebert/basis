@@ -23,6 +23,10 @@
             <Query>Requête</Query>
             <Language>Langue</Language>
             <Attribut>Attribut</Attribut>
+            <Query1>Tout les dossiers où l'éditeur de suivi est l'utilisateur courant</Query1>
+            <Query2>Tout les dossiers où l'éditeur de suivi est équal à un groupe spécifique</Query2>
+            <Query3>Tout les dossiers où l'éditeur de suivi est équal à un utilisateur spécifique</Query3>
+            <Query4>Tout les dossiers où l'éditeur de suivi est équal à une action spécifique</Query4>
         </label>
         <action>
             <Search>Rechercher</Search>

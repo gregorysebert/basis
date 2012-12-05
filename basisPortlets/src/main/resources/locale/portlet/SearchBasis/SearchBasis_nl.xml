@@ -23,6 +23,10 @@
             <Query>Vraag</Query>
             <Language>Taal</Language>
             <Attribut>Attribuut</Attribut>
+            <Query1>Alle map waarin follow-up-editor is de huidige gebruiker</Query1>
+            <Query2>Alle map waarin follow-up-editor is een specifieke groep</Query2>
+            <Query3>Alle map waarin follow-up-editor is een specifieke gebruiker</Query3>
+            <Query4>Alle map waarin follow-up-editor is een specifieke actie</Query4>
         </label>
         <action>
             <Search>Zoeken</Search>

@@ -23,6 +23,10 @@
             <Query>Query</Query>
             <Language>Language</Language>
             <Attribut>Attribut</Attribut>
+            <Query1>All folder where follow up editor is the current user</Query1>
+            <Query2>All folder where follow up editor is a specific group</Query2>
+            <Query3>All folder where follow up editor is a specific user</Query3>
+            <Query4>All folder where follow up editor is a specific action</Query4>
         </label>
         <action>
             <Search>Search</Search>

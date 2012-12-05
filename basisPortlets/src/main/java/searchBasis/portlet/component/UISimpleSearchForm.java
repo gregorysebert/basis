@@ -13,6 +13,8 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import basis.selector.service.BasisSelectorService;
 
 import org.exoplatform.webui.form.UIFormSelectBox;
@@ -57,6 +59,8 @@ public class UISimpleSearchForm extends UIForm {
     private static final String BASIS_FOLDER_BY_ACTION_XPATH_QUERY = "byAction" ;
 
     public UISimpleSearchForm() throws Exception {
+        PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
+
         List<SelectItemOption<String>> lsLanguage = new ArrayList<SelectItemOption<String>>() ;
         lsLanguage.add(new SelectItemOption<String>("NL", "NL")) ;
         lsLanguage.add(new SelectItemOption<String>("FR", "FR")) ;
@@ -66,10 +70,6 @@ public class UISimpleSearchForm extends UIForm {
         addUIFormInput(uiFormSelectBoxLanguage);
 
         List<SelectItemOption<String>> lsQuery = new ArrayList<SelectItemOption<String>>() ;
-        lsQuery.add(new SelectItemOption<String>("All folder where follow up editor is the current user", BASIS_FOLDER_BY_CURRENT_USER_XPATH_QUERY)) ;
-        lsQuery.add(new SelectItemOption<String>("All folder where follow up editor is a specific group", BASIS_FOLDER_BY_GROUP_XPATH_QUERY)) ;
-        lsQuery.add(new SelectItemOption<String>("All folder where follow up editor is a specific user", BASIS_FOLDER_BY_USER_XPATH_QUERY)) ;
-        lsQuery.add(new SelectItemOption<String>("All folder where follow up editor is a specific action", BASIS_FOLDER_BY_ACTION_XPATH_QUERY)) ;
         UIFormSelectBox uiFormSelectBoxQuery = new UIFormSelectBox(QUERY, QUERY, lsQuery) ;
         uiFormSelectBoxQuery.setOnChange("Change");
         addUIFormInput(uiFormSelectBoxQuery);
@@ -131,8 +131,8 @@ public class UISimpleSearchForm extends UIForm {
                     UISearchBasisPortlet uiSearchBasisPortlet = uiSimpleSearchForm.getAncestorOfType(UISearchBasisPortlet.class);
                     uiSearchBasisPortlet.setQueryResult(result);
                     uiSearchBasisPortlet.updateResult();
+                    uiSimpleSearchForm.getUIFormSelectBox(QUERY).setDefaultValue("currentUser");
                     uiSimpleSearchForm.setRendered(false);
-                    uiSimpleSearchForm.reset();
 
                 }
                 else{
@@ -213,6 +213,7 @@ public class UISimpleSearchForm extends UIForm {
                 UIFormSelectBox uiFormSelectBox = new UIFormSelectBox(ATTRIBUT, ATTRIBUT, lsAttribut) ;
                 uiSimpleSearchForm.addUIFormInput(uiFormSelectBox);
             }
+            uiSimpleSearchForm.getUIFormSelectBox(QUERY).setDefaultValue(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue());
             event.getRequestContext().addUIComponentToUpdateByAjax(uiSimpleSearchForm) ;
         }
     }

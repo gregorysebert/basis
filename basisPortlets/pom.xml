@@ -31,7 +31,7 @@
     <artifactId>basis-portlets</artifactId>
    	<packaging>war</packaging>
   	<name>Basis Portlets</name>
-  	<version>1.0</version>
+  	<version>${org.exoplatform.basis.version}</version>
     <dependencies>
         <dependency>
             <groupId>javax.portlet</groupId>
@@ -56,6 +56,12 @@
             <artifactId>basis-selectorService</artifactId>
             <scope>provided</scope>
             <version>${org.exoplatform.basis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.exoplatform.spff</groupId>
+            <artifactId>spff.patch.UserSpffSelector</artifactId>
+            <scope>provided</scope>
+            <version>3.5.4</version>
         </dependency>
     </dependencies>
 

@@ -21,7 +21,16 @@
        margin-top: 25px;
   }
   </style>
-<% String fieldName; %>
+<%  import org.exoplatform.webui.core.model.SelectItemOption;
+import java.util.List;
+
+String fieldName;
+List<SelectItemOption<String>> lsQuery = new ArrayList<SelectItemOption<String>>() ;
+    lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query1"), "currentUser")) ;
+    lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query2"), "byGroup")) ;
+    lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query3"), "byUser")) ;
+    lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query4"), "byAction")) ;
+%>
 <div class="UIForm $uicomponent.id">
 <%uiform.begin()%>
         <table id="TableQuerySimple">
@@ -39,6 +48,10 @@
                         <%=_ctx.appRes("UISimpleSearchForm.label."+field.getName())%>
                     </label>
                 </td>
+                <%if(field.getName().equals("Query")){
+                    field.setOptions(lsQuery);
+                    field.setValue(field.getDefaultValue());
+                } %>
                 <td id="FieldSimpleQueryBasis"><% uiform.renderField(field) %></td> </tr>
                 <%}%>
 
