@@ -31,6 +31,8 @@ public class UISearchBasisPortlet extends UIPortletApplication {
     final public static String SWTCH_TAB = "SwitchTab".intern() ;
 
     private QueryResult queryResult = null;
+    private String typeQuery = "";
+    private String attribute = "";
 
 
     public UISearchBasisPortlet( ) throws Exception {
@@ -54,6 +56,22 @@ public class UISearchBasisPortlet extends UIPortletApplication {
 
     public void setQueryResult(QueryResult queryResult) {
         this.queryResult = queryResult;
+    }
+
+    public String getTypeQuery() {
+        return typeQuery;
+    }
+
+    public void setTypeQuery(String typeQuery) {
+        this.typeQuery = typeQuery;
+    }
+
+    public String getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(String attribute) {
+        this.attribute = attribute;
     }
 
     static public class SwitchTabActionListener extends EventListener<UISearchBasisPortlet>

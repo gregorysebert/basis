@@ -1,5 +1,5 @@
 <style type="text/css">
-  #Name {
+  #NameBasis {
      border : 1px solid black;
      text-align:center;
      font-size: 15px;
@@ -7,28 +7,28 @@
      font-weight:bold;
      background-color: rgb(227,227,227);
     }
-    #Path {
+    #PathBasis {
      border : 1px solid black;
      text-align:center;
      font-size: 15px;
      height : 20px;
      background-color: rgb(227,227,227);
     }
-  #Action{
+  #ActionBasis{
      border: 1px solid black;
      text-align:center;
      font-size: 15px;
      height : 20px;
      background-color: rgb(227,227,227);
   }
-  #Error{
+  #ErrorBasis{
     text-align:center;
     font-size: 17px;
     height : 30px;
     color : red;
     font-weight:bold;
   }
-  th{
+  #thBasis{
     border : 1px solid black;
     background-color: grey;
     height : 20px;
@@ -43,7 +43,7 @@ String fieldName;
 	<div class="HorizontalLayout">
 		<div class="FormContainer">
 			<table class="UIFormGrid" style="width: 60%">
-			<th><%=_ctx.appRes("UIResultForm.header.Name")%></th>     <th><%=_ctx.appRes("UIResultForm.header.Path")%></th>   <th><%=_ctx.appRes("UIResultForm.header.Action")%></th>
+			<th id="thBasis"><%=_ctx.appRes("UIResultForm.header.Name")%></th>     <th id="thBasis"><%=_ctx.appRes("UIResultForm.header.Path")%></th>   <th id="thBasis"><%=_ctx.appRes("UIResultForm.header.Action")%></th>
 				<%   def i = 0;
 				    if(uiform.hasChildren()){
                             for(field in uiform.getChildren()) {
@@ -56,7 +56,7 @@ String fieldName;
                                         if(i%2!=0){
                                 %>
                                             <tr>
-                                                    <td id="Name">
+                                                    <td id="NameBasis">
                                                        <label for="Name">
                                                         <%=uicomponent.getLabel(field.getName()) %>
                                                         </label>
@@ -65,12 +65,12 @@ String fieldName;
                                         }
                                         else {
                                         %>
-                                                    <td id="Path">
+                                                    <td id="PathBasis">
                                                        <label for="Path">
                                                         <%=uicomponent.getLabel(field.getName()) %>
                                                         </label>
                                                     </td>
-                                                    <td id="Action">
+                                                    <td id="ActionBasis">
                                                         <a href="$url?path=Order Desk/Files/BO$field.id"><%=_ctx.appRes("UIResultForm.label.View")%></a>
                                                     </td>
                                             </tr>
@@ -82,7 +82,7 @@ String fieldName;
                             }
                     }
                     else{%>
-                        <tr><td id="Error"><label for="Error"><%=_ctx.appRes("UIResultForm.label.NoResult")%></label></td> </tr>
+                        <tr><td id="ErrorBasis"><label for="Error"><%=_ctx.appRes("UIResultForm.label.NoResult")%></label></td> </tr>
                     <%}
 				%>
 			</table>

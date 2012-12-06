@@ -84,6 +84,14 @@ public class UISimpleSearchForm extends UIForm {
             UIApplication uiApp = uiSimpleSearchForm.getAncestorOfType(UIApplication.class);
             String xpathStatement = "";
 
+            String url = Util.getPortalRequestContext().getRequestURI();
+            String urlSplitted[] = url.split("BO:");
+            String folderBO[] = urlSplitted[1].split("/");
+
+            String language = uiSimpleSearchForm.getUIFormSelectBox(LANGUAGE).getValue();
+            String statusLanguageFR = "and not(jcr:like(@basis:folderStatus, 'clôturé')) and not(jcr:like(@basis:folderStatus, 'annulé'))";
+            String statusLanguageEN = "and not(jcr:like(@basis:folderStatus, 'closed')) and not(jcr:like(@basis:folderStatus, 'cancelled'))";
+            String statusLanguageNL = "and not(jcr:like(@basis:folderStatus, 'afgesloten')) and not(jcr:like(@basis:folderStatus, 'geannulleerd'))";
 
             try {
                 ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
@@ -91,47 +99,91 @@ public class UISimpleSearchForm extends UIForm {
                 Session session = (Session) rs.getRepository("repository").getSystemSession("collaboration");
                 QueryManager queryManager = null;
                 queryManager = session.getWorkspace().getQueryManager();
+
+                UISearchBasisPortlet uiSearchBasisPortlet = uiSimpleSearchForm.getAncestorOfType(UISearchBasisPortlet.class);
+
                 if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("currentUser")){
                     String remoteUser =  Util.getPortalRequestContext().getRemoteUser();
-                    xpathStatement = "/jcr:root/Files/BO//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,\'"+remoteUser+"\')]";
+                    if(language.equals("FR")){
+                        xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageFR+"]";
+                    }
+                    else if(language.equals("EN")){
+                        xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageEN+"]";
+                    }
+                    else if(language.equals("NL")) {
+                        xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageNL+"]";
+                    }
+                    uiSearchBasisPortlet.setTypeQuery(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue());
+
                 }
                 else if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("byGroup")){
                     String group = uiSimpleSearchForm.getUIStringInput(ATTRIBUT).getValue();
+                    uiSearchBasisPortlet.setAttribute(group);
+                    uiSearchBasisPortlet.setTypeQuery(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue());
                     if(!group.equals(null)) {
-                        xpathStatement = "/jcr:root/Files/BO//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"\')]";
-                        uiSimpleSearchForm.removeChildById(ATTRIBUT);
+                        if(language.equals("FR")){
+                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageFR+"]";
+                        }
+                        else if(language.equals("EN")){
+                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageEN+"]";
+                        }
+                        else if(language.equals("NL")) {
+                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageNL+"]";
+                        }
+                        //uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     }
                     else
                         return;
                 }
                 else if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("byUser")){
                     String user = uiSimpleSearchForm.getUIStringInput(ATTRIBUT).getValue();
+                    uiSearchBasisPortlet.setAttribute(user);
+                    uiSearchBasisPortlet.setTypeQuery(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue());
+
                     if(!user.equals(null)){
-                        xpathStatement = "/jcr:root/Files/BO//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,\'"+user+"\')]";
-                        uiSimpleSearchForm.removeChildById(ATTRIBUT);
+                        if(language.equals("FR")){
+                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+user+"') "+statusLanguageFR+"]";
+                        }
+                        else if(language.equals("EN")){
+                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+user+"') "+statusLanguageEN+"]";
+                        }
+                        else if(language.equals("NL")) {
+                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+user+"') "+statusLanguageNL+"]";
+                        }
+                        //uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     }
                     else
                         return;
                 }
                 else if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("byAction")){
                     String action = uiSimpleSearchForm.getUIStringInput(ATTRIBUT).getValue();
+                    uiSearchBasisPortlet.setAttribute(action);
+                    uiSearchBasisPortlet.setTypeQuery(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue());
+
                     uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     if(!action.equals(null)) {
-                        xpathStatement = "/jcr:root/Files/BO//element (*,basis:basisFolder) [jcr:like(*/@basis:followRequiredAction,'"+action+"\')]";
-                        uiSimpleSearchForm.removeChildById(ATTRIBUT);
+                        if(language.equals("FR")){
+                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+action+"') "+statusLanguageFR+"]";
+                        }
+                        else if(language.equals("EN")){
+                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+action+"') "+statusLanguageEN+"]";
+                        }
+                        else if(language.equals("NL")) {
+                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+action+"') "+statusLanguageNL+"]";
+                        }
+                        //uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     }
                     else
                         return;
                 }
 
-                if(!xpathStatement.equals(null)){
+                if(xpathStatement != null){
                     Query query = queryManager.createQuery(xpathStatement, Query.XPATH);
                     QueryResult result = query.execute();
 
-                    UISearchBasisPortlet uiSearchBasisPortlet = uiSimpleSearchForm.getAncestorOfType(UISearchBasisPortlet.class);
                     uiSearchBasisPortlet.setQueryResult(result);
                     uiSearchBasisPortlet.updateResult();
-                    uiSimpleSearchForm.getUIFormSelectBox(QUERY).setDefaultValue("currentUser");
+                    //uiSimpleSearchForm.getUIFormSelectBox(QUERY).setDefaultValue("currentUser");
                     uiSimpleSearchForm.setRendered(false);
 
                 }
