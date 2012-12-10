@@ -32,7 +32,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFollow.label.followSendDate")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="BasisDate">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -45,7 +45,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="followUserInternEditor">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -58,7 +58,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="followGroupInternEditor">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -71,7 +71,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFollow.label.followExternEditor")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="followExternEditor">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -84,7 +84,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="followRequiredAction">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -97,7 +97,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basis.label.comments")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="BasisComments">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -110,7 +110,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFollow.label.followAnswerByDate")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="BasisDate">${valueDisplay}</td>
 				</tr>
 				<%
 					}

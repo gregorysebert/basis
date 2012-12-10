@@ -13,7 +13,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 	def dateFormat = new SimpleDateFormat() ;
 	dateFormat.applyPattern("dd/MM/yyyy");
 %>
-		<div style="font-weight:bold;">
+		<div style="font-weight:bold; padding-bottom: 10px;">
 			          <%=_ctx.appRes("basis.label.version")%>:
 			          <%
 			            if(Utils.isVersionable(node) && !uicomponent.getVersionName(node).equals("jcr:rootVersion")) {
@@ -24,10 +24,10 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 			          <%println node.getProperty("exo:lastModifier").getString();%>
 		</div>
 		<div id="$uicomponent.id">
-			<table class="UIFormGrid">
+			<table class="UIFormGrid" >
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderNumber")%>:</td>
-					<td class="FieldComponent">${title}</td>
+					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderNumber")%>:</td>
+					<td class="folderNummer">${title}</td>
 				</tr>
 				<%
 				 if (node.hasProperty("basis:folderLanguage")) {
@@ -35,8 +35,21 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderLanguage")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderLanguage")%>:</td>
+					<td class="folderLanguage">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+				<%
+				 if (node.hasProperty("basis:folderType")) {
+					 valueDisplay = node.getProperty("basis:folderType").getString();
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderType")%>:</td>
+					<td class="folderType">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -48,21 +61,8 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderRegistrationDate")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
-				</tr>
-				<%
-					}
-				 }	 
-				%>
-				<%
-				 if (node.hasProperty("basis:folderCloseBeforeDate")) {
-					 valueDisplay = dateFormat.format(node.getProperty("basis:folderCloseBeforeDate").getDate().getTime());
-					 if (!valueDisplay.equals("")){
-				%>
-				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderCloseBeforeDate")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderRegistrationDate")%>:</td>
+					<td class="BasisDate">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -74,14 +74,14 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderRNN")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderRNN")%>:</td>
+					<td class="RRN">${valueDisplay}</td>
 					<%
 				 	if (node.hasProperty("basis:folderInternSender")) {
 					 	valueDisplay = node.getProperty("basis:folderInternSender").getString();
 					 	if (!valueDisplay.equals("")){
 					%>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="folderInternSender">${valueDisplay}</td>
 					<%
 						}
 				 	}	 
@@ -97,8 +97,8 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderExternalReference")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderExternalReference")%>:</td>
+					<td class="folderExternalReference">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -110,8 +110,34 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisFolder.label.folderStatus")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderStatus")%>:</td>
+					<td class="folderStatus">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+				<%
+				 if (node.hasProperty("basis:folderCloseBeforeDate")) {
+					 valueDisplay = dateFormat.format(node.getProperty("basis:folderCloseBeforeDate").getDate().getTime());
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderCloseBeforeDate")%>:</td>
+					<td class="BasisDate">${valueDisplay}</td>
+				</tr>
+				<%
+					}
+				 }	 
+				%>
+				<%
+				 if (node.hasProperty("basis:folderCloseOnDate")) {
+					 valueDisplay = dateFormat.format(node.getProperty("basis:folderCloseOnDate").getDate().getTime());
+					 if (!valueDisplay.equals("")){
+				%>
+				<tr>
+					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderCloseOnDate")%>:</td>
+					<td class="BasisDate">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -123,8 +149,8 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basis.label.comments")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="FieldLabel"  ><%=_ctx.appRes("basis.label.comments")%>:</td>
+					<td class="folderComments">${valueDisplay}</td>
 				</tr>
 				<%
 					}

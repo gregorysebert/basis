@@ -70,6 +70,9 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			if (srcNode.hasProperty("basis:folderLanguage")) {
 				basisFolderNode.setProperty("basis:folderLanguage", srcNode.getProperty("basis:folderLanguage").getString());
 			}
+			if (srcNode.hasProperty("basis:folderType")) {
+				basisFolderNode.setProperty("basis:folderType", srcNode.getProperty("basis:folderType").getString());
+			}
 			if (srcNode.hasProperty("basis:folderRegistrationDate")) {
 				basisFolderNode.setProperty("basis:folderRegistrationDate", srcNode.getProperty("basis:folderRegistrationDate").getDate());
 			}
@@ -87,6 +90,9 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			}
 			if (srcNode.hasProperty("basis:folderStatus")) {
 				basisFolderNode.setProperty("basis:folderStatus", srcNode.getProperty("basis:folderStatus").getString());
+			}
+			if (srcNode.hasProperty("basis:folderCloseOnDate")) {
+				basisFolderNode.setProperty("basis:folderCloseOnDate", srcNode.getProperty("basis:folderCloseOnDate").getDate());
 			}
 			if (srcNode.hasProperty("basis:folderComments")) {
 				basisFolderNode.setProperty("basis:folderComments", srcNode.getProperty("basis:folderComments").getString());

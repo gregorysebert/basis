@@ -4,7 +4,7 @@
 	import org.exoplatform.webui.form.UIFormSelectBox;
 	import basis.selector.service.BasisSelectorService;
 	import javax.jcr.Node;
-	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     String todayS=sdf.format(new Date());
 	private String getTimestampName() {
 		   Calendar now = Calendar.getInstance();
@@ -54,6 +54,38 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
     }
     .UIPopupWindow .PopupContent {
     	height: 500px !important;
+	}
+	#docInOut{
+    	font-size: 16px;
+	  	width: 50px;
+	}
+	#docType{
+    	font-size: 16px;
+	  	width: 500px;
+	}
+	#docDate{
+    	font-size: 16px;
+	  	width: 90px;
+	}
+	#docReference{
+		font-size: 16px;
+		width: 450px;
+	}
+	#docKeywords{
+		font-size: 16px;
+		width: 450px;
+	}
+	#docSenderType{
+		font-size: 16px;
+		width: 200px;
+	}
+	#docInternSender{
+		font-size: 16px;
+		width: 250px;
+	}
+	#docPredefinedExternSender{
+		font-size: 16px;
+		width: 500px;
 	}
 </style>
 <div class="UIForm FormLayout">
@@ -254,17 +286,18 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 								  <% for(action in uicomponent.getActions()) { 
 										 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
 										 String link = uicomponent.event(action);
-								  %>
-									<div onclick="$link" class="ActionButton LightBlueStyle">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle">
-													<a href="javascript:void(0);">$actionLabel</a>
+										 if (!action.equals("Save")){%>
+											<div onclick="$link" class="ActionButton LightBlueStyle">
+												<div class="ButtonLeft">
+													<div class="ButtonRight">
+														<div class="ButtonMiddle">
+															<a href="javascript:void(0);">$actionLabel</a>
+														</div>
+													</div>
 												</div>
-											</div>
-										</div>
-									</div>
-								<%}%>          
+											</div> 
+										 <%}
+								}%>          
 								</td>
 							  </tr>
 							</table>

@@ -6,7 +6,9 @@
 	import org.exoplatform.webui.core.model.SelectItemOption;
 	import javax.jcr.Node;
 	import basis.selector.service.BasisSelectorService;
-	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	import javax.servlet.http.HttpSession;
+	import org.exoplatform.portal.webui.util.Util;
+	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     String todayS=sdf.format(new Date());
 	private String getTimestampName() {
 		   Calendar now = Calendar.getInstance();
@@ -22,6 +24,7 @@
 		   }
 		   return parentNode;
 	}
+	HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
 %>
 <% 
 if(uicomponent.isEditing()) {
@@ -40,6 +43,39 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
     .UIPopupWindow .PopupContent {
     	height: 500px !important;
 	}
+	#folderLanguage {
+    	font-size: 16px;
+	  	width: 50px;
+	}
+	#folderType {
+    	font-size: 16px;
+	  	width: 50px;
+	}
+	#folderCloseBeforeDate{
+    	font-size: 16px;
+	  	width: 90px;
+	}
+	#folderCloseOnDate{
+    	font-size: 16px;
+	  	width: 90px;
+	}
+	#inputfolderRNN{
+		font-size: 16px;
+		width: 130px;
+	}
+	#folderExternalReference{
+		font-size: 16px;
+		width: 450px;
+	}
+	#folderInternSender{
+		font-size: 16px;
+		width: 500px;
+	}
+	#folderStatus{
+    	font-size: 16px;
+	  	width: 200px;
+	}
+	
 </style>
 <script type="text/javascript">	
 	function saveRNN(source,destination)
@@ -100,10 +136,13 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				        String[] folderLanguageField = ["jcrPath=/node/basis:folderLanguage", "options=NL,FR,EN", "onchange=true"];
 				        uicomponent.addSelectBoxField("folderLanguage", folderLanguageField);
 				        UIFormSelectBox folderLanguageSelectBox = uicomponent.findComponentById("folderLanguage");
-				        BasisSelectorService basisSelectorService = new BasisSelectorService(getBONode(currentNode).getNode("folderSelector.txt"), "Status", folderLanguageSelectBox.getValue());
+				        String language = folderLanguageSelectBox.getValue();
+				        String folderLanguage = httpSession.getAttribute("folderLanguage");
+				        Node folderSelectorNode = getBONode(currentNode).getNode("folderSelector.txt");
+				        BasisSelectorService basisSelectorService = new BasisSelectorService(folderSelectorNode, "Status", language);
 			            String statusOptions = basisSelectorService.getOptions();
 			            UIFormSelectBox folderStatusSelectBox = uicomponent.findComponentById("folderStatus");
-			            if(folderStatusSelectBox != null) {
+			            if(folderStatusSelectBox != null && language != folderLanguage) {
 				            List<SelectItemOption<String>> optionsList = new ArrayList<SelectItemOption<String>>();
 				            String[] statusOptionsList = statusOptions.split(',');
 			                for(String statusOption:statusOptionsList){
@@ -111,6 +150,27 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 			                }    
 			            	folderStatusSelectBox.setOptions(optionsList);
 			            }
+			            basisSelectorService = new BasisSelectorService(folderSelectorNode, "Type", language);
+			            String typeOptions = basisSelectorService.getOptions();
+			            UIFormSelectBox folderTypeSelectBox = uicomponent.findComponentById("folderType");
+			            if(folderTypeSelectBox != null && language != folderLanguage) {
+				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            String[] typeOptionsList = typeOptions.split(',');
+			                for(String typeOption:typeOptionsList){
+			                    optionsList.add(new SelectItemOption<String>(typeOption,typeOption));
+			                }    
+			                folderTypeSelectBox.setOptions(optionsList);
+			            }
+			            httpSession.setAttribute("folderLanguage", language);
+				        %>
+				    </td>
+				</tr>
+				<tr>
+				    <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderType")%></td>
+				    <td class="FieldComponent" colspan="6">
+				        <%
+				        String[] folderTypeField = ["jcrPath=/node/basis:folderType", "options="+typeOptions, "onchange=false"];
+				        uicomponent.addSelectBoxField("folderType", folderTypeField);
 				        %>
 				    </td>
 				</tr>
@@ -122,15 +182,6 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 						String[] folderRegistrationDateField = ["jcrPath=/node/basis:folderRegistrationDate", ("defaultValues="+todayS)];
 						uicomponent.addCalendarField("folderRegistrationDate", folderRegistrationDateField);
 						}
-						%>
-					</td>
-				</tr>
-				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderCloseBeforeDate")%></td>
-					<td class="FieldComponent">
-						<%
-						String[] folderCloseBeforeDateField = ["jcrPath=/node/basis:folderCloseBeforeDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];
-						uicomponent.addCalendarField("folderCloseBeforeDate", folderCloseBeforeDateField);
 						%>
 					</td>
 				</tr>
@@ -173,11 +224,37 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderStatus")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] folderStatusField = ["jcrPath=/node/basis:folderStatus", "options="+statusOptions, "validate=empty", "onchange=false"];
+				        String[] folderStatusField = ["jcrPath=/node/basis:folderStatus", "options="+statusOptions, "validate=empty", "onchange=true"];
 				        uicomponent.addSelectBoxField("folderStatus", folderStatusField);
 				        %>
 				    </td>
 				</tr>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderCloseBeforeDate")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] folderCloseBeforeDateField = ["jcrPath=/node/basis:folderCloseBeforeDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];
+						uicomponent.addCalendarField("folderCloseBeforeDate", folderCloseBeforeDateField);
+						%>
+					</td>
+				</tr>
+				<%
+				folderStatusSelectBox = uicomponent.findComponentById("folderStatus");
+				if(folderStatusSelectBox.getValue().equals("closed") || folderStatusSelectBox.getValue().equals("afgesloten") || folderStatusSelectBox.getValue().equals("clôturé") 
+				|| folderStatusSelectBox.getValue().equals("cancelled") || folderStatusSelectBox.getValue().equals("geannulleerd") || folderStatusSelectBox.getValue().equals("annulé")) {
+				%>
+				<tr>
+					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderCloseOnDate")%></td>
+					<td class="FieldComponent">
+						<%
+						String[] folderCloseOnDateField = ["jcrPath=/node/basis:folderCloseOnDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];
+						uicomponent.addCalendarField("folderCloseOnDate", folderCloseOnDateField);
+						%>
+					</td>
+				</tr>
+				<%
+				}
+				%>
 				<tr>
 					<td class="FieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
 					<td class="FieldComponent">
@@ -195,7 +272,17 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 						  <% for(action in uicomponent.getActions()) { 
 								 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
 								 String link = uicomponent.event(action);
-								 if (!action.equals("Close")) {
+								 if (action.equals("Close")){%>
+									<div onclick="$link" class="ActionButton LightBlueStyle">
+										<div class="ButtonLeft">
+											<div class="ButtonRight">
+												<div class="ButtonMiddle">
+													<a href="javascript:void(0);">$actionLabel</a>
+												</div>
+											</div>
+										</div>
+									</div> 
+								 <%} else if (!action.equals("Save")) {
 								 link=link.replace("'", "\\'");
 								  %>
 								    <a href="javascript:checkFieldRNN('inputfolderRNN','folderRNN','$link')" class="ActionButton LightBlueStyle">
@@ -208,18 +295,8 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 										</div>
 									</a>
 									
-								<%} else {%>
-									<div onclick="$link" class="ActionButton LightBlueStyle">
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<div class="ButtonMiddle">
-													<a href="javascript:void(0);">$actionLabel</a>
-												</div>
-											</div>
-										</div>
-									</div> 
-								 <%}
-							}%>          
+								<%}
+							}%>         
 						</td>
 					  </tr>
 					</table>

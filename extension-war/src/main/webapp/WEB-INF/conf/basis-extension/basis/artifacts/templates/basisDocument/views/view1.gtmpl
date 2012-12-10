@@ -1,5 +1,5 @@
 <%
-import java.text.SimpleDateFormat ;
+import java.text.SimpleDateFormat;
 import javax.jcr.Value;
 import org.exoplatform.ecm.webui.utils.Utils ;
 %>
@@ -27,7 +27,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 			<table class="UIFormGrid">
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docId")%>:</td>
-					<td class="FieldComponent">${title}</td>
+					<td class="docId">${title}</td>
 				</tr>
 				<%
 				 if (node.hasProperty("basis:docInOut")) {
@@ -36,7 +36,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docInOut")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="docInOut">${valueDisplay}</td>
 				</tr>
 				<%
 					 }
@@ -49,7 +49,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docType")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="docType">${valueDisplay}</td>
 				</tr>
 				<%
 					 }
@@ -75,7 +75,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docDate")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="BasisDate">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -88,7 +88,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docReference")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="docReference">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -108,7 +108,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 %>
 					<tr>
 						<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docKeywords")%>:</td>
-						<td class="FieldComponent">${valueDisplay}</td>
+						<td class="docKeywords">${valueDisplay}</td>
 					</tr>
 					 <%
 					 }
@@ -121,7 +121,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docInternSender")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="docInternSender">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -134,7 +134,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="docPredefinedExternSender">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -147,7 +147,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="docExternSenderName">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -160,7 +160,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderAdress")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="docExternSenderAdress">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -173,7 +173,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderZipCode")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="docExternSenderZipCode">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -186,7 +186,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderCity")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="docExternSenderCity">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -199,7 +199,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderCountry")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="docExternSenderCountry">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -212,7 +212,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basis.label.comments")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="BasisComments">${valueDisplay}</td>
 				</tr>
 				<%
 					}
