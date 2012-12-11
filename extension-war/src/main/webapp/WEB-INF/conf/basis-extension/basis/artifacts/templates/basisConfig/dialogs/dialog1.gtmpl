@@ -47,13 +47,16 @@
 		text-align: right;
 	  	width: 250px;
 	}
+	.FieldLabelMandatory {
+ 		color: blue;
+	}
 	#folderLanguage {
     	font-size: 16px;
 	  	width: 50px;
 	}
 	#folderType{
     	font-size: 16px;
-	  	width: 200px;
+	  	width: 500px;
 	}
 	#folderCloseBeforeDate{
     	font-size: 16px;
@@ -69,7 +72,7 @@
 	}
 	#folderExternalReference{
 		font-size: 16px;
-		width: 450px;
+		width: 500px;
 	}
 	#folderInternSender{
 		font-size: 16px;
@@ -82,7 +85,7 @@
 	
 	#docInOut{
     	font-size: 16px;
-	  	width: 50px;
+	  	width: 60px;
 	}
 	#docType{
     	font-size: 16px;
@@ -94,36 +97,40 @@
 	}
 	#docReference{
 		font-size: 16px;
-		width: 450px;
+		width: 500px;
 	}
 	#docKeywords{
 		font-size: 16px;
-		width: 450px;
+		width: 500px;
 	}
 	#docSenderType{
 		font-size: 16px;
-		width: 200px;
+		width: 500px;
 	}
 	#docInternSender{
 		font-size: 16px;
-		width: 250px;
+		width: 500px;
 	}
 	#docPredefinedExternSender{
 		font-size: 16px;
 		width: 500px;
 	}
+	#docExternSenderCountry{
+		font-size: 16px;
+		width: 200px;
+	}
 	
 	#followEditorType{
 		font-size: 16px;
-		width: 250px;
+		width: 200px;
 	}
 	#followUserInternEditor{
 		font-size: 16px;
-		width: 250px;
+		width: 500px;
 	}
 	#followRequiredAction{
 		font-size: 16px;
-		width: 300px;
+		width: 500px;
 	}
 	#followAnswerByDate{
     	font-size: 16px;
@@ -256,7 +263,19 @@
 				        String folderLanguage = httpSession.getAttribute("folderLanguage");
 				        // basis folder
 				        Node folderSelectorNode = getBONode(currentNode).getNode("folderSelector.txt");
-				        BasisSelectorService basisSelectorService = new BasisSelectorService(folderSelectorNode, "Status", language);
+				        BasisSelectorService basisSelectorService = new BasisSelectorService(folderSelectorNode, "Type", language);
+			            String folderTypeOptions = basisSelectorService.getOptions();
+			            UIFormSelectBox folderTypeSelectBox = uicomponent.findComponentById("folderType");
+			            if(folderTypeSelectBox != null && language != folderLanguage) {
+				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            optionsList.add(new SelectItemOption("", ""));
+				            String[] folderTypeOptionsList = folderTypeOptions.split(',');
+			                for(String folderTypeOption:folderTypeOptionsList){
+			                    optionsList.add(new SelectItemOption<String>(folderTypeOption,folderTypeOption));
+			                }    
+			                folderTypeSelectBox.setOptions(optionsList);
+			            }
+			            basisSelectorService = new BasisSelectorService(folderSelectorNode, "Status", language);
 			            String statusOptions = basisSelectorService.getOptions();
 			            UIFormSelectBox folderStatusSelectBox = uicomponent.findComponentById("folderStatus");
 			            if(folderStatusSelectBox != null && language != folderLanguage) {
@@ -266,17 +285,6 @@
 			                    optionsList.add(new SelectItemOption<String>(statusOption,statusOption));
 			                }    
 			            	folderStatusSelectBox.setOptions(optionsList);
-			            }
-			            basisSelectorService = new BasisSelectorService(folderSelectorNode, "Type", language);
-			            String folderTypeOptions = basisSelectorService.getOptions();
-			            UIFormSelectBox folderTypeSelectBox = uicomponent.findComponentById("folderType");
-			            if(folderTypeSelectBox != null && language != folderLanguage) {
-				            optionsList = new ArrayList<SelectItemOption<String>>();
-				            String[] folderTypeOptionsList = folderTypeOptions.split(',');
-			                for(String folderTypeOption:folderTypeOptionsList){
-			                    optionsList.add(new SelectItemOption<String>(folderTypeOption,folderTypeOption));
-			                }    
-			                folderTypeSelectBox.setOptions(optionsList);
 			            }
 			            // basis document
 			            Node documentSelectorNode = getBONode(currentNode).getNode("documentSelector.txt");
@@ -307,6 +315,7 @@
 			            UIFormSelectBox docPredefinedExternSenderSelectBox = uicomponent.findComponentById("docPredefinedExternSender");
 			            if(docPredefinedExternSenderSelectBox != null && language != folderLanguage) {
 				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            optionsList.add(new SelectItemOption("", ""));
 				            String[] predefinedExternSenderOptionsList = predefinedExternSenderOptions.split(',');
 			                for(String predefinedExternSenderOption:predefinedExternSenderOptionsList){
 			                    optionsList.add(new SelectItemOption<String>(predefinedExternSenderOption,predefinedExternSenderOption));
@@ -320,6 +329,7 @@
 			            UIFormSelectBox followGroupInternEditorSelectBox = uicomponent.findComponentById("followGroupInternEditor");
 			            if(followGroupInternEditorSelectBox != null && language != folderLanguage) {
 				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            optionsList.add(new SelectItemOption("", ""));
 				            String[] groupInternEditorOptionsList = groupInternEditorOptions.split(',');
 			                for(String groupInternEditorOption:groupInternEditorOptionsList){
 			                    optionsList.add(new SelectItemOption<String>(groupInternEditorOption,groupInternEditorOption));
@@ -331,6 +341,7 @@
 			            UIFormSelectBox followExternEditorSelectBox = uicomponent.findComponentById("followExternEditor");
 			            if(followExternEditorSelectBox != null && language != folderLanguage) {
 				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            optionsList.add(new SelectItemOption("", ""));
 				            String[] externEditorOptionsList = externEditorOptions.split(',');
 			                for(String externEditorOption:externEditorOptionsList){
 			                    optionsList.add(new SelectItemOption<String>(externEditorOption,externEditorOption));
@@ -342,6 +353,7 @@
 			            UIFormSelectBox followRequiredActionSelectBox = uicomponent.findComponentById("followRequiredAction");
 			            if(followRequiredActionSelectBox != null && language != folderLanguage) {
 				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            optionsList.add(new SelectItemOption("", ""));
 				            String[] requiredActionOptionsList = requiredActionOptions.split(',');
 			                for(String requiredActionOption:requiredActionOptionsList){
 			                    optionsList.add(new SelectItemOption<String>(requiredActionOption,requiredActionOption));
@@ -353,10 +365,10 @@
 				    </td>
 				</tr>
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderType")%></td>
+				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFolder.label.folderType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] folderTypeField = ["jcrPath=/node/basis:folderType", "options="+folderTypeOptions, "onchange=false"];
+				        String[] folderTypeField = ["jcrPath=/node/basis:folderType", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+folderTypeOptions, "validate=empty", "onchange=false"];
 				        uicomponent.addSelectBoxField("folderType", folderTypeField);
 				        %>
 				    </td>
@@ -370,12 +382,15 @@
 						%>
 					</td>
 				</tr>
+				<%
+				if (getBONode(currentNode).getProperty("basis:BODispalyRNN").getBoolean()) {
+				%>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderRNN")%></td>
+					<td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFolder.label.folderRNN")%></td>
 					<td class="FieldComponent">
 					    <div style="display:none;">
 							<%
-							String[] folderRNNField = ["jcrPath=/node/basis:folderRNN"];
+							String[] folderRNNField = ["jcrPath=/node/basis:folderRNN", "validate=empty"];
 							uicomponent.addTextField("folderRNN", folderRNNField);
 							%>
 						</div>
@@ -387,15 +402,22 @@
 						folderRNNVal = folderRNNFieldStringInput.getValue(); 
 						}
 						%>
-						<input id="inputfolderRNN" type="text" name="inputfolderRNN"  value=<%=folderRNNVal%> onchange="javascript:checkFieldRNN('inputfolderRNN','folderRNN','')">
+						<input id="inputfolderRNN" type="text" name="inputfolderRNN"  value=<%=folderRNNVal%> onchange="javascript:checkFieldRNN('inputfolderRNN','folderRNN','')"> *
 					</td>
+				</tr>
+				<tr>
+					<td>
+					</td>	
 					<td class="FieldComponent">
 			          	<%
-			          	 String[] folderInternSenderField = ["jcrPath=/node/basis:folderInternSender", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			          	 String[] folderInternSenderField = ["jcrPath=/node/basis:folderInternSender", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
 			           	uicomponent.addActionField("folderInternSender", folderInternSenderField);
 			          	%>
 			        </td>
 				</tr>
+				<%
+				}
+				%>
 				<tr>
 					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderExternalReference")%></td>
 					<td class="FieldComponent">
@@ -490,10 +512,10 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docReference")%></td>
+					<td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docReference")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docReferenceField = ["jcrPath=/node/basis:docReference"];
+						String[] docReferenceField = ["jcrPath=/node/basis:docReference", "validate=empty"];
 						uicomponent.addTextField("docReference", docReferenceField);
 						%>
 					</td>
@@ -521,10 +543,10 @@
 				if(docSenderTypeSelectBox.getValue().equals("intern")){
 				%>
 			    <tr>
-			        <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docInternSender")%></td>
+			        <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docInternSender")%></td>
 			        <td class="FieldComponent">
 			          	<%
-			          	 String[] docInternSenderField = ["jcrPath=/node/basis:docInternSender", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			          	 String[] docInternSenderField = ["jcrPath=/node/basis:docInternSender", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
 			           	uicomponent.addActionField("docInternSender", docInternSenderField);
 			          	%>
 			        </td>
@@ -533,20 +555,20 @@
 				else if(docSenderTypeSelectBox.getValue().equals("predefined extern")){
 				%>	
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
+				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "options="+predefinedExternSenderOptions, "onchange=false"];
+				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+predefinedExternSenderOptions, "validate=empty", "onchange=false"];
 				        uicomponent.addSelectBoxField("docPredefinedExternSender", docPredefinedExternSenderField);
 				        %>
 				    </td>
 				</tr>	
 				<%} else {%>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%></td>
+					<td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docExternSenderNameField = ["jcrPath=/node/basis:docExternSenderName"];
+						String[] docExternSenderNameField = ["jcrPath=/node/basis:docExternSenderName", "validate=empty"];
 						uicomponent.addTextField("docExternSenderName", docExternSenderNameField);
 						%>
 					</td>
@@ -583,8 +605,7 @@
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docExternSenderCountryField = ["jcrPath=/node/basis:docExternSenderCountry",
-				        "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy",
-				        "scriptParams=Belgique,België,Afghanistan,Albania,American Samoa,Andorra," +
+				        "options=Belgique,België,Afghanistan,Albania,American Samoa,Andorra," +
 				        "Angola,Anguilla,Antarctica,Antigua & Barbuda,Argentina," +
 				        "Armenia,Aruba,Ascension Island,Australia,Austria,Azerbaijan," +
 				        "Bahamas,Bahrain,Bangladesh,Barbados,Belarus,Belize," +
@@ -654,10 +675,10 @@
 				if(followEditorTypeSelectBox.getValue().equals("intern user")){
 				%>
 			    <tr>
-			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
+			        <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
 			        <td class="FieldComponent">
 			          	<%
-			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
 			           	uicomponent.addActionField("followUserInternEditor", followUserInternEditorField);
 			          	%>
 			        </td>
@@ -666,30 +687,30 @@
 				else if(followEditorTypeSelectBox.getValue().equals("intern group")){
 				%>	
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
+				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "options="+groupInternEditorOptions, "onchange=false"];
+				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+groupInternEditorOptions, "validate=empty", "onchange=false"];
 				        uicomponent.addSelectBoxField("followGroupInternEditor", followGroupInternEditorField);
 				        %>
 				    </td>
 				</tr>	
 				<%} else {%>
 			    <tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
+				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "options="+externEditorOptions, "onchange=false"];
+				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+externEditorOptions, "validate=empty", "onchange=false"];
 				        uicomponent.addSelectBoxField("followExternEditor", followExternEditorField);
 				        %>
 				    </td>
 				</tr>	
 				<% } %>
 			    <tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
+				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "options="+requiredActionOptions, "onchange=false"];
+				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+requiredActionOptions, "validate=empty", "onchange=false"];
 				        uicomponent.addSelectBoxField("followRequiredAction", followRequiredActionField);
 				        %>
 				    </td>
@@ -723,7 +744,7 @@
 								 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
 								 String link = uicomponent.event(action);
 								 if (action.equals("Close")){%>
-									<div onclick="$link" class="ActionButton LightBlueStyle">
+									<div onclick="$link;tempSelectedTab='Tab1'" class="ActionButton LightBlueStyle">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
 												<div class="ButtonMiddle">
@@ -735,7 +756,7 @@
 								 <%} else if (action.equals("SaveAndClose")) {
 								 link=link.replace("'", "\\'");
 								  %>
-								    <a href="javascript:checkFieldRNN('inputfolderRNN','folderRNN','$link')" class="ActionButton LightBlueStyle">
+								    <a href="javascript:tempSelectedTab='Tab1';checkFieldRNN('inputfolderRNN','folderRNN','$link')" class="ActionButton LightBlueStyle">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
 												<div class="ButtonMiddle">

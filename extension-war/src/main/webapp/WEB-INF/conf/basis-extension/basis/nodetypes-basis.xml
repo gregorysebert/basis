@@ -10,6 +10,10 @@
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
+            <propertyDefinition name="basis:BODispalyRNN" requiredType="Boolean" autoCreated="false" mandatory="false"
+                                onParentVersion="COPY" protected="false" multiple="false">
+                <valueConstraints/>
+            </propertyDefinition>
         </propertyDefinitions>
     </nodeType>
     <nodeType name="basis:basisDate" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
@@ -84,7 +88,7 @@
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:foldertype" requiredType="String" autoCreated="false" mandatory="false"
+            <propertyDefinition name="basis:folderType" requiredType="String" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>

@@ -75,13 +75,13 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 				%>
 				<tr>
 					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderRNN")%>:</td>
-					<td class="RRN">${valueDisplay}</td>
+					<td class="RRN">${valueDisplay}
 					<%
 				 	if (node.hasProperty("basis:folderInternSender")) {
 					 	valueDisplay = node.getProperty("basis:folderInternSender").getString();
 					 	if (!valueDisplay.equals("")){
 					%>
-					<td class="folderInternSender">${valueDisplay}</td>
+					: ${valueDisplay}</td>
 					<%
 						}
 				 	}	 

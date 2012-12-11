@@ -4,6 +4,7 @@
 	import org.exoplatform.webui.form.UIFormSelectBox;
 	import basis.selector.service.BasisSelectorService;
 	import javax.jcr.Node;
+	import org.exoplatform.webui.core.model.SelectItemOption;
 	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     String todayS=sdf.format(new Date());
 	private String getTimestampName() {
@@ -55,9 +56,17 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
     .UIPopupWindow .PopupContent {
     	height: 500px !important;
 	}
+	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FieldLabel {
+ 		font-size: 16px;
+		text-align: right;
+	  	width: 250px;
+	}
+	.FieldLabelMandatory {
+ 		color: blue;
+	}
 	#docInOut{
     	font-size: 16px;
-	  	width: 50px;
+	  	width: 60px;
 	}
 	#docType{
     	font-size: 16px;
@@ -69,23 +78,27 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 	}
 	#docReference{
 		font-size: 16px;
-		width: 450px;
+		width: 500px;
 	}
 	#docKeywords{
 		font-size: 16px;
-		width: 450px;
+		width: 500px;
 	}
 	#docSenderType{
 		font-size: 16px;
-		width: 200px;
+		width: 500px;
 	}
 	#docInternSender{
 		font-size: 16px;
-		width: 250px;
+		width: 500px;
 	}
 	#docPredefinedExternSender{
 		font-size: 16px;
 		width: 500px;
+	}
+	#docExternSenderCountry{
+		font-size: 16px;
+		width: 200px;
 	}
 </style>
 <div class="UIForm FormLayout">
@@ -141,10 +154,10 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					</td>
 				</tr>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docReference")%></td>
+					<td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docReference")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docReferenceField = ["jcrPath=/node/basis:docReference"];
+						String[] docReferenceField = ["jcrPath=/node/basis:docReference", "validate=empty"];
 						uicomponent.addTextField("docReference", docReferenceField);
 						%>
 					</td>
@@ -172,10 +185,10 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				if(docSenderTypeSelectBox.getValue().equals("intern")){
 				%>
 			    <tr>
-			        <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docInternSender")%></td>
+			        <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docInternSender")%></td>
 			        <td class="FieldComponent">
 			          	<%
-			          	 String[] docInternSenderField = ["jcrPath=/node/basis:docInternSender", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			          	 String[] docInternSenderField = ["jcrPath=/node/basis:docInternSender", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
 			           	uicomponent.addActionField("docInternSender", docInternSenderField);
 			          	%>
 			        </td>
@@ -184,20 +197,20 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				else if(docSenderTypeSelectBox.getValue().equals("predefined extern")){
 				%>	
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
+				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "options="+predefinedExternSenderOptions, "onchange=false"];
+				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+predefinedExternSenderOptions, "validate=empty", "onchange=false"];
 				        uicomponent.addSelectBoxField("docPredefinedExternSender", docPredefinedExternSenderField);
 				        %>
 				    </td>
 				</tr>	
 				<%} else {%>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%></td>
+					<td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docExternSenderNameField = ["jcrPath=/node/basis:docExternSenderName"];
+						String[] docExternSenderNameField = ["jcrPath=/node/basis:docExternSenderName", "validate=empty"];
 						uicomponent.addTextField("docExternSenderName", docExternSenderNameField);
 						%>
 					</td>
@@ -234,8 +247,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docExternSenderCountryField = ["jcrPath=/node/basis:docExternSenderCountry",
-				        "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy",
-				        "scriptParams=Belgique,Belgi?,Afghanistan,Albania,American Samoa,Andorra," +
+				        "options=Belgique,België,Afghanistan,Albania,American Samoa,Andorra," +
 				        "Angola,Anguilla,Antarctica,Antigua & Barbuda,Argentina," +
 				        "Armenia,Aruba,Ascension Island,Australia,Austria,Azerbaijan," +
 				        "Bahamas,Bahrain,Bangladesh,Barbados,Belarus,Belize," +

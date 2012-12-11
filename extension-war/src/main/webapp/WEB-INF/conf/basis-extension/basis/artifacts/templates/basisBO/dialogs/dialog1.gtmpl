@@ -19,6 +19,15 @@
 		            %></div>
 		          </td>
         		</tr>
+        		<tr>
+					<td class="FieldLabel">
+						<%
+						String[] BODispalyRNNField = ["jcrPath=/node/basis:BODispalyRNN"];
+						uicomponent.addCheckBoxField("BODispalyRNN", BODispalyRNNField);
+						%>
+					</td>
+					<td class="FieldComponent"><%=_ctx.appRes("basis.label.dispalyRNN")%></td>
+				 </tr>
 			</table>
 		</div>
 		<div class="UIAction">

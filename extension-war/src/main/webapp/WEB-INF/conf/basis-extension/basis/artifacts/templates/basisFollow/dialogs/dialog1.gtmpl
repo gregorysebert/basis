@@ -4,6 +4,7 @@
 	import org.exoplatform.webui.form.UIFormSelectBox;
 	import basis.selector.service.BasisSelectorService;
 	import javax.jcr.Node;
+	import org.exoplatform.webui.core.model.SelectItemOption;
 	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     String todayS=sdf.format(new Date());
 	private String getTimestampName() {
@@ -62,17 +63,25 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
     .UIPopupWindow .PopupContent {
     	height: 500px !important;
 	}
+	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FieldLabel {
+ 		font-size: 16px;
+		text-align: right;
+	  	width: 250px;
+	}
+	.FieldLabelMandatory {
+ 		color: blue;
+	}
 	#followEditorType{
 		font-size: 16px;
-		width: 250px;
+		width: 200px;
 	}
 	#followUserInternEditor{
 		font-size: 16px;
-		width: 250px;
+		width: 500px;
 	}
 	#followRequiredAction{
 		font-size: 16px;
-		width: 300px;
+		width: 500px;
 	}
 	#followAnswerByDate{
     	font-size: 16px;
@@ -123,10 +132,10 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				if(followEditorTypeSelectBox.getValue().equals("intern user")){
 				%>
 			    <tr>
-			        <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
+			        <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
 			        <td class="FieldComponent">
 			          	<%
-			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
 			           	uicomponent.addActionField("followUserInternEditor", followUserInternEditorField);
 			          	%>
 			        </td>
@@ -135,30 +144,30 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				else if(followEditorTypeSelectBox.getValue().equals("intern group")){
 				%>	
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
+				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "options="+groupInternEditorOptions, "onchange=false"];
+				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+groupInternEditorOptions, "validate=empty", "onchange=false"];
 				        uicomponent.addSelectBoxField("followGroupInternEditor", followGroupInternEditorField);
 				        %>
 				    </td>
 				</tr>	
 				<%} else {%>
 			    <tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
+				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "options="+externEditorOptions, "onchange=false"];
+				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+externEditorOptions, "validate=empty", "onchange=false"];
 				        uicomponent.addSelectBoxField("followExternEditor", followExternEditorField);
 				        %>
 				    </td>
 				</tr>	
 				<% } %> 
 			    <tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
+				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "options="+requiredActionOptions, "onchange=false"];
+				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+requiredActionOptions, "validate=empty", "onchange=false"];
 				        uicomponent.addSelectBoxField("followRequiredAction", followRequiredActionField);
 				        %>
 				    </td>

@@ -43,13 +43,21 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
     .UIPopupWindow .PopupContent {
     	height: 500px !important;
 	}
+	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FieldLabel {
+ 		font-size: 16px;
+		text-align: right;
+	  	width: 250px;
+	}
+	.FieldLabelMandatory {
+ 		color: blue;
+	}
 	#folderLanguage {
     	font-size: 16px;
 	  	width: 50px;
 	}
-	#folderType {
+	#folderType{
     	font-size: 16px;
-	  	width: 50px;
+	  	width: 500px;
 	}
 	#folderCloseBeforeDate{
     	font-size: 16px;
@@ -65,7 +73,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 	}
 	#folderExternalReference{
 		font-size: 16px;
-		width: 450px;
+		width: 500px;
 	}
 	#folderInternSender{
 		font-size: 16px;
@@ -139,7 +147,19 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				        String language = folderLanguageSelectBox.getValue();
 				        String folderLanguage = httpSession.getAttribute("folderLanguage");
 				        Node folderSelectorNode = getBONode(currentNode).getNode("folderSelector.txt");
-				        BasisSelectorService basisSelectorService = new BasisSelectorService(folderSelectorNode, "Status", language);
+				        BasisSelectorService basisSelectorService = new BasisSelectorService(folderSelectorNode, "Type", language);
+			            String typeOptions = basisSelectorService.getOptions();
+			            UIFormSelectBox folderTypeSelectBox = uicomponent.findComponentById("folderType");
+			            if(folderTypeSelectBox != null && language != folderLanguage) {
+				            optionsList = new ArrayList<SelectItemOption<String>>();
+				            optionsList.add(new SelectItemOption("", ""));
+				            String[] typeOptionsList = typeOptions.split(',');
+			                for(String typeOption:typeOptionsList){
+			                    optionsList.add(new SelectItemOption<String>(typeOption,typeOption));
+			                }    
+			                folderTypeSelectBox.setOptions(optionsList);
+			            }
+			            basisSelectorService = new BasisSelectorService(folderSelectorNode, "Status", language);
 			            String statusOptions = basisSelectorService.getOptions();
 			            UIFormSelectBox folderStatusSelectBox = uicomponent.findComponentById("folderStatus");
 			            if(folderStatusSelectBox != null && language != folderLanguage) {
@@ -150,26 +170,15 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 			                }    
 			            	folderStatusSelectBox.setOptions(optionsList);
 			            }
-			            basisSelectorService = new BasisSelectorService(folderSelectorNode, "Type", language);
-			            String typeOptions = basisSelectorService.getOptions();
-			            UIFormSelectBox folderTypeSelectBox = uicomponent.findComponentById("folderType");
-			            if(folderTypeSelectBox != null && language != folderLanguage) {
-				            optionsList = new ArrayList<SelectItemOption<String>>();
-				            String[] typeOptionsList = typeOptions.split(',');
-			                for(String typeOption:typeOptionsList){
-			                    optionsList.add(new SelectItemOption<String>(typeOption,typeOption));
-			                }    
-			                folderTypeSelectBox.setOptions(optionsList);
-			            }
 			            httpSession.setAttribute("folderLanguage", language);
 				        %>
 				    </td>
 				</tr>
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderType")%></td>
+				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFolder.label.folderType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] folderTypeField = ["jcrPath=/node/basis:folderType", "options="+typeOptions, "onchange=false"];
+				        String[] folderTypeField = ["jcrPath=/node/basis:folderType", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+typeOptions, "validate=empty", "onchange=false"];
 				        uicomponent.addSelectBoxField("folderType", folderTypeField);
 				        %>
 				    </td>
@@ -185,12 +194,15 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 						%>
 					</td>
 				</tr>
+				<%
+				if (getBONode(currentNode).getProperty("basis:BODispalyRNN").getBoolean()) {
+				%>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderRNN")%></td>
+					<td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFolder.label.folderRNN")%></td>
 					<td class="FieldComponent">
 					    <div style="display:none;">
 							<%
-							String[] folderRNNField = ["jcrPath=/node/basis:folderRNN"];
+							String[] folderRNNField = ["jcrPath=/node/basis:folderRNN", "validate=empty"];
 							uicomponent.addTextField("folderRNN", folderRNNField);
 							%>
 						</div>
@@ -202,15 +214,22 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 						folderRNNVal = folderRNNFieldStringInput.getValue(); 
 						}
 						%>
-						<input id="inputfolderRNN" type="text" name="inputfolderRNN"  value=<%=folderRNNVal%> onchange="javascript:checkFieldRNN('inputfolderRNN','folderRNN','')">
+						<input id="inputfolderRNN" type="text" name="inputfolderRNN"  value=<%=folderRNNVal%> onchange="javascript:checkFieldRNN('inputfolderRNN','folderRNN','')"> *
 					</td>
+				</tr>
+				<tr>
+					<td>
+					</td>	
 					<td class="FieldComponent">
 			          	<%
-			          	 String[] folderInternSenderField = ["jcrPath=/node/basis:folderInternSender", "defaultValues=", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			          	 String[] folderInternSenderField = ["jcrPath=/node/basis:folderInternSender", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
 			           	uicomponent.addActionField("folderInternSender", folderInternSenderField);
 			          	%>
 			        </td>
 				</tr>
+				<%
+				}
+				%>
 				<tr>
 					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderExternalReference")%></td>
 					<td class="FieldComponent">
@@ -224,7 +243,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderStatus")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] folderStatusField = ["jcrPath=/node/basis:folderStatus", "options="+statusOptions, "validate=empty", "onchange=true"];
+				        String[] folderStatusField = ["jcrPath=/node/basis:folderStatus", "options="+statusOptions, "onchange=true"];
 				        uicomponent.addSelectBoxField("folderStatus", folderStatusField);
 				        %>
 				    </td>
