@@ -63,7 +63,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
     .UIPopupWindow .PopupContent {
     	height: 500px !important;
 	}
-	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FieldLabel {
+	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FastDocFieldLabel {
  		font-size: 16px;
 		text-align: right;
 	  	width: 250px;
@@ -110,7 +110,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 		          </td>
         		</tr>
 				<tr style="display:none;">
-					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followSendDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisFollow.label.followSendDate")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] followSendDateField = ["jcrPath=/node/basis:followSendDate", ("defaultValues="+todayS)];
@@ -119,7 +119,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					</td>
 				</tr>
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followEditorType")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisFollow.label.followEditorType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] followEditorTypeField = ["jcrPath=/node/basis:followEditorType", "options=intern user, intern group, extern", "onchange=true"];
@@ -132,11 +132,13 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				if(followEditorTypeSelectBox.getValue().equals("intern user")){
 				%>
 			    <tr>
-			        <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
+			        <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
 			        <td class="FieldComponent">
 			          	<%
+						 uicomponent.removeChildById("followGroupInternEditor");
+						 uicomponent.removeChildById("followExternEditor");
 			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
-			           	uicomponent.addActionField("followUserInternEditor", followUserInternEditorField);
+			           	 uicomponent.addActionField("followUserInternEditor", followUserInternEditorField);
 			          	%>
 			        </td>
 			    </tr>
@@ -144,27 +146,31 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				else if(followEditorTypeSelectBox.getValue().equals("intern group")){
 				%>	
 				<tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+groupInternEditorOptions, "validate=empty", "onchange=false"];
-				        uicomponent.addSelectBoxField("followGroupInternEditor", followGroupInternEditorField);
+						 uicomponent.removeChildById("followUserInternEditor");
+						 uicomponent.removeChildById("followExternEditor");
+				         String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+groupInternEditorOptions, "validate=empty", "onchange=false"];
+				         uicomponent.addSelectBoxField("followGroupInternEditor", followGroupInternEditorField);
 				        %>
 				    </td>
 				</tr>	
 				<%} else {%>
 			    <tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+externEditorOptions, "validate=empty", "onchange=false"];
-				        uicomponent.addSelectBoxField("followExternEditor", followExternEditorField);
+						 uicomponent.removeChildById("followUserInternEditor");
+						 uicomponent.removeChildById("followGroupInternEditor");
+				         String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+externEditorOptions, "validate=empty", "onchange=false"];
+				         uicomponent.addSelectBoxField("followExternEditor", followExternEditorField);
 				        %>
 				    </td>
 				</tr>	
 				<% } %> 
 			    <tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+requiredActionOptions, "validate=empty", "onchange=false"];
@@ -173,7 +179,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    </td>
 				</tr>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] followCommentsField = ["jcrPath=/node/basis:followComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;
@@ -182,7 +188,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					</td>
 				</tr>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followAnswerByDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisFollow.label.followAnswerByDate")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] followAnswerByDateField = ["jcrPath=/node/basis:followAnswerByDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];

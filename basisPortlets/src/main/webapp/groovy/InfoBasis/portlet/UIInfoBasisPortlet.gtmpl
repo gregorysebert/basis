@@ -3,8 +3,19 @@ String folderNumber = uicomponent.getFolderNumber();
 String documentId = uicomponent.getDocumentId();
 String folderNodePath = uicomponent.getFolderNodePath();
 String documentNodePath = uicomponent.getDocumentNodePath();
+String homeNodePath = null;
+if (folderNumber != null) {
+	homeNodePath = folderNodePath.split("BO/")[0]+"BO/"+folderNodePath.split("BO/")[1].split("/")[0];
+}
+else if (documentId != null) {
+	homeNodePath = documentNodePath.split("BO/")[0]+"BO/"+documentNodePath.split("BO/")[1].split("/")[0];
+}
 %>
 <center><p style="font-family: arial; font-size: 20px;">
+<%if (homeNodePath != null) {%>
+		<a href="$homeNodePath"><%=_ctx.appRes("BasisInfo.home")%></a>
+		<br/>
+<%}%> 
 <%if (folderNumber != null) {%>
 <%=_ctx.appRes("BasisInfo.newBasisFolderNumber")%> <a href="$folderNodePath">$folderNumber</a>
 <%}

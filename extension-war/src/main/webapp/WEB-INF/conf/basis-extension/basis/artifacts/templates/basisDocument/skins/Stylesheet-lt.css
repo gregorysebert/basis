@@ -1,28 +1,13 @@
 /**
   LTR skin for basis:basisDocument template
 */
-	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FieldLabel {
+	.FastDocFieldLabel {
 	padding-right: 12px;
 	text-align: left;
 	font-size: 18px;
-	width:25%;
+	width:27%;
 	}
-	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid.FieldComponent {
-	    color: #000FF0;
-	    font-size: 16px;
-	    font-weight: bold;
-	    padding-bottom: 12px;
-	    text-align: left;
-	 }
-	
-	.FieldComponent{
-	    color: #0000FF;
-	    font-size: 16px;
-	    font-weight: bold;
-	    padding-bottom: 12px;
-	    text-align: left;
-	 }
-	 
+		 
 	.BasisComments{
 	    color: #0000FF;
 	    font-size: 16px;

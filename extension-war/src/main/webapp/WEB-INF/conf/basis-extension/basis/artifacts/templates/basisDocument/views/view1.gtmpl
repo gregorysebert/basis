@@ -26,7 +26,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 		<div id="$uicomponent.id">
 			<table class="UIFormGrid">
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docId")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docId")%>:</td>
 					<td class="docId">${title}</td>
 				</tr>
 				<%
@@ -35,7 +35,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docInOut")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docInOut")%>:</td>
 					<td class="docInOut">${valueDisplay}</td>
 				</tr>
 				<%
@@ -48,7 +48,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docType")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docType")%>:</td>
 					<td class="docType">${valueDisplay}</td>
 				</tr>
 				<%
@@ -61,8 +61,8 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docRegistrationDate")%>:</td>
-					<td class="FieldComponent">${valueDisplay}</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docRegistrationDate")%>:</td>
+					<td class="BasisDate">${valueDisplay}</td>
 				</tr>
 				<%
 					}
@@ -74,7 +74,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docDate")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docDate")%>:</td>
 					<td class="BasisDate">${valueDisplay}</td>
 				</tr>
 				<%
@@ -87,7 +87,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docReference")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docReference")%>:</td>
 					<td class="docReference">${valueDisplay}</td>
 				</tr>
 				<%
@@ -107,7 +107,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 					 %>
 					<tr>
-						<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docKeywords")%>:</td>
+						<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docKeywords")%>:</td>
 						<td class="docKeywords">${valueDisplay}</td>
 					</tr>
 					 <%
@@ -120,7 +120,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docInternSender")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docInternSender")%>:</td>
 					<td class="docInternSender">${valueDisplay}</td>
 				</tr>
 				<%
@@ -133,7 +133,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%>:</td>
 					<td class="docPredefinedExternSender">${valueDisplay}</td>
 				</tr>
 				<%
@@ -146,7 +146,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%>:</td>
 					<td class="docExternSenderName">${valueDisplay}</td>
 				</tr>
 				<%
@@ -159,7 +159,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderAdress")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderAdress")%>:</td>
 					<td class="docExternSenderAdress">${valueDisplay}</td>
 				</tr>
 				<%
@@ -172,7 +172,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderZipCode")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderZipCode")%>:</td>
 					<td class="docExternSenderZipCode">${valueDisplay}</td>
 				</tr>
 				<%
@@ -185,7 +185,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderCity")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderCity")%>:</td>
 					<td class="docExternSenderCity">${valueDisplay}</td>
 				</tr>
 				<%
@@ -198,7 +198,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderCountry")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basisDocument.label.docExternSenderCountry")%>:</td>
 					<td class="docExternSenderCountry">${valueDisplay}</td>
 				</tr>
 				<%
@@ -211,7 +211,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  colspan="2"><%=_ctx.appRes("basis.label.comments")%>:</td>
+					<td class="FastDocFieldLabel"  colspan="2"><%=_ctx.appRes("basis.label.comments")%>:</td>
 					<td class="BasisComments">${valueDisplay}</td>
 				</tr>
 				<%

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
   <BasisInfo>
-    <newBasisFolderNumber>Your last Basis folder number is:_nl</newBasisFolderNumber>
-	<noNewBasisFolder>No new Basis folder._nl</noNewBasisFolder>
-    <newBasisDocumentId>Your last Basis document id is:_nl</newBasisDocumentId>
-	<noNewBasisDocument>No new Basis document._nl</noNewBasisDocument>
+    <newBasisFolderNumber>Uw recentste FastDoc dossiernummer is: </newBasisFolderNumber>
+	<noNewBasisFolder>Nog geen nieuw FastDoc dossier tijdens deze sessie.</noNewBasisFolder>
+    <newBasisDocumentId>Uw recentste FastDoc documentnummer is:</newBasisDocumentId>
+	<noNewBasisDocument>Nog geen nieuw FastDoc document tijdens deze sessie.</noNewBasisDocument>
+	<home>FastDoc positioneren om dossiers toe te voegen.</home>
   </BasisInfo>
 </bundle>

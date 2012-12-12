@@ -50,7 +50,7 @@
     .UIPopupWindow .PopupContent {
     	height: 500px !important;
 	}
-	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FieldLabel {
+	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FastDocFieldLabel {
  		font-size: 16px;
 		text-align: right;
 	  	width: 250px;
@@ -90,6 +90,26 @@
 		font-size: 16px;
 		width: 500px;
 	}
+	#docExternSenderName{
+		font-size: 16px;
+		width: 200px;
+	}
+	#docExternSenderAdress{
+		font-size: 16px;
+		width: 200px;
+	}
+	#docExternSenderCountry{
+		font-size: 16px;
+		width: 200px;
+	}
+	#docExternSenderZipCode{
+		font-size: 16px;
+		width: 200px;
+	}
+	#docExternSenderCity{
+		font-size: 16px;
+		width: 200px;
+	}
 	#docExternSenderCountry{
 		font-size: 16px;
 		width: 200px;
@@ -119,6 +139,31 @@
 		font-size: 16px;
 		width: 500px;
 	}
+	
+	#folderConfigFollowDocEditorType{
+		font-size: 16px;
+		width: 200px;
+	}
+	#folderConfigFollowDocUserInternEditor{
+		font-size: 16px;
+		width: 500px;
+	}
+	#folderConfigFollowDocRequiredAction{
+		font-size: 16px;
+		width: 500px;
+	}
+	#folderConfigFollowDocAnswerByDate{
+    	font-size: 16px;
+	  	width: 90px;
+	}
+	#folderConfigFollowDocExternEditor{
+		font-size: 16px;
+		width: 500px;
+	}
+	#folderConfigFollowDocGroupInternEditor{
+		font-size: 16px;
+		width: 500px;
+	}
 </style>
 <div class="UIForm FormLayout">
 	<% uiform.begin() %> 
@@ -134,7 +179,7 @@
 		          </td>
         		</tr>
         		<tr>
-					<td class="FieldLabel">
+					<td class="FastDocFieldLabel">
 						<%
 						String[] folderConfigFollowFolderField = ["jcrPath=/node/basis:folderConfigFollowFolder", "onchange=true"];
 						uicomponent.addCheckBoxField("folderConfigFollowFolder", folderConfigFollowFolderField);
@@ -144,9 +189,13 @@
 				 </tr>
 				 <%
 				 if(!uicomponent.findComponentById("folderConfigFollowFolder").isChecked()){
+					 uicomponent.removeChildById("followUserInternEditor");
+					 uicomponent.removeChildById("followGroupInternEditor");
+					 uicomponent.removeChildById("followExternEditor");
+					 uicomponent.removeChildById("followRequiredAction");
 				 %>
         		 <tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docInOut")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docInOut")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docInOutField = ["jcrPath=/node/basis:docInOut", "options=IN,OUT", "onchange=false"];
@@ -155,7 +204,7 @@
 				    </td>
 				 </tr>
 				 <tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docType")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docTypeField = ["jcrPath=/node/basis:docType", "options="+typeOptions, "onchange=false"];
@@ -164,7 +213,7 @@
 				    </td>
 				 </tr>
 				 <tr style="display:none;">
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docRegistrationDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docRegistrationDate")%></td>
 					<td class="FieldComponent">
 						<%
 						if(!uicomponent.isEditing()) {
@@ -175,7 +224,7 @@
 					</td>
 				 </tr>
 				 <tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docDate")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docDateField = ["jcrPath=/node/basis:docDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];
@@ -184,7 +233,7 @@
 					</td>
 				 </tr>
 				 <tr>
-					<td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docReference")%></td>
+					<td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docReference")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docReferenceField = ["jcrPath=/node/basis:docReference", "validate=empty"];
@@ -193,7 +242,7 @@
 					</td>
 				 </tr>
 				 <tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docKeywords")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docKeywords")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docKeywordsField = ["jcrPath=/node/basis:docKeywords", "options="+keywordsOptions, "multiValues=true", "onchange=false"];
@@ -202,7 +251,7 @@
 				    </td>
 				 </tr>
 			 	 <tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docSenderType")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docSenderType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docSenderTypeField = ["jcrPath=/node/basis:docSenderType", "options=intern,predefined extern,extern", "onchange=true"];
@@ -215,11 +264,13 @@
 				 if(docSenderTypeSelectBox.getValue().equals("intern") || docSenderTypeSelectBox.getValue() == null){
 				 %>
 			     <tr>
-			        <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docInternSender")%></td>
+			        <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docInternSender")%></td>
 			        <td class="FieldComponent">
 			          	<%
+			          	 uicomponent.removeChildById("docPredefinedExternSender");
+						 uicomponent.removeChildById("docExternSenderName");
 			          	 String[] docInternSenderField = ["jcrPath=/node/basis:docInternSender", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
-			           	uicomponent.addActionField("docInternSender", docInternSenderField);
+			           	 uicomponent.addActionField("docInternSender", docInternSenderField);
 			          	%>
 			        </td>
 			     </tr>
@@ -227,26 +278,30 @@
 				 else if(docSenderTypeSelectBox.getValue().equals("predefined extern")){
 				 %>	
 			  	 <tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+predefinedExternSenderOptions, "validate=empty", "onchange=false"];
-				        uicomponent.addSelectBoxField("docPredefinedExternSender", docPredefinedExternSenderField);
+						 uicomponent.removeChildById("docInternSender");
+						 uicomponent.removeChildById("docExternSenderName");
+				         String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+predefinedExternSenderOptions, "validate=empty", "onchange=false"];
+				         uicomponent.addSelectBoxField("docPredefinedExternSender", docPredefinedExternSenderField);
 				        %>
 				    </td>
 				 </tr>	
 				 <%} else {%>
 				 <tr>
-					<td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%></td>
+					<td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docExternSenderNameField = ["jcrPath=/node/basis:docExternSenderName", "validate=empty"];
-						uicomponent.addTextField("docExternSenderName", docExternSenderNameField);
+						 uicomponent.removeChildById("docInternSender");
+						 uicomponent.removeChildById("docPredefinedExternSender");
+						 String[] docExternSenderNameField = ["jcrPath=/node/basis:docExternSenderName", "validate=empty"];
+						 uicomponent.addTextField("docExternSenderName", docExternSenderNameField);
 						%>
 					</td>
 				 </tr>
 				 <tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderAdress")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderAdress")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docExternSenderAdressField = ["jcrPath=/node/basis:docExternSenderAdress"];
@@ -255,7 +310,7 @@
 					</td>
 				 </tr>
 				 <tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderZipCode")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderZipCode")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docExternSenderZipCodeField = ["jcrPath=/node/basis:docExternSenderZipCode"];
@@ -264,7 +319,7 @@
 					</td>
 				 </tr>
 				 <tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderCity")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderCity")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docExternSenderCityField = ["jcrPath=/node/basis:docExternSenderCity"];
@@ -273,7 +328,7 @@
 					</td>
 				 </tr>
 			 	 <tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderCountry")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderCountry")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docExternSenderCountryField = ["jcrPath=/node/basis:docExternSenderCountry",
@@ -312,7 +367,7 @@
 				 </tr>																			    
 			     <%}%>
 			     <tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docCommentsField = ["jcrPath=/node/basis:docComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;
@@ -321,7 +376,7 @@
 					</td>
 				 </tr> 	
 			     <tr>
-					<td class="FieldLabel">
+					<td class="FastDocFieldLabel">
 						<%
 						String[] folderConfigfollowDocField = ["jcrPath=/node/basis:folderConfigFollowDoc", "onchange=true"];
 						uicomponent.addCheckBoxField("folderConfigfollowDoc", folderConfigfollowDocField);
@@ -331,33 +386,35 @@
 				 </tr>
 				 <%if(uicomponent.findComponentById("folderConfigfollowDoc").isChecked()){%>
 				 <tr style="display:none;">
-					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followSendDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisFollow.label.followSendDate")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] followSendDateField = ["jcrPath=/node/basis:folderConfigFollowDocSendDate", ("defaultValues="+todayS)];
-						uicomponent.addCalendarField("followSendDate", followSendDateField);
+						uicomponent.addCalendarField("folderConfigFollowDocSendDate", followSendDateField);
 						%>
 					</td>
 				 </tr>
 				 <tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followEditorType")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisFollow.label.followEditorType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] followEditorTypeField = ["jcrPath=/node/basis:folderConfigFollowDocEditorType", "options=intern user, intern group, extern", "onchange=true"];
-				        uicomponent.addSelectBoxField("followEditorType", followEditorTypeField);
+				        uicomponent.addSelectBoxField("folderConfigFollowDocEditorType", followEditorTypeField);
 				        %>
 				    </td>
 				 </tr>
 				 <%
-				 UIFormSelectBox followEditorTypeSelectBox = uicomponent.findComponentById("followEditorType");
+				 UIFormSelectBox followEditorTypeSelectBox = uicomponent.findComponentById("folderConfigFollowDocEditorType");
 				 if(followEditorTypeSelectBox.getValue().equals("intern user") || followEditorTypeSelectBox.getValue() == null){
 				 %>
 			     <tr>
-			        <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
+			        <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
 			        <td class="FieldComponent">
 			          	<%
+						 uicomponent.removeChildById("folderConfigFollowDocGroupInternEditor");
+						 uicomponent.removeChildById("folderConfigFollowDocExternEditor");
 			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:folderConfigFollowDocUserInternEditor", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
-			           	uicomponent.addActionField("followUserInternEditor", followUserInternEditorField);
+			           	 uicomponent.addActionField("folderConfigFollowDocUserInternEditor", followUserInternEditorField);
 			          	%>
 			        </td>
 			     </tr>
@@ -365,57 +422,69 @@
 				 else if(followEditorTypeSelectBox.getValue().equals("intern group")){
 				 %>	
 				 <tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:folderConfigFollowDocGroupInternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+groupInternEditorOptions, "validate=empty", "onchange=false"];
-				        uicomponent.addSelectBoxField("followGroupInternEditor", followGroupInternEditorField);
+						 uicomponent.removeChildById("folderConfigFollowDocUserInternEditor");
+						 uicomponent.removeChildById("folderConfigFollowDocExternEditor");
+				         String[] followGroupInternEditorField = ["jcrPath=/node/basis:folderConfigFollowDocGroupInternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+groupInternEditorOptions, "validate=empty", "onchange=false"];
+				         uicomponent.addSelectBoxField("folderConfigFollowDocGroupInternEditor", followGroupInternEditorField);
 				        %>
 				    </td>
 				 </tr>	
 				 <%} else {%>
 			     <tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followExternEditorField = ["jcrPath=/node/basis:folderConfigFollowDocExternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+externEditorOptions, "validate=empty", "onchange=false"];
-				        uicomponent.addSelectBoxField("followExternEditor", followExternEditorField);
+						 uicomponent.removeChildById("folderConfigFollowDocUserInternEditor");
+						 uicomponent.removeChildById("folderConfigFollowDocGroupInternEditor");
+				         String[] followExternEditorField = ["jcrPath=/node/basis:folderConfigFollowDocExternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+externEditorOptions, "validate=empty", "onchange=false"];
+				         uicomponent.addSelectBoxField("folderConfigFollowDocExternEditor", followExternEditorField);
 				        %>
 				    </td>
 				 </tr>	
 				 <% } %> 
 			     <tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] followRequiredActionField = ["jcrPath=/node/basis:folderConfigFollowDocRequiredAction", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+requiredActionOptions, "validate=empty", "onchange=false"];
-				        uicomponent.addSelectBoxField("followRequiredAction", followRequiredActionField);
+				        uicomponent.addSelectBoxField("folderConfigFollowDocRequiredAction", followRequiredActionField);
 				        %>
 				    </td>
 				 </tr>
 				 <tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] followCommentsField = ["jcrPath=/node/basis:folderConfigFollowDocComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;
-						uicomponent.addRichtextField("followComments", followCommentsField);
+						uicomponent.addRichtextField("folderConfigFollowDocComments", followCommentsField);
 						%>
 					</td>
 				 </tr>
 				 <tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followAnswerByDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisFollow.label.followAnswerByDate")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] followAnswerByDateField = ["jcrPath=/node/basis:folderConfigFollowDocAnswerByDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];
-						uicomponent.addCalendarField("followAnswerByDate", followAnswerByDateField);
+						uicomponent.addCalendarField("folderConfigFollowDocAnswerByDate", followAnswerByDateField);
 						%>
 					</td>
 				 </tr>
 			     <%} 
 			 	 } else {
+					 uicomponent.removeChildById("docReference");
+					 uicomponent.removeChildById("docInternSender");
+		          	 uicomponent.removeChildById("docPredefinedExternSender");
+					 uicomponent.removeChildById("docExternSenderName");
+					 uicomponent.removeChildById("folderConfigFollowDocUserInternEditor");
+					 uicomponent.removeChildById("folderConfigFollowDocGroupInternEditor");
+					 uicomponent.removeChildById("folderConfigFollowDocExternEditor");
+					 uicomponent.removeChildById("folderConfigFollowDocRequiredAction");
 				 %>
 			 	 <tr style="display:none;">
-					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followSendDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisFollow.label.followSendDate")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] followSendDateField = ["jcrPath=/node/basis:followSendDate", ("defaultValues="+todayS)];
@@ -424,7 +493,7 @@
 					</td>
 			 	 </tr>
 				 <tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followEditorType")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisFollow.label.followEditorType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] followEditorTypeField = ["jcrPath=/node/basis:followEditorType", "options=intern user, intern group, extern", "onchange=true"];
@@ -437,11 +506,13 @@
 				 if(followEditorTypeSelectBox.getValue().equals("intern user") || followEditorTypeSelectBox.getValue() == null){
 				 %>
 			     <tr>
-			        <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
+			        <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followUserInternEditor")%></td>
 			        <td class="FieldComponent">
 			          	<%
+						 uicomponent.removeChildById("followGroupInternEditor");
+						 uicomponent.removeChildById("followExternEditor");
 			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
-			           	uicomponent.addActionField("followUserInternEditor", followUserInternEditorField);
+			           	 uicomponent.addActionField("followUserInternEditor", followUserInternEditorField);
 			          	%>
 			        </td>
 			     </tr>
@@ -449,27 +520,31 @@
 				 else if(followEditorTypeSelectBox.getValue().equals("intern group")){
 				 %>	
 				 <tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followGroupInternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+groupInternEditorOptions, "validate=empty", "onchange=false"];
-				        uicomponent.addSelectBoxField("followGroupInternEditor", followGroupInternEditorField);
+						 uicomponent.removeChildById("followUserInternEditor");
+						 uicomponent.removeChildById("followExternEditor");
+				         String[] followGroupInternEditorField = ["jcrPath=/node/basis:followGroupInternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+groupInternEditorOptions, "validate=empty", "onchange=false"];
+				         uicomponent.addSelectBoxField("followGroupInternEditor", followGroupInternEditorField);
 				        %>
 				    </td>
 				 </tr>	
 				 <%} else {%>
 			     <tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followExternEditor")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+externEditorOptions, "validate=empty", "onchange=false"];
-				        uicomponent.addSelectBoxField("followExternEditor", followExternEditorField);
+						 uicomponent.removeChildById("followUserInternEditor");
+						 uicomponent.removeChildById("followGroupInternEditor");
+				         String[] followExternEditorField = ["jcrPath=/node/basis:followExternEditor", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+externEditorOptions, "validate=empty", "onchange=false"];
+				         uicomponent.addSelectBoxField("followExternEditor", followExternEditorField);
 				        %>
 				    </td>
 				 </tr>	
 				 <% } %> 
 			     <tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFollow.label.followRequiredAction")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] followRequiredActionField = ["jcrPath=/node/basis:followRequiredAction", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+requiredActionOptions, "validate=empty", "onchange=false"];
@@ -478,7 +553,7 @@
 				    </td>
 				 </tr>
 				 <tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] followCommentsField = ["jcrPath=/node/basis:followComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;
@@ -487,7 +562,7 @@
 					</td>
 				 </tr>
 				 <tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisFollow.label.followAnswerByDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisFollow.label.followAnswerByDate")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] followAnswerByDateField = ["jcrPath=/node/basis:followAnswerByDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];

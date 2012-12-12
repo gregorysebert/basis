@@ -43,7 +43,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
     .UIPopupWindow .PopupContent {
     	height: 500px !important;
 	}
-	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FieldLabel {
+	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FastDocFieldLabel {
  		font-size: 16px;
 		text-align: right;
 	  	width: 250px;
@@ -128,7 +128,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 		<div class="HorizontalLayout">
 			<table class="UIFormGrid">
 			    <tr style="display:none;">
-		          <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderNumber")%></td>
+		          <td class="FastDocFieldLabel"><%=_ctx.appRes("basisFolder.label.folderNumber")%></td>
 		          <td class="FieldComponent">
 		            $timestampName 
 		               <div style="display:none;"><%
@@ -138,7 +138,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 		          </td>
         		</tr>
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderLanguage")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisFolder.label.folderLanguage")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] folderLanguageField = ["jcrPath=/node/basis:folderLanguage", "options=NL,FR,EN", "onchange=true"];
@@ -175,7 +175,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    </td>
 				</tr>
 				<tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFolder.label.folderType")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFolder.label.folderType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] folderTypeField = ["jcrPath=/node/basis:folderType", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+typeOptions, "validate=empty", "onchange=false"];
@@ -184,7 +184,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    </td>
 				</tr>
 				<tr style="display:none;">
-					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderRegistrationDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisFolder.label.folderRegistrationDate")%></td>
 					<td class="FieldComponent">
 						<%
 						if(!uicomponent.isEditing()) {
@@ -198,7 +198,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				if (getBONode(currentNode).getProperty("basis:BODispalyRNN").getBoolean()) {
 				%>
 				<tr>
-					<td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFolder.label.folderRNN")%></td>
+					<td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFolder.label.folderRNN")%></td>
 					<td class="FieldComponent">
 					    <div style="display:none;">
 							<%
@@ -231,7 +231,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				}
 				%>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderExternalReference")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisFolder.label.folderExternalReference")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] folderExternalReferenceField = ["jcrPath=/node/basis:folderExternalReference"];
@@ -240,7 +240,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					</td>
 				</tr>
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderStatus")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisFolder.label.folderStatus")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] folderStatusField = ["jcrPath=/node/basis:folderStatus", "options="+statusOptions, "onchange=true"];
@@ -249,7 +249,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    </td>
 				</tr>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderCloseBeforeDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisFolder.label.folderCloseBeforeDate")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] folderCloseBeforeDateField = ["jcrPath=/node/basis:folderCloseBeforeDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];
@@ -263,7 +263,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				|| folderStatusSelectBox.getValue().equals("cancelled") || folderStatusSelectBox.getValue().equals("geannulleerd") || folderStatusSelectBox.getValue().equals("annulé")) {
 				%>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisFolder.label.folderCloseOnDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisFolder.label.folderCloseOnDate")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] folderCloseOnDateField = ["jcrPath=/node/basis:folderCloseOnDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];
@@ -275,7 +275,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				}
 				%>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] folderCommentsField = ["jcrPath=/node/basis:folderComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;
@@ -304,16 +304,15 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 								 <%} else if (!action.equals("Save")) {
 								 link=link.replace("'", "\\'");
 								  %>
-								    <a href="javascript:checkFieldRNN('inputfolderRNN','folderRNN','$link')" class="ActionButton LightBlueStyle">
+								    <div onclick="javascript:checkFieldRNN('inputfolderRNN','folderRNN','$link')" class="ActionButton LightBlueStyle">
 										<div class="ButtonLeft">
 											<div class="ButtonRight">
 												<div class="ButtonMiddle">
-													$actionLabel
+													<a href="javascript:void(0);">$actionLabel</a>
 												</div>
 											</div>
 										</div>
-									</a>
-									
+									</div>
 								<%}
 							}%>         
 						</td>

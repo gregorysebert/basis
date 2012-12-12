@@ -1,11 +1,11 @@
   /**
   LTR skin for basis:basisFollow template
 */
-	 .UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FieldLabel {
+	 .FastDocFieldLabel {
 		padding-right: 12px;
 		text-align: left;
 		font-size: 18px;
-		width:25%;
+		width:27%;
 	 }
 	
 	 .BasisComments{

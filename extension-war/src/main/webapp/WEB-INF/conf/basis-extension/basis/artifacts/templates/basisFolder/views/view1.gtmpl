@@ -26,7 +26,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 		<div id="$uicomponent.id">
 			<table class="UIFormGrid" >
 				<tr>
-					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderNumber")%>:</td>
+					<td class="FastDocFieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderNumber")%>:</td>
 					<td class="folderNummer">${title}</td>
 				</tr>
 				<%
@@ -35,7 +35,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderLanguage")%>:</td>
+					<td class="FastDocFieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderLanguage")%>:</td>
 					<td class="folderLanguage">${valueDisplay}</td>
 				</tr>
 				<%
@@ -48,7 +48,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderType")%>:</td>
+					<td class="FastDocFieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderType")%>:</td>
 					<td class="folderType">${valueDisplay}</td>
 				</tr>
 				<%
@@ -61,7 +61,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderRegistrationDate")%>:</td>
+					<td class="FastDocFieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderRegistrationDate")%>:</td>
 					<td class="BasisDate">${valueDisplay}</td>
 				</tr>
 				<%
@@ -74,7 +74,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderRNN")%>:</td>
+					<td class="FastDocFieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderRNN")%>:</td>
 					<td class="RRN">${valueDisplay}
 					<%
 				 	if (node.hasProperty("basis:folderInternSender")) {
@@ -97,7 +97,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderExternalReference")%>:</td>
+					<td class="FastDocFieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderExternalReference")%>:</td>
 					<td class="folderExternalReference">${valueDisplay}</td>
 				</tr>
 				<%
@@ -110,7 +110,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderStatus")%>:</td>
+					<td class="FastDocFieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderStatus")%>:</td>
 					<td class="folderStatus">${valueDisplay}</td>
 				</tr>
 				<%
@@ -123,7 +123,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderCloseBeforeDate")%>:</td>
+					<td class="FastDocFieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderCloseBeforeDate")%>:</td>
 					<td class="BasisDate">${valueDisplay}</td>
 				</tr>
 				<%
@@ -136,7 +136,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderCloseOnDate")%>:</td>
+					<td class="FastDocFieldLabel"  ><%=_ctx.appRes("basisFolder.label.folderCloseOnDate")%>:</td>
 					<td class="BasisDate">${valueDisplay}</td>
 				</tr>
 				<%
@@ -149,7 +149,7 @@ import org.exoplatform.ecm.webui.utils.Utils ;
 					 if (!valueDisplay.equals("")){
 				%>
 				<tr>
-					<td class="FieldLabel"  ><%=_ctx.appRes("basis.label.comments")%>:</td>
+					<td class="FastDocFieldLabel"  ><%=_ctx.appRes("basis.label.comments")%>:</td>
 					<td class="folderComments">${valueDisplay}</td>
 				</tr>
 				<%

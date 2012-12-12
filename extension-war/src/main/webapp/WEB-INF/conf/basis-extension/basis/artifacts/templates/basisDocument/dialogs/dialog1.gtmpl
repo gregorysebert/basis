@@ -56,7 +56,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
     .UIPopupWindow .PopupContent {
     	height: 500px !important;
 	}
-	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FieldLabel {
+	.UIJCRExplorerPortlet .UIJCRExplorer .UIFormGrid .FastDocFieldLabel {
  		font-size: 16px;
 		text-align: right;
 	  	width: 250px;
@@ -96,6 +96,26 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 		font-size: 16px;
 		width: 500px;
 	}
+	#docExternSenderName{
+		font-size: 16px;
+		width: 200px;
+	}
+	#docExternSenderAdress{
+		font-size: 16px;
+		width: 200px;
+	}
+	#docExternSenderCountry{
+		font-size: 16px;
+		width: 200px;
+	}
+	#docExternSenderZipCode{
+		font-size: 16px;
+		width: 200px;
+	}
+	#docExternSenderCity{
+		font-size: 16px;
+		width: 200px;
+	}
 	#docExternSenderCountry{
 		font-size: 16px;
 		width: 200px;
@@ -106,7 +126,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 		<div class="HorizontalLayout">
 			<table class="UIFormGrid">
 			    <tr style="display:none;">
-		          <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docId")%></td>
+		          <td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docId")%></td>
 		          <td class="FieldComponent">
 		            $timestampName 
 		               <div style="display:none;"><%
@@ -116,7 +136,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 		          </td>
         		</tr>
         		<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docInOut")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docInOut")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docInOutField = ["jcrPath=/node/basis:docInOut", "options=IN,OUT", "onchange=false"];
@@ -125,7 +145,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    </td>
 				</tr>
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docType")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docTypeField = ["jcrPath=/node/basis:docType", "options="+typeOptions, "onchange=false"];
@@ -134,7 +154,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    </td>
 				</tr>
 				<tr style="display:none;">
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docRegistrationDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docRegistrationDate")%></td>
 					<td class="FieldComponent">
 						<%
 						if(!uicomponent.isEditing()) {
@@ -145,7 +165,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					</td>
 				</tr>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docDate")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docDate")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docDateField = ["jcrPath=/node/basis:docDate", "visible=true", "validate=datetime", ("defaultValues="+todayS)];
@@ -154,7 +174,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					</td>
 				</tr>
 				<tr>
-					<td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docReference")%></td>
+					<td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docReference")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docReferenceField = ["jcrPath=/node/basis:docReference", "validate=empty"];
@@ -163,7 +183,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					</td>
 				</tr>
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docKeywords")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docKeywords")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docKeywordsField = ["jcrPath=/node/basis:docKeywords", "options="+keywordsOptions, "multiValues=true", "onchange=false"];
@@ -172,7 +192,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				    </td>
 				</tr>
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docSenderType")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docSenderType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docSenderTypeField = ["jcrPath=/node/basis:docSenderType", "options=intern,predefined extern,extern", "onchange=true"];
@@ -185,11 +205,13 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				if(docSenderTypeSelectBox.getValue().equals("intern")){
 				%>
 			    <tr>
-			        <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docInternSender")%></td>
+			        <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docInternSender")%></td>
 			        <td class="FieldComponent">
 			          	<%
+			          	 uicomponent.removeChildById("docPredefinedExternSender");
+						 uicomponent.removeChildById("docExternSenderName");
 			          	 String[] docInternSenderField = ["jcrPath=/node/basis:docInternSender", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
-			           	uicomponent.addActionField("docInternSender", docInternSenderField);
+			           	 uicomponent.addActionField("docInternSender", docInternSenderField);
 			          	%>
 			        </td>
 			    </tr>
@@ -197,26 +219,30 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				else if(docSenderTypeSelectBox.getValue().equals("predefined extern")){
 				%>	
 				<tr>
-				    <td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
+				    <td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docPredefinedExternSender")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+predefinedExternSenderOptions, "validate=empty", "onchange=false"];
-				        uicomponent.addSelectBoxField("docPredefinedExternSender", docPredefinedExternSenderField);
+						 uicomponent.removeChildById("docInternSender");
+						 uicomponent.removeChildById("docExternSenderName");
+				         String[] docPredefinedExternSenderField = ["jcrPath=/node/basis:docPredefinedExternSender", "script=ecm-explorer/widget/FillSelectBoxWithTitles.groovy", "scriptParams="+predefinedExternSenderOptions, "validate=empty", "onchange=false"];
+				         uicomponent.addSelectBoxField("docPredefinedExternSender", docPredefinedExternSenderField);
 				        %>
 				    </td>
 				</tr>	
 				<%} else {%>
 				<tr>
-					<td class="FieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%></td>
+					<td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisDocument.label.docExternSenderName")%></td>
 					<td class="FieldComponent">
 						<%
-						String[] docExternSenderNameField = ["jcrPath=/node/basis:docExternSenderName", "validate=empty"];
-						uicomponent.addTextField("docExternSenderName", docExternSenderNameField);
+						 uicomponent.removeChildById("docInternSender");
+						 uicomponent.removeChildById("docPredefinedExternSender");
+						 String[] docExternSenderNameField = ["jcrPath=/node/basis:docExternSenderName", "validate=empty"];
+						 uicomponent.addTextField("docExternSenderName", docExternSenderNameField);
 						%>
 					</td>
 				</tr>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderAdress")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderAdress")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docExternSenderAdressField = ["jcrPath=/node/basis:docExternSenderAdress"];
@@ -225,7 +251,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					</td>
 				</tr>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderZipCode")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderZipCode")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docExternSenderZipCodeField = ["jcrPath=/node/basis:docExternSenderZipCode"];
@@ -234,7 +260,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					</td>
 				</tr>
 				<tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderCity")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderCity")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docExternSenderCityField = ["jcrPath=/node/basis:docExternSenderCity"];
@@ -243,7 +269,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					</td>
 				</tr>
 				<tr>
-				    <td class="FieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderCountry")%></td>
+				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisDocument.label.docExternSenderCountry")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docExternSenderCountryField = ["jcrPath=/node/basis:docExternSenderCountry",
@@ -282,7 +308,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 				</tr>																			    
 			   <% } %>
 			    <tr>
-					<td class="FieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
+					<td class="FastDocFieldLabel"><%=_ctx.appRes("basis.label.comments")%></td>
 					<td class="FieldComponent">
 						<%
 						String[] docCommentsField = ["jcrPath=/node/basis:docComments", "options=toolbar:CompleteWCM,'height:410px',noSanitization", ""] ;
