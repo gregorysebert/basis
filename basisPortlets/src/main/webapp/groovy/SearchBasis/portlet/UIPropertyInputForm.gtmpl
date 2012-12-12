@@ -1,0 +1,45 @@
+<style type="text/css">
+  #BasisPropertyInput {
+     width: 400px;
+     text-align:left;
+     font-size: 15px;
+    }
+    #BasisProperty {
+     width: 200px;
+     text-align:left;
+     font-size: 15px;
+    }
+    #searchType{
+     width: 120px;
+     text-align:left;
+     font-size: 15px;
+    }
+  </style>
+
+<% String fieldName; %>
+	<%uiform.begin()%>
+
+        <%
+            for(field in uiform.getChildren()) {
+            if(field.isRendered()) {
+            %>
+
+                <%fieldName = uicomponent.getLabel(field.getName());%>
+                <%
+                if(fieldName != null && fieldName.length() > 0 && fieldName != "searchType") {
+                %>
+                        <td id="BasisProperty">
+                            <label for ="BasisProperty">
+                                <%=_ctx.appRes("UIPropertyInputForm.label."+field.getName())%>
+                            </label>
+                        </td>
+                        <td id="searchType"><% uiform.renderField("searchType") %></td>
+                        <td id="BasisPropertyInput"><% uiform.renderField(field) %></td>
+                <%}%>
+
+            <%
+            }
+            }
+        %>
+
+    <%uiform.end()%>

@@ -1,11 +1,11 @@
 <style type="text/css">
   #Query {
-     width: 400px;
+     width: 600px;
      text-align:left;
      font-size: 15px;
     }
     #Attribut {
-     width: 400px;
+     width: 600px;
      text-align:left;
      font-size: 15px;
     }
@@ -15,7 +15,7 @@
      font-size: 15px;
     }
   #TableQuerySimple{
-        width: 800px;
+        width: 1000px;
        text-align:left;
        margin-left: 50px;
        margin-top: 25px;
@@ -72,5 +72,8 @@ List<SelectItemOption<String>> lsQuery = new ArrayList<SelectItemOption<String>>
         </div>
 <%uiform.end()%>
 </div>
+
+
+
 
 

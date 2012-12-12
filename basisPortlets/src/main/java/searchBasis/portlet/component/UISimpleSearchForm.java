@@ -86,7 +86,7 @@ public class UISimpleSearchForm extends UIForm {
 
             String url = Util.getPortalRequestContext().getRequestURI();
             String urlSplitted[] = url.split("BO:");
-            String folderBO[] = urlSplitted[1].split("/");
+            String nameBO[] = urlSplitted[1].split("/");
 
             String language = uiSimpleSearchForm.getUIFormSelectBox(LANGUAGE).getValue();
             String statusLanguageFR = "and not(jcr:like(@basis:folderStatus, 'clôturé')) and not(jcr:like(@basis:folderStatus, 'annulé'))";
@@ -100,18 +100,20 @@ public class UISimpleSearchForm extends UIForm {
                 QueryManager queryManager = null;
                 queryManager = session.getWorkspace().getQueryManager();
 
+
+
                 UISearchBasisPortlet uiSearchBasisPortlet = uiSimpleSearchForm.getAncestorOfType(UISearchBasisPortlet.class);
 
                 if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("currentUser")){
                     String remoteUser =  Util.getPortalRequestContext().getRemoteUser();
                     if(language.equals("FR")){
-                        xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageFR+"]";
+                        xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageFR+"]";
                     }
                     else if(language.equals("EN")){
-                        xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageEN+"]";
+                        xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageEN+"]";
                     }
                     else if(language.equals("NL")) {
-                        xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageNL+"]";
+                        xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageNL+"]";
                     }
                     uiSearchBasisPortlet.setTypeQuery(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue());
 
@@ -122,13 +124,13 @@ public class UISimpleSearchForm extends UIForm {
                     uiSearchBasisPortlet.setTypeQuery(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue());
                     if(!group.equals(null)) {
                         if(language.equals("FR")){
-                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageFR+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageFR+"]";
                         }
                         else if(language.equals("EN")){
-                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageEN+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageEN+"]";
                         }
                         else if(language.equals("NL")) {
-                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageNL+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageNL+"]";
                         }
                         //uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     }
@@ -137,18 +139,20 @@ public class UISimpleSearchForm extends UIForm {
                 }
                 else if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("byUser")){
                     String user = uiSimpleSearchForm.getUIStringInput(ATTRIBUT).getValue();
-                    uiSearchBasisPortlet.setAttribute(user);
                     uiSearchBasisPortlet.setTypeQuery(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue());
 
                     if(!user.equals(null)){
                         if(language.equals("FR")){
-                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+user+"') "+statusLanguageFR+"]";
+                            uiSearchBasisPortlet.setAttribute(user);
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+user+"') "+statusLanguageFR+"]";
                         }
                         else if(language.equals("EN")){
-                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+user+"') "+statusLanguageEN+"]";
+                            uiSearchBasisPortlet.setAttribute(user);
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+user+"') "+statusLanguageEN+"]";
                         }
                         else if(language.equals("NL")) {
-                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+user+"') "+statusLanguageNL+"]";
+                            uiSearchBasisPortlet.setAttribute(user);
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+user+"') "+statusLanguageNL+"]";
                         }
                         //uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     }
@@ -163,13 +167,13 @@ public class UISimpleSearchForm extends UIForm {
                     uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     if(!action.equals(null)) {
                         if(language.equals("FR")){
-                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+action+"') "+statusLanguageFR+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followRequiredAction,'"+action+"') "+statusLanguageFR+"]";
                         }
                         else if(language.equals("EN")){
-                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+action+"') "+statusLanguageEN+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followRequiredAction,'"+action+"') "+statusLanguageEN+"]";
                         }
                         else if(language.equals("NL")) {
-                            xpathStatement = "/jcr:root/Files/BO/"+folderBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+action+"') "+statusLanguageNL+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followRequiredAction,'"+action+"') "+statusLanguageNL+"]";
                         }
                         //uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     }

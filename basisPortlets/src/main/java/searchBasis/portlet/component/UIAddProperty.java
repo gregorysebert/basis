@@ -19,14 +19,26 @@ import java.util.List;
  */
 @ComponentConfig(
         lifecycle = UIFormLifecycle.class,
-        template =  "app:/groovy/SearchBasis/portlet/UIInputAdvancedSearchform.gtmpl"
+        template =  "app:/groovy/SearchBasis/portlet/UIAddPropertyBasis.gtmpl"
 )
-public class UIInputAdvancedSearchform extends UIForm {
+public class UIAddProperty extends UIForm {
 
     public static final String FIELD_SEARCH_TYPE = "searchType" ;
-    public static final String QUERY = "Query" ;
+    private  static final String FIELD_OPERATOR = "Operator";
 
-    public UIInputAdvancedSearchform() throws Exception {
+    public UIAddProperty() throws Exception {
+
+    }
+
+    public void load(String propertyName)throws Exception{
+
+        List<SelectItemOption<String>> lsOperator = new ArrayList<SelectItemOption<String>>() ;
+        lsOperator.add(new SelectItemOption<String>(" ", " ")) ;
+        lsOperator.add(new SelectItemOption<String>("Et", "&&")) ;
+        lsOperator.add(new SelectItemOption<String>("Ou", "||")) ;
+        UIFormSelectBox uiSelectBoxOperator = new UIFormSelectBox(FIELD_OPERATOR, FIELD_OPERATOR, lsOperator) ;
+        addUIFormInput(uiSelectBoxOperator);
+
         List<SelectItemOption<String>> lsSearch = new ArrayList<SelectItemOption<String>>() ;
         lsSearch.add(new SelectItemOption<String>(" ", " ")) ;
         lsSearch.add(new SelectItemOption<String>("Equals", "=")) ;
@@ -36,6 +48,10 @@ public class UIInputAdvancedSearchform extends UIForm {
         UIFormSelectBox uiSelectBoxSearch = new UIFormSelectBox(FIELD_SEARCH_TYPE, FIELD_SEARCH_TYPE, lsSearch) ;
         addUIFormInput(uiSelectBoxSearch);
 
-        addUIFormInput(new UIFormStringInput(QUERY,QUERY,null));
+        addUIFormInput(new UIFormStringInput(propertyName,propertyName,null));
+
+
+
+
     }
 }

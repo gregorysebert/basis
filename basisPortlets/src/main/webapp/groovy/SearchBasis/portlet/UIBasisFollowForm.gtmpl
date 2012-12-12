@@ -1,0 +1,29 @@
+<style type="text/css">
+  #TableQueryAdvanced{
+       width: 1000px;
+       text-align:left;
+  }
+  #fieldsetFollow{
+       margin-left: 50px;
+       margin-top: 25px;
+       margin-bottom: 10px;
+       overflow:hidden;
+       border: 1px solid #b7b7b7;
+    }
+  </style>
+
+<div id="UIForm $uicomponent.id">
+	<%uiform.begin()%>
+		<fieldset id="fieldsetFollow">
+		<legend>$uicomponent.id</legend>
+			<table id="TableQueryAdvanced">
+				 <% for(uiChild in uicomponent.getChildren()) {%>
+							<tr><%uicomponent.renderChild(uiChild) ;%> </tr> <%
+					   }
+				  %>
+			  </table>
+
+		</fieldset>
+	<%uiform.end()%>
+
+</div>

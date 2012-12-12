@@ -54,7 +54,7 @@ public class UIResultForm extends UIForm {
                     String urlSplitted[] = url.split("BO:");
                     String folderBO[] = urlSplitted[1].split("/");
 
-                    String selectFollowByFolder = "/jcr:root/Files/BO/"+folderBO[0]+"/*/*/*/"+basisFolderNode.getName()+"//element (*,basis:basisFollow) order by @exo:dateCreated descending";
+                    String selectFollowByFolder = "/jcr:root/Files/BO/"+folderBO[0]+"/*/*/*/"+basisFolderNode.getName()+"/element (*,basis:basisFollow) order by @exo:dateCreated descending";
 
                     QueryManager queryManager = session.getWorkspace().getQueryManager();
                     Query selectFollowByFolderQuery = queryManager.createQuery(selectFollowByFolder, Query.XPATH);

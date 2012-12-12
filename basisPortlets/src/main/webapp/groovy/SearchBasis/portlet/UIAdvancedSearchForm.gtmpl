@@ -1,20 +1,27 @@
-<% String fieldName; %>
+<style type="text/css">
+  #From {
+      width: 120px;
+      text-align:left;
+      font-size: 15px;
+      margin-left: 50px;
+      margin-top: 25px;
+    }
+  </style>
 <div class="UIForm $uicomponent.id">
 	<%uiform.begin()%>
-	<div class="HorizontalLayout">
-		<div class="FormContainer">
-			<table style="width: 60%">
+
+	<label id ="From">
+        From
+    </label>
+    <% uiform.renderField("From") ;%>
+
+
 				<% for(uiChild in uicomponent.getChildren()) {
-				        String labelId = uiChild.getId();%>
-				        <td class="FieldLabel">
-                           <label for="$labelId">
-                            <%=uicomponent.getLabel(uiChild.getId()) %>
-                            </label>
-                        </td>
-                        <%uicomponent.renderChild(uiChild) ;
+				        if(uicomponent.getLabel(uiChild.getName())!= "From"){
+				              uicomponent.renderChild(uiChild) ;
+				        }
                    }
 				%>
-				</table>
 			 <div class="UIAction">
                     <% for(action in uicomponent.getActions()) {
                     String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action)
@@ -23,7 +30,9 @@
                         <a href="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
                     <%}%>
             </div>
-		</div>
-	</div>
 	<%uiform.end()%>
 </div>
+
+
+
+

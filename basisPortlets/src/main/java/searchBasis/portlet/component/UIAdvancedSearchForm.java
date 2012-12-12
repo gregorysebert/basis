@@ -8,6 +8,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,81 +26,38 @@ import java.util.List;
         events = {
                 @EventConfig(listeners = UIAdvancedSearchForm.SearchActionListener.class),
                 @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class),
-                @EventConfig(listeners = UIAdvancedSearchForm.AddFieldActionListener.class)
+                @EventConfig(listeners = UIAdvancedSearchForm.ChangeActionListener.class, phase= Event.Phase.DECODE)
         }
 )
 public class UIAdvancedSearchForm extends UIForm  {
-    public static final String FIELD_OPERATOR = "operator" ;
-    public static final String FIELD_DOC_TYPE = "basis:docType" ;
-    public static final String FIELD_DOC_REGISTRATION = "basis:docRegistrationDate" ;
-    public static final String FIELD_DOC_DATE = "basis:docDate" ;
-    public static final String FIELD_DOC_REFERENCE = "basis:docReference" ;
-    public static final String FIELD_DOC_KEYWORD = "basis:docKeywords" ;
-    public static final String FIELD_DOC_SENDER_TYPE = "basis:docSenderType" ;
-    public static final String FIELD_DOC_INTERN = "basis:docInternSender" ;
-    public static final String FIELD_DOC_SENDER_NAME = "basis:docExternSenderName" ;
-    public static final String FIELD_DOC_SENDER_ADRESS = "basis:docExternSenderAdress" ;
-    public static final String FIELD_DOC_SENDER_CP = "basis:docExternSenderZipCode" ;
-    public static final String FIELD_DOC_SENDER_CITY = "basis:docExternSenderCity" ;
-    public static final String FIELD_DOC_SENDER_COUNTRY = "basis:docExternSenderCountry" ;
-    public static final String FIELD_FOLDER_LANGUAGE = "basis:folderLanguage" ;
-    public static final String FIELD_FOLDER_REGISTRATION = "basis:folderRegistrationDate" ;
-    public static final String FIELD_FOLDER_CLOSE = "basis:folderCloseBeforeDate" ;
-    public static final String FIELD_FOLDER_RNN = "basis:folderRNN" ;
-    public static final String FIELD_FOLDER_REFERENCE = "basis:folderExternalReference" ;
-    public static final String FIELD_FOLDER_STATUS = "basis:folderStatus" ;
-    public static final String FIELD_FOLLOW_SEND_DATE = "basis:followSendDate" ;
-    public static final String FIELD_FOLLOW_EDITOR = "basis:followEditor" ;
-    public static final String FIELD_FOLLOW_ACTION = "basis:followRequiredAction" ;
-    public static final String FIELD_FOLLOW_COMMENT = "basis:followComments" ;
-    public static final String FIELD_FOLLOW_ANSWER = "basis:followAnswerByDate" ;
+    public static final String FIELD_DOC = "Document" ;
+    public static final String FIELD_FOLDER = "Folder" ;
+    public static final String FIELD_FOLLOW = "Follow" ;
+    public static final String FIELD_FROM = "From" ;
 
     public UIAdvancedSearchForm() throws Exception {
-        /*List<SelectItemOption<String>> lsSearch = new ArrayList<SelectItemOption<String>>() ;
-        lsSearch.add(new SelectItemOption<String>(" ", " ")) ;
-        lsSearch.add(new SelectItemOption<String>("Equals", "=")) ;
-        lsSearch.add(new SelectItemOption<String>("Contains", "Contains")) ;
-        lsSearch.add(new SelectItemOption<String>("Not Equals", "!=")) ;
-        lsSearch.add(new SelectItemOption<String>("Not Contains", "!Contains")) ;
-        UIFormSelectBox uiSelectBoxSearch = new UIFormSelectBox(FIELD_SEARCH_TYPE, FIELD_SEARCH_TYPE, lsSearch) ;
-        addUIFormInput(uiSelectBoxSearch);  */
+        addChild(UIBasisFolderForm.class,null,FIELD_FOLDER);
 
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_TYPE);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_REGISTRATION);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_DATE);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_REFERENCE);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_KEYWORD);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_TYPE);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_INTERN);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_NAME);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_ADRESS);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_CP);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_CITY);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_DOC_SENDER_COUNTRY);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_LANGUAGE);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_REGISTRATION);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_CLOSE);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_RNN);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_REFERENCE);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLDER_STATUS);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLLOW_SEND_DATE);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLLOW_EDITOR);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLLOW_ACTION);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLLOW_COMMENT);
-        addChild(UIInputAdvancedSearchform.class,null,FIELD_FOLLOW_ANSWER);
+        addChild(UIBasisDocForm.class,null,FIELD_DOC);
+
+        addChild(UIBasisFollowForm.class,null,FIELD_FOLLOW);
+
+        List<SelectItemOption<String>> lsFrom = new ArrayList<SelectItemOption<String>>() ;
+        lsFrom.add(new SelectItemOption<String>("Folder", "Folder")) ;
+        lsFrom.add(new SelectItemOption<String>("Document", "Document")) ;
+        lsFrom.add(new SelectItemOption<String>("Follow", "Follow")) ;
+        UIFormSelectBox uiSelectBoxFrom = new UIFormSelectBox(FIELD_FROM, FIELD_FROM, lsFrom) ;
+        uiSelectBoxFrom.setOnChange("Change");
+        addChild(uiSelectBoxFrom);
+
 
 
         setActions(new String[]{"Search", "Cancel"}) ;
-        setRendered(true);
     }
-
-    /*public void update(Query query) throws Exception {
-    }   */
 
     static public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
         public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
             UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource();
-            String name = uiAdvancedSearchForm.getUIStringInput(FIELD_DOC_TYPE).getValue();
         }
     }
 
@@ -112,18 +70,35 @@ public class UIAdvancedSearchForm extends UIForm  {
         }
     }
 
-    static public class AddFieldActionListener extends EventListener<UIAdvancedSearchForm> {
+    static public class ChangeActionListener extends EventListener<UIAdvancedSearchForm> {
         public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
             UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource();
+            UISearchBasisPortlet uiSearchBasisPortlet = uiAdvancedSearchForm.getParent();
 
-            List<SelectItemOption<String>> lsOperator = new ArrayList<SelectItemOption<String>>() ;
-            lsOperator.add(new SelectItemOption<String>(" ", " ")) ;
-            lsOperator.add(new SelectItemOption<String>("Et", "&&")) ;
-            lsOperator.add(new SelectItemOption<String>("Ou", "||")) ;
-            UIFormSelectBox uiSelectBoxOperator = new UIFormSelectBox(FIELD_OPERATOR, FIELD_OPERATOR, lsOperator) ;
-            uiAdvancedSearchForm.addUIFormInput(uiSelectBoxOperator);
+            uiAdvancedSearchForm.removeChildById(FIELD_FOLDER);
+            /*UIBasisFolderForm uiBasisFolderForm = uiAdvancedSearchForm.getChildById(FIELD_FOLDER);
+            UIBasisDocForm uiBasisDocForm = uiAdvancedSearchForm.getChildById(FIELD_DOC);
+            UIBasisFollowForm uiBasisFollowForm = uiAdvancedSearchForm.getChildById(FIELD_FOLLOW);  */
 
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiAdvancedSearchForm);
+
+            String fromValue = uiAdvancedSearchForm.getUIFormSelectBox(FIELD_FROM).getValue();
+
+            System.out.println("fromValue :" + fromValue);
+
+            if(fromValue.equals("Folder")){
+                uiAdvancedSearchForm.addChild(UIBasisFolderForm.class,null,FIELD_FOLDER);
+                uiAdvancedSearchForm.addChild(UIBasisDocForm.class,null,FIELD_DOC);
+                uiAdvancedSearchForm.addChild(UIBasisFollowForm.class,null,FIELD_FOLLOW);
+            }
+            else if(fromValue.equals("Document")){
+                uiAdvancedSearchForm.addChild(UIBasisDocForm.class,null,FIELD_DOC);
+                uiAdvancedSearchForm.addChild(UIBasisFollowForm.class,null,FIELD_FOLLOW);
+            }
+            else if(fromValue.equals("Follow")){
+                uiAdvancedSearchForm.addChild(UIBasisFollowForm.class,null,FIELD_FOLLOW);
+            }
+
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiSearchBasisPortlet) ;
         }
     }
 }
