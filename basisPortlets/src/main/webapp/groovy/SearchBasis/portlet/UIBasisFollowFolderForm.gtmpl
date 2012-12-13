@@ -1,0 +1,39 @@
+<style type="text/css">
+  #TableQueryAdvanced{
+       width: 1000px;
+       text-align:left;
+  }
+  #fieldsetFollowFolder{
+       margin-left: 100px;
+       margin-top: 25px;
+       margin-bottom: 10px;
+       overflow:hidden;
+       border: 1px solid #b7b7b7;
+    }
+  </style>
+  <%import org.exoplatform.webui.core.model.SelectItemOption;
+    import java.util.List;
+
+    List<SelectItemOption<String>> lsRadioBox = new ArrayList<SelectItemOption<String>>() ;
+      lsRadioBox.add(new SelectItemOption<String>(_ctx.appRes("UIBasisFollowFolderForm.radiobox.All"), "All")) ;
+      lsRadioBox.add(new SelectItemOption<String>(_ctx.appRes("UIBasisFollowFolderForm.radiobox.Last"), "Last")) ;
+  %>
+
+<div id="UIForm $uicomponent.id">
+	<%uiform.begin()%>
+		<fieldset id="fieldsetFollowFolder">
+		<legend>$uicomponent.id</legend>
+			<table id="TableQueryAdvanced">
+				 <% for(uiChild in uicomponent.getChildren()) {%>
+				            <%if(uiChild.getName().equals("RadioBox")){
+                                  uiChild.setOptions(lsRadioBox);
+                            } %>
+							<tr><%uicomponent.renderChild(uiChild) ;%> </tr> <%
+					   }
+				  %>
+			  </table>
+
+		</fieldset>
+	<%uiform.end()%>
+
+</div>

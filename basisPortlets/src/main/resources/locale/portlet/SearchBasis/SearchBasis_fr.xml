@@ -39,5 +39,59 @@
             <Search>Rechercher</Search>
             <Cancel>Annuler</Cancel>
         </action>
+        <label>
+            <From>Liste:</From>
+        </label>
     </UIAdvancedSearchForm>
+
+    <UIPropertyInputForm>
+        <label>
+            <title>Titre</title>
+            <folderExternalReference>Référence externe</folderExternalReference>
+            <folderStatus>Status</folderStatus>
+            <folderRNN>RNN</folderRNN>
+            <folderComments>Commentaires</folderComments>
+            <folderRegistrationDate>Date d'inscription</folderRegistrationDate>
+            <folderCloseOnDate>Date de fermeture</folderCloseOnDate>
+            <folderType>Type</folderType>
+            <folderCloseBeforeDate>Fermer avant date</folderCloseBeforeDate>
+            <docExternSenderCity>Ville expéditeur externe</docExternSenderCity>
+            <docPredefinedExternSender>Expéditeur externe prédéfini</docPredefinedExternSender>
+            <docComments>Commentaires</docComments>
+            <docKeywords>Mots-clés</docKeywords>
+            <docReference>Reference</docReference>
+            <docRegistrationDate>Date d'inscription</docRegistrationDate>
+            <docType>Type</docType>
+            <docExternSenderCountry>Ville expéditeur externe</docExternSenderCountry>
+            <docExternSenderName>Nom de l'expéditeur externe</docExternSenderName>
+            <docSenderType>Type d'émetteur</docSenderType>
+            <docExternSenderAdress>Adresse expéditeur externe</docExternSenderAdress>
+            <docExternSenderZipCode>Code postal expéditeur externe</docExternSenderZipCode>
+            <docInOut>Entrée - sortie</docInOut>
+            <docDate >Date</docDate >
+            <docInternSender>Expéditeur interne </docInternSender>
+            <followComments>Commentaires</followComments>
+            <followRequiredAction>Action requise</followRequiredAction>
+            <followAnswerByDate>Réponse par date</followAnswerByDate>
+            <followGroupInternEditor>Rédacteur Groupe interne</followGroupInternEditor>
+            <followExternEditor>Editeur externe</followExternEditor>
+            <followEditorType>Type d'éditeur</followEditorType>
+            <followUserInternEditor>Rédacteur utilisateur interne</followUserInternEditor>
+            <followSendDate>Date d'envoi</followSendDate>
+        </label>
+    </UIPropertyInputForm>
+
+    <UIBasisFollowDocForm>
+        <radiobox>
+            <All>Tout</All>
+            <Last>Dernier</Last>
+        </radiobox>
+    </UIBasisFollowDocForm>
+
+    <UIBasisFollowFolderForm>
+        <radiobox>
+            <All>Tout</All>
+            <Last>Dernier</Last>
+        </radiobox>
+    </UIBasisFollowFolderForm>
 </bundle>

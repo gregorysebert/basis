@@ -11,7 +11,7 @@
 	<%uiform.begin()%>
 
 	<label id ="From">
-        From
+        <%=_ctx.appRes("UIAdvancedSearchForm.label.From")%>
     </label>
     <% uiform.renderField("From") ;%>
 

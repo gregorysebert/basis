@@ -40,4 +40,66 @@
             <Cancel>Cancel</Cancel>
         </action>
     </UIAdvancedSearchForm>
+
+    <UIAdvancedSearchForm>
+        <action>
+            <Search>Search</Search>
+            <Cancel>Cancel</Cancel>
+        </action>
+        <label>
+            <From>List: </From>
+        </label>
+    </UIAdvancedSearchForm>
+
+    <UIPropertyInputForm>
+        <label>
+            <title>Title</title>
+            <folderExternalReference>External Reference</folderExternalReference>
+            <folderStatus>Status</folderStatus>
+            <folderRNN>RNN</folderRNN>
+            <folderComments>Comments</folderComments>
+            <folderRegistrationDate>Registration Date</folderRegistrationDate>
+            <folderCloseOnDate>Close On Date</folderCloseOnDate>
+            <folderType>Type</folderType>
+            <folderCloseBeforeDate>Close Before Date</folderCloseBeforeDate>
+            <docExternSenderCity>Extern Sender City</docExternSenderCity>
+            <docPredefinedExternSender>Predefined Extern Sender</docPredefinedExternSender>
+            <docComments>Comments</docComments>
+            <docKeywords>Keywords</docKeywords>
+            <docReference>Reference</docReference>
+            <docRegistrationDate>Registration Date</docRegistrationDate>
+            <docType>Type</docType>
+            <docExternSenderCountry>Extern Sender Country</docExternSenderCountry>
+            <docExternSenderName>Extern Sender Name</docExternSenderName>
+            <docSenderType>Sender Type</docSenderType>
+            <docExternSenderAdress>Extern Sender Adress</docExternSenderAdress>
+            <docExternSenderZipCode>Extern Sender Zip Code</docExternSenderZipCode>
+            <docInOut>In Out</docInOut>
+            <docDate >Date</docDate >
+            <docInternSender>Intern Sender</docInternSender>
+            <followComments>Comments</followComments>
+            <followRequiredAction>Required Action</followRequiredAction>
+            <followAnswerByDate>Answer By Date</followAnswerByDate>
+            <followGroupInternEditor>Group Intern Editor</followGroupInternEditor>
+            <followExternEditor>Extern Editor</followExternEditor>
+            <followEditorType>Editor Type</followEditorType>
+            <followUserInternEditor>User Intern Editor</followUserInternEditor>
+            <followSendDate>Send Date</followSendDate>
+        </label>
+    </UIPropertyInputForm>
+
+    <UIBasisFollowDocForm>
+        <radiobox>
+            <All>All</All>
+            <Last>Last</Last>
+        </radiobox>
+    </UIBasisFollowDocForm>
+
+    <UIBasisFollowFolderForm>
+        <radiobox>
+            <All>All</All>
+            <Last>Last</Last>
+        </radiobox>
+    </UIBasisFollowFolderForm>
+
 </bundle>

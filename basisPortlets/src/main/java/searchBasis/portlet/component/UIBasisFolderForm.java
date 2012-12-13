@@ -23,24 +23,23 @@ import javax.jcr.nodetype.PropertyDefinition;
 )
 public class UIBasisFolderForm extends UIForm {
 
+    public static final String FIELD_FOLDER_ID = "exo:title" ;
+
     public UIBasisFolderForm() throws Exception {
         ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
         RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
         NodeType basisFolderNodetype = rs.getRepository("repository").getNodeTypeManager().getNodeType("basis:basisFolder");
         PropertyDefinition[] basisFolderNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
+        UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, FIELD_FOLDER_ID);
+        uiPropertyInputForm.load(FIELD_FOLDER_ID,FIELD_FOLDER_ID.split("exo:")[1],"" );
         for (PropertyDefinition property : basisFolderNodetypeProperties) {
             if(property.getName().contains("basis")) {
-                if(!property.getName().contains("folderInternSender")) {
-                    UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, property.getName());
+                if(!property.getName().contains("folderInternSender") && !property.getName().contains("folderLanguage")) {
+                    uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, property.getName());
                     uiPropertyInputForm.load(property.getName(),property.getName().split("basis:")[1],"" );
                 }
             }
 
         }
-    }
-
-    public void load(String parentName) throws Exception{
-
-
     }
 }
