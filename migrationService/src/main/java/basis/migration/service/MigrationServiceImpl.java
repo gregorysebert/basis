@@ -20,10 +20,6 @@ public class MigrationServiceImpl implements MigrationService
 
     public MigrationServiceImpl() {
         log.debug("basis.migration.service.MigrationServiceImpl");
-        Properties prop = getPropsFile("conf/application.properties");
-        this.path = prop.getProperty("basis.documentsPath");
-        this.documentsErrorPath = prop.getProperty("basis.documentsErrorPath");
-        this.jcrpath = prop.getProperty("basis.jcrPath");
     }
 
 
@@ -45,6 +41,12 @@ public class MigrationServiceImpl implements MigrationService
     @Override
     public void MigrateAll(String BO) {
         //To change body of implemented methods use File | Settings | File Templates.
+        Properties prop = getPropsFile("conf/application.properties");
+        this.path = prop.getProperty(BO+".basis.documentsPath");
+        this.documentsErrorPath = prop.getProperty(BO+".basis.documentsErrorPath");
+        this.jcrpath = prop.getProperty(BO+".basis.jcrPath");
+
+
         log.info("Starting Migration of folder :" + path + "in jcr path :" + jcrpath );
         Session session = MigrationUtil.getSession();
 
@@ -56,7 +58,9 @@ public class MigrationServiceImpl implements MigrationService
 
         if (!rootNode.hasNode(BO))
         {
-            rootNode.addNode(BO, "nt:unstructured");
+            Node boNode = rootNode.addNode(BO, "basis:basisBO");
+            boNode.setProperty("basis:BOCount", "0");
+            boNode.setProperty("basis:BODisplayRNN", false);
             session.save();
         }
 
@@ -70,9 +74,7 @@ public class MigrationServiceImpl implements MigrationService
         {
               log.info("Migrating file : " + fileName);
 
-                MigrationUtil.addBasisDocument(session, BO, path + "/" + fileName,jcrpath,documentsErrorPath);
-
-
+              MigrationUtil.addBasisDocument(session, BO, path + "/" + fileName,jcrpath,documentsErrorPath);
         }
         session.logout();
     }

@@ -13,6 +13,15 @@ public class BasisFolder {
     private String folderLanguage;
     private String folderRegistrationDate;
     private String folderCloseBeforeDate;
+    private String folderComments;
+
+    public String getFolderComments() {
+        return folderComments;
+    }
+
+    public void setFolderComments(String folderComments) {
+        this.folderComments = folderComments;
+    }
 
     public String getFolderId() {
         return folderId;
