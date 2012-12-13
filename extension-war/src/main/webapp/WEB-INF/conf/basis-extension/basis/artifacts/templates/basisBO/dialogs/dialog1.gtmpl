@@ -22,7 +22,7 @@
         		<tr>
 					<td class="FieldLabel">
 						<%
-						String[] BODispalyRNNField = ["jcrPath=/node/basis:BODispalyRNN"];
+						String[] BODispalyRNNField = ["jcrPath=/node/basis:BODisplayRNN"];
 						uicomponent.addCheckBoxField("BODispalyRNN", BODispalyRNNField);
 						%>
 					</td>

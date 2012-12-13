@@ -10,7 +10,7 @@
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>
-            <propertyDefinition name="basis:BODispalyRNN" requiredType="Boolean" autoCreated="false" mandatory="false"
+            <propertyDefinition name="basis:BODisplayRNN" requiredType="Boolean" autoCreated="false" mandatory="false"
                                 onParentVersion="COPY" protected="false" multiple="false">
                 <valueConstraints/>
             </propertyDefinition>

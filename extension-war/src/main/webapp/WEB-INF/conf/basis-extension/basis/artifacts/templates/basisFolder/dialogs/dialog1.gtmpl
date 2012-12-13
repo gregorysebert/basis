@@ -195,7 +195,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 					</td>
 				</tr>
 				<%
-				if (getBONode(currentNode).getProperty("basis:BODispalyRNN").getBoolean()) {
+				if (getBONode(currentNode).getProperty("basis:BODisplayRNN").getBoolean()) {
 				%>
 				<tr>
 					<td class="FastDocFieldLabel FieldLabelMandatory"><%=_ctx.appRes("basisFolder.label.folderRNN")%></td>
