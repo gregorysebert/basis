@@ -31,12 +31,19 @@ public class UIBasisDocForm extends UIForm {
         NodeType basisFolderNodetype = rs.getRepository("repository").getNodeTypeManager().getNodeType("basis:basisDocument");
         PropertyDefinition[] basisFolderNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
         UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, FIELD_DOC_ID);
-        uiPropertyInputForm.load(FIELD_DOC_ID,FIELD_DOC_ID.split("exo:")[1],"" );
+        uiPropertyInputForm.load(FIELD_DOC_ID,"basisDocument.label.docId",1 );
         for (PropertyDefinition property : basisFolderNodetypeProperties) {
             if(property.getName().contains("basis")) {
-                if(!property.getName().contains("folderInternSender")) {
+                if(!property.getName().contains("docSenderType")) {
+                    String labelProperty;
+                    if(!property.getName().contains("Comments")) {
+                        labelProperty = "basisDocument.label." + property.getName().split("basis:")[1];
+                    }
+                    else{
+                        labelProperty = "basis.label." + property.getName().split("basis:doc")[1].toLowerCase();
+                    }
                     uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, property.getName());
-                    uiPropertyInputForm.load(property.getName(),property.getName().split("basis:")[1],"" );
+                    uiPropertyInputForm.load(property.getName(),labelProperty,property.getRequiredType() );
                 }
             }
 

@@ -44,43 +44,6 @@
         </label>
     </UIAdvancedSearchForm>
 
-    <UIPropertyInputForm>
-        <label>
-            <title>Titel</title>
-            <folderExternalReference>Externe referentie</folderExternalReference>
-            <folderStatus>staat</folderStatus>
-            <folderRNN>RNN</folderRNN>
-            <folderComments>Reacties</folderComments>
-            <folderRegistrationDate>Registratie Datum</folderRegistrationDate>
-            <folderCloseOnDate>Sluit op Datum</folderCloseOnDate>
-            <folderType>Type</folderType>
-            <folderCloseBeforeDate>Sluit Voordat Datum</folderCloseBeforeDate>
-            <docExternSenderCity>Extern Sender Stad</docExternSenderCity>
-            <docPredefinedExternSender>Vooraf gedefinieerde Extern Sender</docPredefinedExternSender>
-            <docComments>Reacties</docComments>
-            <docKeywords>Trefwoorden</docKeywords>
-            <docReference>referentie</docReference>
-            <docRegistrationDate>Registratie Datum</docRegistrationDate>
-            <docType>Type</docType>
-            <docExternSenderCountry>Extern Sender Land</docExternSenderCountry>
-            <docExternSenderName>Extern Sender Naam</docExternSenderName>
-            <docSenderType>Sender Type</docSenderType>
-            <docExternSenderAdress>Extern Afzender Adres</docExternSenderAdress>
-            <docExternSenderZipCode>Extern Sender Postcode</docExternSenderZipCode>
-            <docInOut>In Out</docInOut>
-            <docDate >Datum</docDate >
-            <docInternSender>Intern Sender</docInternSender>
-            <followComments>Reacties</followComments>
-            <followRequiredAction>Vereiste actie</followRequiredAction>
-            <followAnswerByDate>Antwoord op datum</followAnswerByDate>
-            <followGroupInternEditor>Groep Intern Editor</followGroupInternEditor>
-            <followExternEditor>Extern Editor</followExternEditor>
-            <followEditorType>Editor Type</followEditorType>
-            <followUserInternEditor>Gebruiker Intern Editor</followUserInternEditor>
-            <followSendDate>Stuur Datum</followSendDate>
-        </label>
-    </UIPropertyInputForm>
-
     <UIBasisFollowDocForm>
         <radiobox>
             <All>Alle</All>

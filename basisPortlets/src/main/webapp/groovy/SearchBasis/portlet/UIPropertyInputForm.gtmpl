@@ -14,6 +14,10 @@
      text-align:left;
      font-size: 15px;
     }
+    #BasisCheckBox{
+      width: 40px;
+      text-align:left;
+     }
   </style>
 
 <% String fieldName; %>
@@ -26,11 +30,12 @@
 
                 <%fieldName = uicomponent.getLabel(field.getName());%>
                 <%
-                if(fieldName != null && fieldName.length() > 0 && fieldName != "searchType") {
+                if(fieldName != null && fieldName.length() > 0 && fieldName != "searchType" && fieldName !="CheckBoxProperty") {
                 %>
+                        <td id="BasisCheckBox"><% uiform.renderField("CheckBoxProperty") %></td>
                         <td id="BasisProperty">
                             <label for ="BasisProperty">
-                                <%=_ctx.appRes("UIPropertyInputForm.label."+field.getName())%>
+                                <%=_ctx.appRes(field.getName())%>
                             </label>
                         </td>
                         <td id="searchType"><% uiform.renderField("searchType") %></td>

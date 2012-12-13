@@ -36,9 +36,16 @@ public class UIBasisFollowFolderForm extends UIForm {
         PropertyDefinition[] basisFolderNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
         for (PropertyDefinition property : basisFolderNodetypeProperties) {
             if(property.getName().contains("basis")) {
-                if(!property.getName().contains("folderInternSender")) {
+                if(!property.getName().contains("followEditorType")) {
+                    String labelProperty;
+                    if(!property.getName().contains("Comments")) {
+                        labelProperty = "basisFollow.label." + property.getName().split("basis:")[1];
+                    }
+                    else {
+                        labelProperty = "basis.label." + property.getName().split("basis:follow")[1].toLowerCase();
+                    }
                     UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, property.getName());
-                    uiPropertyInputForm.load(property.getName(),property.getName().split("basis:")[1],"" );
+                    uiPropertyInputForm.load(property.getName(),labelProperty,property.getRequiredType() );
                 }
             }
 
