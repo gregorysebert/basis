@@ -156,7 +156,7 @@ public class MigrationUtil {
         Node rootNode = session.getRootNode().getNode(path);
 
 
-        log.info("Check YEAR folder: "+ yearFormat.format(date));
+        //log.info("Check YEAR folder: "+ yearFormat.format(date));
         if (!rootNode.hasNode(yearFormat.format(date)))
         {
             rootNode.addNode(yearFormat.format(date),"basis:basisDate");
@@ -165,7 +165,7 @@ public class MigrationUtil {
 
         rootNode = session.getRootNode().getNode(path+"/"+yearFormat.format(date));
 
-        log.info("Check MONTH folder: "+ monthFormat.format(date));
+        //log.info("Check MONTH folder: "+ monthFormat.format(date));
         if (!rootNode.hasNode(monthFormat.format(date)))
         {
             rootNode.addNode(monthFormat.format(date),"basis:basisDate");
@@ -174,7 +174,7 @@ public class MigrationUtil {
 
         rootNode = session.getRootNode().getNode(path+"/"+yearFormat.format(date)+"/"+monthFormat.format(date));
 
-        log.info("Check DAY folder: "+ dayFormat.format(date));
+        //log.info("Check DAY folder: "+ dayFormat.format(date));
         if (!rootNode.hasNode(dayFormat.format(date)))
         {
             rootNode.addNode(dayFormat.format(date),"basis:basisDate");
