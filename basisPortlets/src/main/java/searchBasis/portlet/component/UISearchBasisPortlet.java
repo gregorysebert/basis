@@ -50,6 +50,14 @@ public class UISearchBasisPortlet extends UIPortletApplication {
         setRenderedChild("Result");
     }
 
+    public  void updateResultAdvanced()throws Exception{
+        removeChildById("Result");
+        addChild(UIResultForm.class,null,"Result");
+        UIResultForm uiResultForm = getChild(UIResultForm.class);
+        uiResultForm.updateAdvanced();
+        setRenderedChild("Result");
+    }
+
     public QueryResult getQueryResult() {
         return queryResult;
     }

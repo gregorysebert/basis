@@ -58,4 +58,10 @@
             <Last>Dernier</Last>
         </radiobox>
     </UIBasisFollowFolderForm>
+
+    <basisFolder>
+        <label>
+            <folderInternSender>Expéditeur interne</folderInternSender>
+        </label>
+    </basisFolder>
 </bundle>

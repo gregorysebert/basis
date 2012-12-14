@@ -106,6 +106,26 @@ public class UIResultForm extends UIForm {
         }
 
     }
+    public  void updateAdvanced()throws Exception{
+        UISearchBasisPortlet uiSearchBasisPortlet = this.getAncestorOfType(UISearchBasisPortlet.class);
+        try{
+            if(uiSearchBasisPortlet.getQueryResult() != null){
+                queryResult = uiSearchBasisPortlet.getQueryResult();
+                nodeIterator1 = queryResult.getNodes();
+                while(nodeIterator1.hasNext()){
+                    Node basisFolderNode = nodeIterator1.nextNode();
+                    addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                    String path = basisFolderNode.getPath() ;
+                    String pathSlippted [] = path.split("/Files/BO");
+                    addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                }
+            }
+        }
+        catch (NullPointerException ex){
+            System.out.print("Null Pointer Exception" + ex);
+        }
+
+    }
 
     public QueryResult getQueryResult() {
         return queryResult;

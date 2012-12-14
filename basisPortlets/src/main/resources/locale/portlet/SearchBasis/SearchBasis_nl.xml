@@ -57,4 +57,10 @@
             <Last>Laatste</Last>
         </radiobox>
     </UIBasisFollowFolderForm>
+
+    <basisFolder>
+        <label>
+            <folderInternSender>Interne afzender</folderInternSender>
+        </label>
+    </basisFolder>
 </bundle>

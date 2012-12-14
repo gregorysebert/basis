@@ -26,7 +26,6 @@ import java.util.List;
 @ComponentConfig(
         lifecycle = UIFormLifecycle.class,
         template =  "app:/groovy/SearchBasis/portlet/UIPropertyInputForm.gtmpl"
-
 )
 public class UIPropertyInputForm extends UIForm {
 
@@ -41,34 +40,27 @@ public class UIPropertyInputForm extends UIForm {
                 labelProperty = typeNode+".label." + property.getName().split("basis:")[1];
             }
             else {
-                labelProperty = "basis.label.comments";
+                labelProperty = typeNode+"_basis.label.comments";
             }
         }
         else {
             labelProperty = typeNode;
         }
-        addUIFormInput(new UICheckBoxInput(labelProperty+"_checkBox",null,null));
+        UICheckBoxInput uiCheckBoxInput = new UICheckBoxInput(labelProperty+"_checkBox",null,null);
+        addUIFormInput(uiCheckBoxInput);
 
         List<SelectItemOption<String>> lsSearch = new ArrayList<SelectItemOption<String>>() ;
-        lsSearch.add(new SelectItemOption<String>(" ", " ")) ;
-        lsSearch.add(new SelectItemOption<String>("Equals", "=")) ;
+        lsSearch.add(new SelectItemOption<String>("Equals", "Equals")) ;
         lsSearch.add(new SelectItemOption<String>("Contains", "Contains")) ;
-        lsSearch.add(new SelectItemOption<String>("Not Equals", "!=")) ;
-        lsSearch.add(new SelectItemOption<String>("Not Contains", "!Contains")) ;
+        lsSearch.add(new SelectItemOption<String>("Not Equals", "Not_Equals")) ;
+        lsSearch.add(new SelectItemOption<String>("Not Contains", "Not_Contains")) ;
         addUIFormInput(new UIFormSelectBox(labelProperty+"_searchType", null, lsSearch));
         if(property != null){
-            if(!property.getName().contains("Comments")) {
-                if(property.getRequiredType() != 5){
-                    addUIFormInput(new UIFormStringInput(labelProperty, null, null));
-                }
-                else {
-                    addUIFormInput(new UIFormDateTimeInput(labelProperty, null, new Date(), false));
-                }
+            if(property.getRequiredType() != 5){
+                addUIFormInput(new UIFormStringInput(labelProperty, null, null));
             }
-            else if(property.getName().contains("Comments") && property != null){
-                UIFormWYSIWYGInput uiFormWYSIWYGInput = new UIFormWYSIWYGInput(labelProperty, null, null,false);
-                uiFormWYSIWYGInput.setHeight("410");
-                addUIFormInput(uiFormWYSIWYGInput);
+            else {
+                addUIFormInput(new UIFormDateTimeInput(labelProperty, null, new Date(), false));
             }
         }
         else{
@@ -77,4 +69,6 @@ public class UIPropertyInputForm extends UIForm {
 
 
     }
+
+
 }

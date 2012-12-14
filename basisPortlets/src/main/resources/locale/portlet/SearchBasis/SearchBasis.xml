@@ -58,7 +58,11 @@
         </radiobox>
     </UIBasisFollowFolderForm>
 
-
+    <basisFolder>
+        <label>
+            <folderInternSender>Intern Sender</folderInternSender>
+        </label>
+    </basisFolder>
 
 
 </bundle>

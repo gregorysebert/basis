@@ -218,6 +218,10 @@ public class UISimpleSearchForm extends UIForm {
 
             String language = uiSimpleSearchForm.getUIFormSelectBox(LANGUAGE).getValue();
 
+            String url = Util.getPortalRequestContext().getRequestURI();
+            String urlSplitted[] = url.split("BO:");
+            String nameBO[] = urlSplitted[1].split("/");
+
             if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("byGroup")){
                 List<SelectItemOption<String>> lsAttribut = new ArrayList<SelectItemOption<String>>() ;
 
@@ -226,7 +230,7 @@ public class UISimpleSearchForm extends UIForm {
                 Session session = (Session) rs.getRepository("repository").getSystemSession("collaboration");
                 QueryManager queryManager = null;
                 queryManager = session.getWorkspace().getQueryManager();
-                String xpathStatement = "/jcr:root/Files/BO//element (*, nt:file) [jcr:like(@exo:name,'followSelector.txt')]";
+                String xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*, nt:file) [jcr:like(@exo:name,'followSelector.txt')]";
                 Query query = queryManager.createQuery(xpathStatement, Query.XPATH);
                 QueryResult result = query.execute();
                 NodeIterator nodeIterator = result.getNodes();
@@ -254,7 +258,7 @@ public class UISimpleSearchForm extends UIForm {
                 Session session = (Session) rs.getRepository("repository").getSystemSession("collaboration");
                 QueryManager queryManager = null;
                 queryManager = session.getWorkspace().getQueryManager();
-                String xpathStatement = "/jcr:root/Files/BO//element (*, nt:file) [jcr:like(@exo:name,'followSelector.txt')]";
+                String xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*, nt:file) [jcr:like(@exo:name,'followSelector.txt')]";
                 Query query = queryManager.createQuery(xpathStatement, Query.XPATH);
                 QueryResult result = query.execute();
                 NodeIterator nodeIterator = result.getNodes();

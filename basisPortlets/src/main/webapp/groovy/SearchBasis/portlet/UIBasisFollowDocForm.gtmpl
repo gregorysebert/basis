@@ -21,7 +21,6 @@
     %>
 
 <div id="UIForm $uicomponent.id">
-	<%uiform.begin()%>
 		<fieldset id="fieldsetFollowDoc">
 		<legend>$uicomponent.id</legend>
 			<table id="TableQueryAdvanced">
@@ -35,6 +34,5 @@
 			  </table>
 
 		</fieldset>
-	<%uiform.end()%>
 
 </div>

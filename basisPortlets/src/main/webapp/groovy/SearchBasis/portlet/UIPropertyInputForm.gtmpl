@@ -21,7 +21,6 @@
   </style>
 
 <% String fieldName; %>
-	<%uiform.begin()%>
 
         <%
             for(field in uiform.getChildren()) {
@@ -32,12 +31,21 @@
                 if(fieldName.contains("checkBox")){%>
                     <td id="BasisCheckBox"><% uiform.renderField(field) %></td>
                 <%}
-                 if(fieldName.contains("searchType")){%>
+                 if(fieldName.contains("searchType")){
+                    if(fieldName.contains("comments")){%>
+                        <td id="BasisProperty">
+							<% def fieldNameComments = fieldName.split("_searchType")[0]; %>
+                            <%=_ctx.appRes(fieldNameComments.split("_")[1])%>
+                        </td>
+                        <td id="searchType"><% uiform.renderField(field) %></td>
+                <%	}
+					else{%>
                         <td id="BasisProperty">
                             <%=_ctx.appRes(fieldName.split("_searchType")[0])%>
                         </td>
                         <td id="searchType"><% uiform.renderField(field) %></td>
-                <%}
+                <%	}
+				}
                 if(!fieldName.contains("searchType") && !fieldName.contains("checkBox")) {
                 %>
 
@@ -48,5 +56,3 @@
             }
             }
         %>
-
-    <%uiform.end()%>

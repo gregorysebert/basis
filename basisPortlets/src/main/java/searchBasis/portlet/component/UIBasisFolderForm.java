@@ -26,6 +26,7 @@ import javax.jcr.nodetype.PropertyDefinition;
 public class UIBasisFolderForm extends UIForm {
 
     public static final String FIELD_FOLDER_ID = "exo:title" ;
+    private PropertyDefinition[] basisFolderNodetypeProperties;
 
     public UIBasisFolderForm() throws Exception {
 
@@ -34,9 +35,9 @@ public class UIBasisFolderForm extends UIForm {
         ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
         RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
         NodeType basisFolderNodetype = rs.getRepository("repository").getNodeTypeManager().getNodeType("basis:basisFolder");
-        PropertyDefinition[] basisFolderNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
+        basisFolderNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
         UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, FIELD_FOLDER_ID);
-        uiPropertyInputForm.load(null,"basisFolder.label.folderNumber");
+        uiPropertyInputForm.load(null, "basisFolder.label.folderNumber");
         for (PropertyDefinition property : basisFolderNodetypeProperties) {
             if(property.getName().contains("basis")) {
                 if(!property.getName().contains("folderLanguage")) {
@@ -46,5 +47,13 @@ public class UIBasisFolderForm extends UIForm {
             }
 
         }
+    }
+
+    public PropertyDefinition[] getBasisFolderNodetypeProperties() {
+        return basisFolderNodetypeProperties;
+    }
+
+    public void setBasisFolderNodetypeProperties(PropertyDefinition[] basisFolderNodetypeProperties) {
+        this.basisFolderNodetypeProperties = basisFolderNodetypeProperties;
     }
 }

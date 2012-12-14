@@ -1,5 +1,9 @@
 package searchBasis.portlet.component;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -8,9 +12,15 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import sun.security.krb5.internal.util.KerberosString;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.jcr.Session;
+import javax.jcr.nodetype.PropertyDefinition;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -62,6 +72,154 @@ public class UIAdvancedSearchForm extends UIForm  {
     static public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
         public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
             UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource();
+            UISearchBasisPortlet uiSearchBasisPortlet = uiAdvancedSearchForm.getAncestorOfType(UISearchBasisPortlet.class);
+            Map<String,String[]> mapFolder = new HashMap<String,String[]>();
+
+            String from = uiAdvancedSearchForm.getUIFormSelectBox(FIELD_FROM).getValue();
+            String xPathStatement = "";
+
+
+            UIBasisFolderForm uiBasisFolderForm = uiAdvancedSearchForm.getChildById(FIELD_FOLDER);
+            PropertyDefinition[] basisFolderNodetypeProperties = uiBasisFolderForm.getBasisFolderNodetypeProperties();
+            for (PropertyDefinition property : basisFolderNodetypeProperties) {
+                if(property.getName().contains("basis")) {
+                    if(!property.getName().contains("folderLanguage") && !property.getName().contains("folderComments")) {
+                        if(property.getRequiredType() != 5){
+                            UIPropertyInputForm uiPropertyInputForm = uiBasisFolderForm.getChildById(FIELD_FOLDER+"_"+property.getName());
+                            if(uiPropertyInputForm.getUICheckBoxInput("basisFolder.label."+property.getName().split("basis:")[1]+"_checkBox").getValue()){
+                                String[] parameter= new String[2];
+                                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisFolder.label." + property.getName().split("basis:")[1] + "_searchType").getValue();
+                                parameter[1] = uiPropertyInputForm.getUIStringInput("basisFolder.label." + property.getName().split("basis:")[1]).getValue();
+                                mapFolder.put(property.getName(), parameter);
+                            }
+                        }
+                        else{
+                            UIPropertyInputForm uiPropertyInputForm = uiBasisFolderForm.getChildById(FIELD_FOLDER+"_"+property.getName());
+                            if(uiPropertyInputForm.getUICheckBoxInput("basisFolder.label."+property.getName().split("basis:")[1]+"_checkBox").getValue()){
+                                String date = uiPropertyInputForm.getUIFormDateTimeInput("basisFolder.label." + property.getName().split("basis:")[1]).getValue();
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                String propertyDate=sdf.format(new Date(date));
+
+                                String[] parameter= new String[2];
+                                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisFolder.label." + property.getName().split("basis:")[1]+"_searchType").getValue();
+                                parameter[1] = propertyDate;
+
+                                mapFolder.put(property.getName(),parameter);
+                            }
+                        }
+                    }
+                }
+            }
+            UIPropertyInputForm uiPropertyInputForm = uiBasisFolderForm.getChildById(FIELD_FOLDER+"_basis:folderComments");
+            if(uiPropertyInputForm.getUICheckBoxInput("basisFolder_basis.label.comments_checkBox").getValue()){
+                String[] parameter= new String[2];
+                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisFolder_basis.label.comments_searchType").getValue();
+                parameter[1] = uiPropertyInputForm.getUIStringInput("basisFolder_basis.label.comments").getValue();
+                mapFolder.put("basis:folderComments", parameter);
+            }
+            uiPropertyInputForm = uiBasisFolderForm.getChildById("exo:title");
+            if(uiPropertyInputForm.getUICheckBoxInput("basisFolder.label.folderNumber_checkBox").getValue()){
+                String[] parameter= new String[2];
+                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisFolder.label.folderNumber_searchType").getValue();
+                parameter[1] = uiPropertyInputForm.getUIStringInput("basisFolder.label.folderNumber").getValue();
+                mapFolder.put("exo:title", parameter);
+            }
+
+            if(from.equals("Folder")){
+                String url = Util.getPortalRequestContext().getRequestURI();
+                String urlSplitted[] = url.split("BO:");
+                String nameBO[] = urlSplitted[1].split("/");
+                xPathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [";
+            }
+
+            if(!mapFolder.isEmpty()){
+                int i = 0 ;
+                for (String mapKey : mapFolder.keySet()) {
+                    String[] value = mapFolder.get(mapKey);
+                    //System.out.println("value 0 : " + value[0]+ "value 1 : "  +value[1] + " key : " + mapKey);
+
+                    if(value[0].equals("Equals")){
+                        if(!mapKey.contains("Date")){
+                            if(i == 0){
+                                xPathStatement += "@"+mapKey+"='"+value[1]+"'";
+                            }
+                            else{
+                                xPathStatement += " and @"+mapKey+"='"+value[1]+"'";
+                            }
+                        }
+                        else{
+                            if(i == 0){
+                                xPathStatement += "@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                            }
+                            else{
+                                xPathStatement += " and @"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                            }
+
+                        }
+                    }
+                    else if(value[0].equals("Contains")){
+                        if(i == 0){
+                            xPathStatement += "jcr:contains(@"+mapKey+"="+value[1]+")";
+                        }
+                        else{
+                            xPathStatement += " and jcr:contains(@"+mapKey+"="+value[1]+")";
+                        }
+
+                    }
+                    else if(value[0].equals("Not_Equals")){
+                        if(!mapKey.contains("Date")){
+                            if(i == 0){
+                                xPathStatement += "not(@"+mapKey+"="+value[1]+")";
+                            }
+                            else{
+                                xPathStatement += " and not(@"+mapKey+"="+value[1]+")";
+                            }
+                        }
+                        else{
+                            if(i == 0){
+                                xPathStatement += "not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                            }
+                            else{
+                                xPathStatement += " and not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                            }
+
+                        }
+
+                    }
+                    else if(value[0].equals("Not_Contains")){
+                        if(i == 0){
+                            xPathStatement += "not(jcr:contains(@"+mapKey+"="+value[1]+"))";
+                        }
+                        else{
+                            xPathStatement += " and not(jcr:contains(@"+mapKey+"="+value[1]+"))";
+                        }
+                    }
+
+                     i++;
+
+                }
+                xPathStatement += "]";
+            }
+
+            System.out.println("xpathstatement : " + xPathStatement);
+
+            if(xPathStatement != null){
+                ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
+                RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
+                Session session = (Session) rs.getRepository("repository").getSystemSession("collaboration");
+                QueryManager queryManager = null;
+                queryManager = session.getWorkspace().getQueryManager();
+                Query query = queryManager.createQuery(xPathStatement, Query.XPATH);
+                QueryResult result = query.execute();
+
+                uiSearchBasisPortlet.setQueryResult(result);
+                uiSearchBasisPortlet.updateResultAdvanced();
+                //uiSimpleSearchForm.getUIFormSelectBox(QUERY).setDefaultValue("currentUser");
+                uiAdvancedSearchForm.setRendered(false);
+
+            }
+
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiAdvancedSearchForm) ;
         }
     }
 
@@ -73,6 +231,8 @@ public class UIAdvancedSearchForm extends UIForm  {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
         }
     }
+
+
 }
 
 
