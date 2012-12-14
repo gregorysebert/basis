@@ -26,24 +26,20 @@ public class UIBasisDocForm extends UIForm {
     public static final String FIELD_DOC_ID = "exo:title" ;
 
     public UIBasisDocForm() throws Exception {
+    }
+
+    public void  load(String parent) throws Exception {
         ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
         RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
         NodeType basisFolderNodetype = rs.getRepository("repository").getNodeTypeManager().getNodeType("basis:basisDocument");
         PropertyDefinition[] basisFolderNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
         UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, FIELD_DOC_ID);
-        uiPropertyInputForm.load(FIELD_DOC_ID,"basisDocument.label.docId",1 );
+        uiPropertyInputForm.load(null,"basisDocument.label.docId");
         for (PropertyDefinition property : basisFolderNodetypeProperties) {
             if(property.getName().contains("basis")) {
                 if(!property.getName().contains("docSenderType")) {
-                    String labelProperty;
-                    if(!property.getName().contains("Comments")) {
-                        labelProperty = "basisDocument.label." + property.getName().split("basis:")[1];
-                    }
-                    else{
-                        labelProperty = "basis.label." + property.getName().split("basis:doc")[1].toLowerCase();
-                    }
-                    uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, property.getName());
-                    uiPropertyInputForm.load(property.getName(),labelProperty,property.getRequiredType() );
+                    uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, parent+"_"+property.getName());
+                    uiPropertyInputForm.load(property,"basisDocument");
                 }
             }
 

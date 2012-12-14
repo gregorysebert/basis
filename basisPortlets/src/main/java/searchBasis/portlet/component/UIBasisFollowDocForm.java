@@ -30,6 +30,10 @@ public class UIBasisFollowDocForm extends UIForm {
     public static final String FIELD_RADIOBOX = "RadioBox" ;
 
     public UIBasisFollowDocForm() throws Exception {
+
+    }
+
+    public void  load(String parent) throws Exception {
         ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
         RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
         NodeType basisFolderNodetype = rs.getRepository("repository").getNodeTypeManager().getNodeType("basis:basisFollow");
@@ -44,8 +48,8 @@ public class UIBasisFollowDocForm extends UIForm {
                     else {
                         labelProperty = "basis.label." + property.getName().split("basis:follow")[1].toLowerCase();
                     }
-                    UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, property.getName());
-                    uiPropertyInputForm.load(property.getName(),labelProperty,property.getRequiredType() );
+                    UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, parent+"_"+property.getName());
+                    uiPropertyInputForm.load(property,"basisFollow");
                 }
             }
 

@@ -6,12 +6,12 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormDateTimeInput;
-import org.exoplatform.webui.form.UIFormSelectBox;
-import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.*;
 import org.exoplatform.webui.form.input.UICheckBoxInput;
+import org.exoplatform.webui.form.wysiwyg.*;
+import org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput;
 
+import javax.jcr.nodetype.PropertyDefinition;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,36 +25,29 @@ import java.util.List;
  */
 @ComponentConfig(
         lifecycle = UIFormLifecycle.class,
-        template =  "app:/groovy/SearchBasis/portlet/UIPropertyInputForm.gtmpl",
-        events = {
-                @EventConfig(listeners = UIPropertyInputForm.ChangeActionListener.class, phase= Event.Phase.DECODE)
-        }
+        template =  "app:/groovy/SearchBasis/portlet/UIPropertyInputForm.gtmpl"
 
 )
 public class UIPropertyInputForm extends UIForm {
 
-    private  static final String FIELD_OPERATOR = "Operator";
-    public static final String FIELD_SEARCH_TYPE = "searchType" ;
-    public static String FIELD_PROPERTY = "";
-
     public UIPropertyInputForm() throws Exception {
-
-
     }
 
-    public void load(String propertyName, String label, int type) throws Exception{
-        FIELD_PROPERTY = propertyName;
+    public void load(PropertyDefinition property, String typeNode) throws Exception{
 
-        UICheckBoxInput uiCheckBoxInput = new UICheckBoxInput("CheckBoxProperty",propertyName,null);
-        uiCheckBoxInput.setOnChange("Change");
-        addUIFormInput(uiCheckBoxInput);
-
-        if(type != 5){
-            addUIFormInput(new UIFormStringInput(label, propertyName, null));
+        String labelProperty;
+        if(property != null){
+            if(!property.getName().contains("Comments")) {
+                labelProperty = typeNode+".label." + property.getName().split("basis:")[1];
+            }
+            else {
+                labelProperty = "basis.label.comments";
+            }
         }
         else {
-            addUIFormInput(new UIFormDateTimeInput(label, propertyName, new Date(), false));
+            labelProperty = typeNode;
         }
+        addUIFormInput(new UICheckBoxInput(labelProperty+"_checkBox",null,null));
 
         List<SelectItemOption<String>> lsSearch = new ArrayList<SelectItemOption<String>>() ;
         lsSearch.add(new SelectItemOption<String>(" ", " ")) ;
@@ -62,17 +55,26 @@ public class UIPropertyInputForm extends UIForm {
         lsSearch.add(new SelectItemOption<String>("Contains", "Contains")) ;
         lsSearch.add(new SelectItemOption<String>("Not Equals", "!=")) ;
         lsSearch.add(new SelectItemOption<String>("Not Contains", "!Contains")) ;
-        UIFormSelectBox uiSelectBoxSearch = new UIFormSelectBox(FIELD_SEARCH_TYPE, FIELD_SEARCH_TYPE, lsSearch) ;
-        uiSelectBoxSearch.setDisabled(true);
-        addUIFormInput(uiSelectBoxSearch);
+        addUIFormInput(new UIFormSelectBox(labelProperty+"_searchType", null, lsSearch));
+        if(property != null){
+            if(!property.getName().contains("Comments")) {
+                if(property.getRequiredType() != 5){
+                    addUIFormInput(new UIFormStringInput(labelProperty, null, null));
+                }
+                else {
+                    addUIFormInput(new UIFormDateTimeInput(labelProperty, null, new Date(), false));
+                }
+            }
+            else if(property.getName().contains("Comments") && property != null){
+                UIFormWYSIWYGInput uiFormWYSIWYGInput = new UIFormWYSIWYGInput(labelProperty, null, null,false);
+                uiFormWYSIWYGInput.setHeight("410");
+                addUIFormInput(uiFormWYSIWYGInput);
+            }
+        }
+        else{
+            addUIFormInput(new UIFormStringInput(labelProperty, null, null));
+        }
 
-        setActions(new String[]{"Add"}) ;
 
     }
-
-    static public class ChangeActionListener extends EventListener<UIPropertyInputForm> {
-        public void execute(Event<UIPropertyInputForm> event) throws Exception {
-            System.out.print(FIELD_PROPERTY);
-        }
-      }
 }

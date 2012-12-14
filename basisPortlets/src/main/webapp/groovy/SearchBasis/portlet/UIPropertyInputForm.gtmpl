@@ -28,18 +28,20 @@
             if(field.isRendered()) {
             %>
 
-                <%fieldName = uicomponent.getLabel(field.getName());%>
-                <%
-                if(fieldName != null && fieldName.length() > 0 && fieldName != "searchType" && fieldName !="CheckBoxProperty") {
-                %>
-                        <td id="BasisCheckBox"><% uiform.renderField("CheckBoxProperty") %></td>
+                <%fieldName = field.getName();
+                if(fieldName.contains("checkBox")){%>
+                    <td id="BasisCheckBox"><% uiform.renderField(field) %></td>
+                <%}
+                 if(fieldName.contains("searchType")){%>
                         <td id="BasisProperty">
-                            <label for ="BasisProperty">
-                                <%=_ctx.appRes(field.getName())%>
-                            </label>
+                            <%=_ctx.appRes(fieldName.split("_searchType")[0])%>
                         </td>
-                        <td id="searchType"><% uiform.renderField("searchType") %></td>
-                        <td id="BasisPropertyInput"><% uiform.renderField(field) %></td>
+                        <td id="searchType"><% uiform.renderField(field) %></td>
+                <%}
+                if(!fieldName.contains("searchType") && !fieldName.contains("checkBox")) {
+                %>
+
+                        <td id="BasisNodeInput"><% uiform.renderField(field) %></td>
                 <%}%>
 
             <%

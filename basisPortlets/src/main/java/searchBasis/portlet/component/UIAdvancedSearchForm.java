@@ -35,13 +35,17 @@ public class UIAdvancedSearchForm extends UIForm  {
     public static final String FIELD_FROM = "From" ;
 
     public UIAdvancedSearchForm() throws Exception {
-        addChild(UIBasisFolderForm.class,null,FIELD_FOLDER);
+        UIBasisFolderForm uiBasisFolderForm = addChild(UIBasisFolderForm.class,null,FIELD_FOLDER);
+        uiBasisFolderForm.load(FIELD_FOLDER);
 
-        addChild(UIBasisDocForm.class,null,FIELD_DOC);
+        UIBasisDocForm uiBasisDocForm = addChild(UIBasisDocForm.class,null,FIELD_DOC);
+        uiBasisDocForm.load(FIELD_DOC);
 
-        addChild(UIBasisFollowDocForm.class,null,FIELD_FOLLOW_DOC);
+        UIBasisFollowDocForm uiBasisFollowDocForm =addChild(UIBasisFollowDocForm.class,null,FIELD_FOLLOW_DOC);
+        uiBasisFollowDocForm.load(FIELD_FOLLOW_DOC);
 
-        addChild(UIBasisFollowFolderForm.class,null,FIELD_FOLLOW_FOLDER);
+        UIBasisFollowFolderForm uiBasisFollowFolderForm = addChild(UIBasisFollowFolderForm.class,null,FIELD_FOLLOW_FOLDER);
+        uiBasisFollowFolderForm.load(FIELD_FOLLOW_FOLDER);
 
         List<SelectItemOption<String>> lsFrom = new ArrayList<SelectItemOption<String>>() ;
         lsFrom.add(new SelectItemOption<String>("Folder", "Folder")) ;

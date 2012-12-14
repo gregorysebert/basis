@@ -28,24 +28,20 @@ public class UIBasisFolderForm extends UIForm {
     public static final String FIELD_FOLDER_ID = "exo:title" ;
 
     public UIBasisFolderForm() throws Exception {
+
+    }
+    public void  load(String parent) throws Exception {
         ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
         RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
         NodeType basisFolderNodetype = rs.getRepository("repository").getNodeTypeManager().getNodeType("basis:basisFolder");
         PropertyDefinition[] basisFolderNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
         UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, FIELD_FOLDER_ID);
-        uiPropertyInputForm.load(FIELD_FOLDER_ID,"basisFolder.label.folderNumber",1 );
+        uiPropertyInputForm.load(null,"basisFolder.label.folderNumber");
         for (PropertyDefinition property : basisFolderNodetypeProperties) {
             if(property.getName().contains("basis")) {
-                if(!property.getName().contains("folderInternSender") && !property.getName().contains("folderLanguage")) {
-                    String labelProperty;
-                    if(!property.getName().contains("Comments")) {
-                        labelProperty = "basisFolder.label." + property.getName().split("basis:")[1];
-                    }
-                    else{
-                        labelProperty = "basis.label." + property.getName().split("basis:folder")[1].toLowerCase();
-                    }
-                    uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, property.getName());
-                    uiPropertyInputForm.load(property.getName(),labelProperty, property.getRequiredType());
+                if(!property.getName().contains("folderLanguage")) {
+                    uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, parent+"_"+property.getName());
+                    uiPropertyInputForm.load(property,"basisFolder");
                 }
             }
 
