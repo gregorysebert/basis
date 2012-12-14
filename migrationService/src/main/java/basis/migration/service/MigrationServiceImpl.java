@@ -17,6 +17,7 @@ public class MigrationServiceImpl implements MigrationService
     private String path;
     private String jcrpath;
     private String documentsErrorPath;
+    private String documentsMigratePath;
 
     public MigrationServiceImpl() {
         log.debug("basis.migration.service.MigrationServiceImpl");
@@ -45,9 +46,10 @@ public class MigrationServiceImpl implements MigrationService
         this.path = prop.getProperty(BO+".basis.documentsPath");
         this.documentsErrorPath = prop.getProperty(BO+".basis.documentsErrorPath");
         this.jcrpath = prop.getProperty(BO+".basis.jcrPath");
+        this.documentsMigratePath = prop.getProperty(BO+".basis.documentsMigratedPath");
 
 
-        log.info("Starting Migration of folder :" + path + "in jcr path :" + jcrpath );
+        log.info("Starting Migration of fastdoc folder :" + path + " in jcr path :" + jcrpath );
         Session session = MigrationUtil.getSession();
 
 
@@ -69,14 +71,21 @@ public class MigrationServiceImpl implements MigrationService
         }
         ;
 
+        int i =1;
 
         for(String fileName : MigrationUtil.getFileList(path))
         {
-              log.info("Migrating file : " + fileName);
 
-              MigrationUtil.addBasisDocument(session, BO, path + "/" + fileName,jcrpath,documentsErrorPath);
+              log.info("Migrating file : " + fileName + " index : "+ i);
+
+              MigrationUtil.addBasisDocument(session, BO, path + "/" + fileName,jcrpath,documentsErrorPath,documentsMigratePath);
+
+              i++;
+
         }
         session.logout();
+
+        log.info("End Migration of fastdoc folder :" + path + " in jcr path :" + jcrpath );
     }
 
     @Override

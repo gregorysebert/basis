@@ -20,8 +20,8 @@ public class Mapping {
     private String BESTEMMELING = "";
     private String STAMNUMMER = "";
 
-    private enum DB {
-        PERS, GBBT;
+    public static enum DB {
+        PERS, GBBT, GBDO;
     }
 
     public Mapping(String database,HashMap<String, String> docMap )
@@ -34,6 +34,9 @@ public class Mapping {
                 break;
             case GBBT:
                 loadGBBT(docMap);
+                break;
+            case GBDO:
+                loadGBDO(docMap);
                 break;
         }
     }
@@ -49,6 +52,21 @@ public class Mapping {
       this.KLASSEMENT = docMap.get("CLSNUM");
       this.BESTEMMELING = docMap.get("DOCORG");
       this.STAMNUMMER = docMap.get("STAMNUMMER");
+    }
+
+    void loadGBDO(HashMap<String, String> docMap) {
+        this.DOSNUM = docMap.get("DOSNUM");
+        this.DOCNUM = docMap.get("DOCIDT");
+        this.KLASSEMENT = docMap.get("CLSNUM");
+        this.ZAAK = docMap.get("ZAAK");
+
+
+        this.OPSTELER = docMap.get("OPSRED");
+        this.AFSENDER = docMap.get("AFZEXP");
+
+
+        this.BESTEMMELING = docMap.get("BEDEOR");
+        this.STAMNUMMER = docMap.get("STAMNUMMER");
     }
 
     void loadGBBT(HashMap<String, String> docMap) {

@@ -18,7 +18,7 @@ public class BasisFiche {
     private String followExternEditor;
     private String followRequiredAction;
     private String followComments;
-    private String followAnswerByDate;
+    private Date followAnswerByDate;
 
     public String getFicheId() {
         return ficheId;
@@ -84,11 +84,11 @@ public class BasisFiche {
         this.followComments = followComments;
     }
 
-    public String getFollowAnswerByDate() {
+    public Date getFollowAnswerByDate() {
         return followAnswerByDate;
     }
 
-    public void setFollowAnswerByDate(String followAnswerByDate) {
+    public void setFollowAnswerByDate(Date followAnswerByDate) {
         this.followAnswerByDate = followAnswerByDate;
     }
 

@@ -22,13 +22,8 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import java.io.*;
-import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 public class MigrationUtil {
@@ -71,13 +66,38 @@ public class MigrationUtil {
         return filesList;
     }
 
-    public static boolean addBasisDocument(Session session, String BO, String path, String jcrpath,String documentsErrorPath) {
+    public static boolean addBasisDocument(Session session, String BO, String path, String jcrpath,String documentsErrorPath,String documentsMigratePath) {
         HashMap<String, String>  mapDoc=  readBasisFile(path,documentsErrorPath);
         try {
        Mapping mapping = new Mapping(BO, mapDoc);
-       BasisFolder basisFolder =   getBasisFolder(BO,mapping);
-       BasisDocument  basisDoc =   getBasisDoc(BO,mapping);
-       BasisFiche  basisFiche =   getBasisFiche(BO,mapping);
+
+            Mapping.DB db = Mapping.DB.valueOf(BO);
+
+            BasisFolder basisFolder = null;
+            BasisDocument  basisDoc = null;
+            BasisFiche  basisFiche = null;
+
+            switch(db) {
+                case PERS:
+                    basisFolder =   Pers.getBasisFolder(BO,mapping);
+                    basisDoc =   Pers.getBasisDoc(BO,mapping);
+                    basisFiche =   Pers.getBasisFiche(BO,mapping);
+                    break;
+                case GBBT:
+                    basisFolder =   Gbbt.getBasisFolder(BO,mapping);
+                    basisDoc =   Gbbt.getBasisDoc(BO,mapping);
+                    basisFiche =   Gbbt.getBasisFiche(BO,mapping);
+                    break;
+                case GBDO:
+                    basisFolder =   Gbdo.getBasisFolder(BO,mapping);
+                    basisDoc =   Gbdo.getBasisDoc(BO,mapping);
+                    basisFiche =   Gbdo.getBasisFiche(BO,mapping);
+                    break;
+        }
+
+
+
+
 
        String basisFolderPath = createDateFolder(basisDoc.getSysDate(),session,jcrpath + "/" + BO);
        String folderPath = createBasisFolder(session,basisFolderPath,basisFolder);
@@ -85,6 +105,9 @@ public class MigrationUtil {
        createBasisFiche(session,folderPath,basisFiche);
 
        session.save();
+
+       File file=   new File(path);
+       file.renameTo(new File(documentsMigratePath+"/"+file.getName()));
 
         } catch (Exception e) {
         File file=   new File(path);
@@ -183,50 +206,6 @@ public class MigrationUtil {
         return rootNode.getNode(dayFormat.format(date)).getPath().substring(1,rootNode.getNode(dayFormat.format(date)).getPath().length());
     }
 
-    public static BasisDocument getBasisDoc(String BO, Mapping mapping)  {
-        BasisDocument basisDoc= new BasisDocument();
-
-        basisDoc.setDocId(BO+"."+mapping.getDOSNUM()+"-"+mapping.getDOCNUM());
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyddMM");
-        ParsePosition pos = new ParsePosition(0);
-        Date sysdate = null;
-        try {
-            sysdate = formatter.parse(mapping.getSYSDAT().trim());
-        } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        basisDoc.setDocReference(mapping.getSTAMNUMMER());
-        basisDoc.setSysDate(sysdate);
-        return basisDoc;
-    }
-
-    public static BasisFolder getBasisFolder(String BO,Mapping mapping)
-    {
-        BasisFolder basisFolder= new BasisFolder();
-        String dosNum = mapping.getDOSNUM();
-        while (dosNum.length()!=8)
-        {
-            dosNum = "0"+dosNum;
-        }
-
-
-        basisFolder.setFolderId(BO+"."+dosNum);
-        basisFolder.setFolderExternalReference(mapping.getZAAK());
-        basisFolder.setFolderComments("Opsteller :" +  mapping.getOPSTELER() + "/n" +   "Afsender :" +  mapping.getAFSENDER() + "/n" + "Stamnummer/matricale :" +  mapping.getSTAMNUMMER() + "/n");
-
-        return basisFolder;
-    }
-
-    public static BasisFiche getBasisFiche(String BO,Mapping mapping)
-    {
-        BasisFiche basisFiche= new BasisFiche();
-        basisFiche.setFicheId("FU-000");
-        basisFiche.setFollowRequiredAction("Import Basis");
-        basisFiche.setFollowAnswerByDate(mapping.getSYSDAT());
-        return basisFiche;
-    }
-
     public static String createBasisFolder(Session session, String path, BasisFolder basisFolder) throws RepositoryException {
         Node rootNode = session.getRootNode().getNode(path);
         Node nodeBasisFolder = null;
@@ -277,7 +256,9 @@ public class MigrationUtil {
             Node nodeBasisFiche = rootNode.addNode(basisFiche.getFicheId(),"basis:basisFollow");
             nodeBasisFiche.setProperty("exo:title",basisFiche.getFicheId()) ;
             nodeBasisFiche.setProperty("basis:followRequiredAction",basisFiche.getFollowRequiredAction());
-            nodeBasisFiche.setProperty("basis:followAnswerByDate", basisFiche.getFollowAnswerByDate());
+            Calendar cal=Calendar.getInstance();
+            cal.setTime(basisFiche.getFollowAnswerByDate());
+            nodeBasisFiche.setProperty("basis:followAnswerByDate", cal);
             session.save();
 
             nodeBasisFiche.checkin();
