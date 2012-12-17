@@ -12,7 +12,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
-import sun.security.krb5.internal.util.KerberosString;
 
 import javax.jcr.Session;
 import javax.jcr.nodetype.PropertyDefinition;
@@ -76,6 +75,10 @@ public class UIAdvancedSearchForm extends UIForm  {
             Map<String,String[]> mapFolder = new HashMap<String,String[]>();
 
             String from = uiAdvancedSearchForm.getUIFormSelectBox(FIELD_FROM).getValue();
+            String url = Util.getPortalRequestContext().getRequestURI();
+            String urlSplitted[] = url.split("BO:");
+            //System.out.println("name bo : "+urlSplitted[1]);
+            String nameBO[] = urlSplitted[1].split("/");
             String xPathStatement = "";
 
 
@@ -126,80 +129,91 @@ public class UIAdvancedSearchForm extends UIForm  {
             }
 
             if(from.equals("Folder")){
-                String url = Util.getPortalRequestContext().getRequestURI();
-                String urlSplitted[] = url.split("BO:");
-                String nameBO[] = urlSplitted[1].split("/");
                 xPathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [";
-            }
 
-            if(!mapFolder.isEmpty()){
                 int i = 0 ;
-                for (String mapKey : mapFolder.keySet()) {
-                    String[] value = mapFolder.get(mapKey);
-                    //System.out.println("value 0 : " + value[0]+ "value 1 : "  +value[1] + " key : " + mapKey);
 
-                    if(value[0].equals("Equals")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "@"+mapKey+"='"+value[1]+"'";
+                if(!mapFolder.isEmpty()){
+
+                    for (String mapKey : mapFolder.keySet()) {
+                        String[] value = mapFolder.get(mapKey);
+                        //System.out.println("value 0 : " + value[0]+ "value 1 : "  +value[1] + " key : " + mapKey);
+
+                        if(value[0].equals("Equals")){
+                            if(!mapKey.contains("Date")){
+                                if(i == 0){
+                                    xPathStatement += "@"+mapKey+"='"+value[1]+"'";
+                                }
+                                else{
+                                    xPathStatement += " and @"+mapKey+"='"+value[1]+"'";
+                                }
                             }
                             else{
-                                xPathStatement += " and @"+mapKey+"='"+value[1]+"'";
+                                if(i == 0){
+                                    xPathStatement += "@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                                }
+                                else{
+                                    xPathStatement += " and @"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                                }
+
                             }
                         }
-                        else{
-                            if(i == 0){
-                                xPathStatement += "@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        else if(value[0].equals("Contains")){
+                            if(!mapKey.contains("Date")){
+                                if(i == 0){
+                                    xPathStatement += "jcr:like(@"+mapKey+",'%"+value[1]+"%')";
+                                }
+                                else{
+                                    xPathStatement += " and jcr:like(@"+mapKey+",'%"+value[1]+"%')";
+                                }
                             }
                             else{
-                                xPathStatement += " and @"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                                xPathStatement += "";
                             }
 
                         }
-                    }
-                    else if(value[0].equals("Contains")){
-                        if(i == 0){
-                            xPathStatement += "jcr:contains(@"+mapKey+"="+value[1]+")";
-                        }
-                        else{
-                            xPathStatement += " and jcr:contains(@"+mapKey+"="+value[1]+")";
-                        }
-
-                    }
-                    else if(value[0].equals("Not_Equals")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "not(@"+mapKey+"="+value[1]+")";
+                        else if(value[0].equals("Not_Equals")){
+                            if(!mapKey.contains("Date")){
+                                if(i == 0){
+                                    xPathStatement += "not(@"+mapKey+"='"+value[1]+"')";
+                                }
+                                else{
+                                    xPathStatement += " and not(@"+mapKey+"='"+value[1]+"')";
+                                }
                             }
                             else{
-                                xPathStatement += " and not(@"+mapKey+"="+value[1]+")";
+                                if(i == 0){
+                                    xPathStatement += "not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                                }
+                                else{
+                                    xPathStatement += " and not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                                }
+
                             }
+
                         }
-                        else{
-                            if(i == 0){
-                                xPathStatement += "not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                        else if(value[0].equals("Not_Contains")){
+                            if(!mapKey.contains("Date")){
+                                if(i == 0){
+                                    xPathStatement += "not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
+                                }
+                                else{
+                                    xPathStatement += " and not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
+                                }
                             }
                             else{
-                                xPathStatement += " and not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                                xPathStatement += "";
                             }
-
                         }
+
+                        i++;
 
                     }
-                    else if(value[0].equals("Not_Contains")){
-                        if(i == 0){
-                            xPathStatement += "not(jcr:contains(@"+mapKey+"="+value[1]+"))";
-                        }
-                        else{
-                            xPathStatement += " and not(jcr:contains(@"+mapKey+"="+value[1]+"))";
-                        }
-                    }
-
-                     i++;
-
+                    xPathStatement += "]";
                 }
-                xPathStatement += "]";
             }
+
+
 
             System.out.println("xpathstatement : " + xPathStatement);
 
@@ -219,7 +233,6 @@ public class UIAdvancedSearchForm extends UIForm  {
 
             }
 
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiAdvancedSearchForm) ;
         }
     }
 
