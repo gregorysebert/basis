@@ -61,7 +61,7 @@ public class MigrationServiceImpl implements MigrationService
         if (!rootNode.hasNode(BO))
         {
             Node boNode = rootNode.addNode(BO, "basis:basisBO");
-            boNode.setProperty("basis:BOCount", "0");
+            boNode.setProperty("basis:BOCount", "00000000");
             boNode.setProperty("basis:BODisplayRNN", false);
             session.save();
         }

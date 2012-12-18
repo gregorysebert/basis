@@ -17,7 +17,13 @@ public class Pers {
     public static BasisDocument getBasisDoc(String BO, Mapping mapping)  {
         BasisDocument basisDoc= new BasisDocument();
 
-        basisDoc.setDocId(BO+"."+mapping.getDOSNUM()+"-"+mapping.getDOCNUM());
+        String dosNum = mapping.getDOSNUM();
+        while (dosNum.length()!=8)
+        {
+            dosNum = "0"+dosNum;
+        }
+
+        basisDoc.setDocId(BO+"."+dosNum+"-"+mapping.getDOCNUM());
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyddMM");
         ParsePosition pos = new ParsePosition(0);
@@ -62,7 +68,7 @@ public class Pers {
 
         if (mapping.getSTAMNUMMER()!=null)
         {
-            comment = comment + "Stamnummer/matricale :" +  mapping.getSTAMNUMMER() + "<BR>";
+            comment = comment + "Stamnummer/matricule :" +  mapping.getSTAMNUMMER() + "<BR>";
         }
 
 
