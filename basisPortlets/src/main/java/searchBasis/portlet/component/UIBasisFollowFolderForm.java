@@ -27,7 +27,8 @@ import java.util.List;
 )
 public class UIBasisFollowFolderForm extends UIForm {
 
-    public static final String FIELD_RADIOBOX = "RadioBox" ;
+    public static final String FIELD_RADIOBOX = "RadioBox_folder" ;
+    private PropertyDefinition[] basisFollowFolderNodetypeProperties;
 
     public UIBasisFollowFolderForm() throws Exception {
 
@@ -37,17 +38,25 @@ public class UIBasisFollowFolderForm extends UIForm {
         ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
         RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
         NodeType basisFolderNodetype = rs.getRepository("repository").getNodeTypeManager().getNodeType("basis:basisFollow");
-        PropertyDefinition[] basisFolderNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
-        for (PropertyDefinition property : basisFolderNodetypeProperties) {
+        basisFollowFolderNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
+        for (PropertyDefinition property : basisFollowFolderNodetypeProperties) {
             if(property.getName().contains("basis")) {
                 if(!property.getName().contains("followEditorType")) {
                     UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, parent+"_"+property.getName());
-                    uiPropertyInputForm.load(property,"basisFollow");
+                    uiPropertyInputForm.load(property,"folder_basisFollow");
                 }
             }
 
         }
         List<SelectItemOption<String>> lsRadioBox = new ArrayList<SelectItemOption<String>>() ;
         addUIFormInput(new UIFormRadioBoxInput(FIELD_RADIOBOX,FIELD_RADIOBOX,lsRadioBox));
+    }
+
+    public PropertyDefinition[] getBasisFollowFolderNodetypeProperties() {
+        return basisFollowFolderNodetypeProperties;
+    }
+
+    public void setBasisFollowFolderNodetypeProperties(PropertyDefinition[] basisFollowFolderNodetypeProperties) {
+        this.basisFollowFolderNodetypeProperties = basisFollowFolderNodetypeProperties;
     }
 }

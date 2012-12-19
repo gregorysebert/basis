@@ -1,10 +1,12 @@
 package searchBasis.portlet.component;
 
+import basis.selector.service.BasisSelectorService;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -13,10 +15,6 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
-import basis.selector.service.BasisSelectorService;
-
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -190,11 +188,6 @@ public class UISimpleSearchForm extends UIForm {
                     //uiSimpleSearchForm.getUIFormSelectBox(QUERY).setDefaultValue("currentUser");
                     uiSimpleSearchForm.setRendered(false);
 
-                }
-                else{
-                    uiApp.addMessage(new ApplicationMessage("UISimpleSearchForm.msg.value-null", null, ApplicationMessage.WARNING));
-                    event.getRequestContext().addUIComponentToUpdateByAjax(uiSimpleSearchForm);
-                    return;
                 }
             } catch (RepositoryException e) {
                 System.out.println("RepositoryException : " + e);

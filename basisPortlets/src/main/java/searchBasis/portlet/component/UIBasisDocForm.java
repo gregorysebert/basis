@@ -24,6 +24,7 @@ import javax.jcr.nodetype.PropertyDefinition;
 public class UIBasisDocForm extends UIForm {
 
     public static final String FIELD_DOC_ID = "exo:title" ;
+    private   PropertyDefinition[] basisDocNodetypeProperties;
 
     public UIBasisDocForm() throws Exception {
     }
@@ -32,10 +33,10 @@ public class UIBasisDocForm extends UIForm {
         ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
         RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
         NodeType basisFolderNodetype = rs.getRepository("repository").getNodeTypeManager().getNodeType("basis:basisDocument");
-        PropertyDefinition[] basisFolderNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
+        basisDocNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
         UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, FIELD_DOC_ID);
         uiPropertyInputForm.load(null,"basisDocument.label.docId");
-        for (PropertyDefinition property : basisFolderNodetypeProperties) {
+        for (PropertyDefinition property : basisDocNodetypeProperties) {
             if(property.getName().contains("basis")) {
                 if(!property.getName().contains("docSenderType")) {
                     uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, parent+"_"+property.getName());
@@ -44,5 +45,13 @@ public class UIBasisDocForm extends UIForm {
             }
 
         }
+    }
+
+    public PropertyDefinition[] getBasisDocNodetypeProperties() {
+        return basisDocNodetypeProperties;
+    }
+
+    public void setBasisDocNodetypeProperties(PropertyDefinition[] basisDocNodetypeProperties) {
+        this.basisDocNodetypeProperties = basisDocNodetypeProperties;
     }
 }

@@ -1,9 +1,14 @@
 <style type="text/css">
-  #BasisPropertyInput {
+  #basisFolder.label.folderNumber {
      width: 400px;
      text-align:left;
      font-size: 15px;
     }
+     #basisFolder.label.folderInternSender{
+         width: 400px;
+         text-align:left;
+         font-size: 15px;
+     }
     #BasisProperty {
      width: 200px;
      text-align:left;
@@ -33,23 +38,37 @@
                 <%}
                  if(fieldName.contains("searchType")){
                     if(fieldName.contains("comments")){%>
-                        <td id="BasisProperty">
-							<% def fieldNameComments = fieldName.split("_searchType")[0]; %>
-                            <%=_ctx.appRes(fieldNameComments.split("_")[1])%>
-                        </td>
+					
+						<% def fieldNameComments = fieldName.split("_searchType")[0]; 
+							if(fieldNameComments.contains("folder_basisFollow") || fieldNameComments.contains("document_basisFollow")){%>
+                                <td id="BasisProperty"><%=_ctx.appRes(fieldNameComments.split("_")[2])%></td>
+                          <%}
+						  
+						  if(!fieldNameComments.contains("folder_basisFollow") && !fieldNameComments.contains("document_basisFollow")){%>
+                                <td id="BasisProperty"><%=_ctx.appRes(fieldNameComments.split("_")[1])%></td>
+                          <%}%>
                         <td id="searchType"><% uiform.renderField(field) %></td>
+							
                 <%	}
 					else{%>
-                        <td id="BasisProperty">
-                            <%=_ctx.appRes(fieldName.split("_searchType")[0])%>
-                        </td>
+                        
+							<%def fieldNameProperty = fieldName.split("_searchType")[0];
+							  if(fieldNameProperty.contains("folder_basisFollow") || fieldNameProperty.contains("document_basisFollow")){
+							%>
+								<td id="BasisProperty"><%=_ctx.appRes(fieldNameProperty.split("_")[1])%></td>
+							<%
+                            }
+							if(!fieldNameProperty.contains("folder_basisFollow") && !fieldNameProperty.contains("document_basisFollow")){%>
+                                <td id="BasisProperty"><%=_ctx.appRes(fieldNameProperty)%></td>
+                          <%}%>
+                        
                         <td id="searchType"><% uiform.renderField(field) %></td>
                 <%	}
 				}
                 if(!fieldName.contains("searchType") && !fieldName.contains("checkBox")) {
                 %>
 
-                        <td id="BasisNodeInput"><% uiform.renderField(field) %></td>
+                        <td id="$field.id"><% uiform.renderField(field) %></td>
                 <%}%>
 
             <%

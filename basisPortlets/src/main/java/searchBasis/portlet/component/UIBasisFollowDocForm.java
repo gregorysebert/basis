@@ -27,7 +27,8 @@ import java.util.List;
 )
 public class UIBasisFollowDocForm extends UIForm {
 
-    public static final String FIELD_RADIOBOX = "RadioBox" ;
+    public static final String FIELD_RADIOBOX = "RadioBox_doc" ;
+    private PropertyDefinition[] basisFollowDocNodetypeProperties;
 
     public UIBasisFollowDocForm() throws Exception {
 
@@ -37,24 +38,25 @@ public class UIBasisFollowDocForm extends UIForm {
         ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
         RepositoryService rs = (RepositoryService) exoContainer.getComponentInstanceOfType(RepositoryService.class);
         NodeType basisFolderNodetype = rs.getRepository("repository").getNodeTypeManager().getNodeType("basis:basisFollow");
-        PropertyDefinition[] basisFolderNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
-        for (PropertyDefinition property : basisFolderNodetypeProperties) {
+        basisFollowDocNodetypeProperties = basisFolderNodetype.getPropertyDefinitions();
+        for (PropertyDefinition property : basisFollowDocNodetypeProperties) {
             if(property.getName().contains("basis")) {
                 if(!property.getName().contains("followEditorType")) {
-                    String labelProperty;
-                    if(!property.getName().contains("Comments")) {
-                        labelProperty = "basisFollow.label." + property.getName().split("basis:")[1];
-                    }
-                    else {
-                        labelProperty = "basis.label." + property.getName().split("basis:follow")[1].toLowerCase();
-                    }
                     UIPropertyInputForm uiPropertyInputForm = addChild(UIPropertyInputForm.class,null, parent+"_"+property.getName());
-                    uiPropertyInputForm.load(property,"basisFollow");
+                    uiPropertyInputForm.load(property,"document_basisFollow");
                 }
             }
 
         }
         List<SelectItemOption<String>> lsRadioBox = new ArrayList<SelectItemOption<String>>() ;
         addUIFormInput(new UIFormRadioBoxInput(FIELD_RADIOBOX,FIELD_RADIOBOX,lsRadioBox));
+    }
+
+    public PropertyDefinition[] getBasisFollowDocNodetypeProperties() {
+        return basisFollowDocNodetypeProperties;
+    }
+
+    public void setBasisFollowDocNodetypeProperties(PropertyDefinition[] basisFollowDocNodetypeProperties) {
+        this.basisFollowDocNodetypeProperties = basisFollowDocNodetypeProperties;
     }
 }

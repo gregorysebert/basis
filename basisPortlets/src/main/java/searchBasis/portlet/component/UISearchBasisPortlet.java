@@ -17,6 +17,8 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 import javax.jcr.query.QueryResult;
+import java.util.HashMap;
+import java.util.Map;
 
 
 //this part is configuration of the portlet, we set the path to the template groovy.
@@ -33,6 +35,10 @@ public class UISearchBasisPortlet extends UIPortletApplication {
     private QueryResult queryResult = null;
     private String typeQuery = "";
     private String attribute = "";
+    private Map<String,String[]> mapFolder = new HashMap<String,String[]>();
+    private Map<String,String[]> mapDoc = new HashMap<String,String[]>();
+    private Map<String,String[]> mapFollowDoc = new HashMap<String,String[]>();
+    private Map<String,String[]> mapFollowFolder = new HashMap<String,String[]>();
 
 
     public UISearchBasisPortlet( ) throws Exception {
@@ -80,6 +86,38 @@ public class UISearchBasisPortlet extends UIPortletApplication {
 
     public void setAttribute(String attribute) {
         this.attribute = attribute;
+    }
+
+    public Map<String, String[]> getMapFolder() {
+        return mapFolder;
+    }
+
+    public void setMapFolder(Map<String, String[]> mapFolder) {
+        this.mapFolder = mapFolder;
+    }
+
+    public Map<String, String[]> getMapDoc() {
+        return mapDoc;
+    }
+
+    public void setMapDoc(Map<String, String[]> mapDoc) {
+        this.mapDoc = mapDoc;
+    }
+
+    public Map<String, String[]> getMapFollowDoc() {
+        return mapFollowDoc;
+    }
+
+    public void setMapFollowDoc(Map<String, String[]> mapFollowDoc) {
+        this.mapFollowDoc = mapFollowDoc;
+    }
+
+    public Map<String, String[]> getMapFollowFolder() {
+        return mapFollowFolder;
+    }
+
+    public void setMapFollowFolder(Map<String, String[]> mapFollowFolder) {
+        this.mapFollowFolder = mapFollowFolder;
     }
 
     static public class SwitchTabActionListener extends EventListener<UISearchBasisPortlet>

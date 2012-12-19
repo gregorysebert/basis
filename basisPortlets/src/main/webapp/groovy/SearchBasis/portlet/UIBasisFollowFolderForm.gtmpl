@@ -9,6 +9,7 @@
        margin-bottom: 10px;
        overflow:hidden;
        border: 1px solid #b7b7b7;
+       width: 1000px;
     }
   </style>
   <%import org.exoplatform.webui.core.model.SelectItemOption;
@@ -24,7 +25,7 @@
 		<legend>$uicomponent.id</legend>
 			<table id="TableQueryAdvanced">
 				 <% for(uiChild in uicomponent.getChildren()) {%>
-				            <%if(uiChild.getName().equals("RadioBox")){
+				            <%if(uiChild.getName().equals("RadioBox_folder")){
                                   uiChild.setOptions(lsRadioBox);
                             } %>
 							<tr><%uicomponent.renderChild(uiChild) ;%> </tr> <%
