@@ -14,10 +14,12 @@ import java.util.Date;
  */
 public class Gbbt {
 
-    public static BasisDocument getBasisDoc(String BO, Mapping mapping)  {
+    public static BasisDocument getBasisDoc(String BO, Mapping mapping, String BOCountPattern)  {
         BasisDocument basisDoc= new BasisDocument();
 
-        basisDoc.setDocId(BO+"."+mapping.getDOSNUM()+"-"+mapping.getDOCNUM());
+        String dosNum = MigrationUtil.checkDosNum(mapping.getDOSNUM(), BOCountPattern);
+
+        basisDoc.setDocId(BO+"."+dosNum+"-"+mapping.getDOCNUM());
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyddMM");
         ParsePosition pos = new ParsePosition(0);
@@ -32,15 +34,10 @@ public class Gbbt {
         return basisDoc;
     }
 
-    public static BasisFolder getBasisFolder(String BO,Mapping mapping)
+    public static BasisFolder getBasisFolder(String BO,Mapping mapping, String BOCountPattern)
     {
         BasisFolder basisFolder= new BasisFolder();
-        String dosNum = mapping.getDOSNUM();
-        while (dosNum.length()!=8)
-        {
-            dosNum = "0"+dosNum;
-        }
-
+        String dosNum = MigrationUtil.checkDosNum(mapping.getDOSNUM(), BOCountPattern);
 
         basisFolder.setFolderId(BO+"."+dosNum);
         basisFolder.setFolderExternalReference(mapping.getZAAK());

@@ -40,7 +40,7 @@ public class MigrationServiceImpl implements MigrationService
 
 
     @Override
-    public void MigrateAll(String BO) {
+    public void MigrateAll(String BO, String BOCountPattern) {
         //To change body of implemented methods use File | Settings | File Templates.
         Properties prop = getPropsFile("conf/application.properties");
         this.path = prop.getProperty(BO+".basis.documentsPath");
@@ -78,7 +78,7 @@ public class MigrationServiceImpl implements MigrationService
 
               log.info("Migrating file : " + fileName + " index : "+ i);
 
-              MigrationUtil.addBasisDocument(session, BO, path + "/" + fileName,jcrpath,documentsErrorPath,documentsMigratePath);
+              MigrationUtil.addBasisDocument(session, BO, path + "/" + fileName,jcrpath,documentsErrorPath,documentsMigratePath, BOCountPattern);
 
               i++;
 

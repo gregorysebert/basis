@@ -66,9 +66,10 @@ public class MigrationUtil {
         return filesList;
     }
 
-    public static boolean addBasisDocument(Session session, String BO, String path, String jcrpath,String documentsErrorPath,String documentsMigratePath) {
+    public static boolean addBasisDocument(Session session, String BO, String path, String jcrpath,String documentsErrorPath,String documentsMigratePath, String BOCountPattern) {
         HashMap<String, String>  mapDoc=  readBasisFile(path,documentsErrorPath);
         try {
+       BOCountPattern = BOCountPattern;
        Mapping mapping = new Mapping(BO, mapDoc);
 
             Mapping.DB db = Mapping.DB.valueOf(BO);
@@ -79,25 +80,21 @@ public class MigrationUtil {
 
             switch(db) {
                 case PERS:
-                    basisFolder =   Pers.getBasisFolder(BO,mapping);
-                    basisDoc =   Pers.getBasisDoc(BO,mapping);
+                    basisFolder =   Pers.getBasisFolder(BO,mapping, BOCountPattern);
+                    basisDoc =   Pers.getBasisDoc(BO,mapping, BOCountPattern);
                     basisFiche =   Pers.getBasisFiche(BO,mapping);
                     break;
                 case GBBT:
-                    basisFolder =   Gbbt.getBasisFolder(BO,mapping);
-                    basisDoc =   Gbbt.getBasisDoc(BO,mapping);
+                    basisFolder =   Gbbt.getBasisFolder(BO,mapping, BOCountPattern);
+                    basisDoc =   Gbbt.getBasisDoc(BO,mapping, BOCountPattern);
                     basisFiche =   Gbbt.getBasisFiche(BO,mapping);
                     break;
                 case GBDO:
-                    basisFolder =   Gbdo.getBasisFolder(BO,mapping);
-                    basisDoc =   Gbdo.getBasisDoc(BO,mapping);
+                    basisFolder =   Gbdo.getBasisFolder(BO,mapping, BOCountPattern);
+                    basisDoc =   Gbdo.getBasisDoc(BO,mapping, BOCountPattern);
                     basisFiche =   Gbdo.getBasisFiche(BO,mapping);
                     break;
         }
-
-
-
-
 
        String basisFolderPath = createDateFolder(basisDoc.getSysDate(),session,jcrpath + "/" + BO);
        String folderPath = createBasisFolder(session,basisFolderPath,basisFolder);
@@ -267,6 +264,18 @@ public class MigrationUtil {
         }
 
         session.save();
+    }
+
+    public static String checkDosNum (String dosNum, String BOCountPattern)
+    {
+        while (dosNum.length()!=6)
+        {
+            dosNum = "0"+dosNum;
+        }
+
+        dosNum =  BOCountPattern + dosNum;
+
+        return dosNum;
     }
 
     }

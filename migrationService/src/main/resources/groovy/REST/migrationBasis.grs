@@ -13,11 +13,11 @@ import basis.migration.service.MigrationService;
 @Path("/MigrationService")
 public class MigrationRestService {
   @GET
-  @Path("MigrateAll/{BO}")
-  public String MigrateAll(@PathParam("BO") String BO)
+  @Path("MigrateAll/{BO}/{BOCountPattern}")
+  public String MigrateAll(@PathParam("BO") String BO, @PathParam("BOCountPattern") String BOCountPattern)
   {
     MigrationService  migrationService =  (MigrationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(MigrationService);
-    migrationService.MigrateAll(BO);
+    migrationService.MigrateAll(BO, BOCount);
     return "<html><body>Migration done!</body></html>";
   }
 

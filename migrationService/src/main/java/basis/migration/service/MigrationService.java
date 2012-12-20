@@ -8,7 +8,7 @@ package basis.migration.service;
  */
 public interface MigrationService {
 
-    public void MigrateAll(String BO) throws Exception;
+    public void MigrateAll(String BO, String BOCountPattern) throws Exception;
 
     public void MigrateDocument(String BO,String docPath) throws Exception;
 
