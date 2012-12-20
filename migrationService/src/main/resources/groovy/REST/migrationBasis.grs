@@ -17,7 +17,7 @@ public class MigrationRestService {
   public String MigrateAll(@PathParam("BO") String BO, @PathParam("BOCountPattern") String BOCountPattern)
   {
     MigrationService  migrationService =  (MigrationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(MigrationService);
-    migrationService.MigrateAll(BO, BOCount);
+    migrationService.MigrateAll(BO, BOCountPattern);
     return "<html><body>Migration done!</body></html>";
   }
 

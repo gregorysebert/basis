@@ -55,12 +55,12 @@ public class MigrationServiceImpl implements MigrationService
 
         Node rootNode = null;
         try {
-            rootNode = session.getRootNode().getNode(jcrpath);
+            rootNode = session.getRootNode();
 
 
-        if (!rootNode.hasNode(BO))
+        if (!rootNode.hasNode(jcrpath))
         {
-            Node boNode = rootNode.addNode(BO, "basis:basisBO");
+            Node boNode = rootNode.addNode(jcrpath, "basis:basisBO");
             boNode.setProperty("basis:BOCount", "00000000");
             boNode.setProperty("basis:BODisplayRNN", false);
             session.save();

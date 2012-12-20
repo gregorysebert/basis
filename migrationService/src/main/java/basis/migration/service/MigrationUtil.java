@@ -96,7 +96,7 @@ public class MigrationUtil {
                     break;
         }
 
-       String basisFolderPath = createDateFolder(basisDoc.getSysDate(),session,jcrpath + "/" + BO);
+       String basisFolderPath = createDateFolder(basisDoc.getSysDate(),session,jcrpath);
        String folderPath = createBasisFolder(session,basisFolderPath,basisFolder);
        createBasisDocument(session,folderPath,basisDoc);
        createBasisFiche(session,folderPath,basisFiche);
