@@ -19,6 +19,12 @@ public class Mapping {
     private String KLASSEMENT = "";
     private String BESTEMMELING = "";
     private String STAMNUMMER = "";
+    private String DOCIDT="";
+    private String ONDERWERP="";
+    private String REFERENCIE="";
+    private String SLEUTELWORDEN="";
+    private String TYPEDOC="";
+
 
     public static enum DB {
         PERS, GBBT, GBDO;
@@ -56,17 +62,18 @@ public class Mapping {
 
     void loadGBDO(HashMap<String, String> docMap) {
         this.DOSNUM = docMap.get("DOSNUM");
-        this.DOCNUM = docMap.get("DOCIDT");
-        this.KLASSEMENT = docMap.get("CLSNUM");
-        this.ZAAK = docMap.get("ZAAK");
-
-
-        this.OPSTELER = docMap.get("OPSRED");
+        this.DOCIDT = docMap.get("DOCIDT");
+        this.DOCNUM = docMap.get("DOCNUM");
+        this.KLASSEMENT = docMap.get("KLANUM");
+        this.ZAAK = docMap.get("ZAAAFF");
+        this.ONDERWERP = docMap.get("OBJECT");
+        this.REFERENCIE = docMap.get("REFDOC");
         this.AFSENDER = docMap.get("AFZEXP");
-
-
+        this.SYSDAT = docMap.get("INSDAT");
         this.BESTEMMELING = docMap.get("BEDEOR");
-        this.STAMNUMMER = docMap.get("STAMNUMMER");
+        this.OPSTELER = docMap.get("OPSRED");
+        this.SLEUTELWORDEN = docMap.get("KEYWDS");
+        this.TYPEDOC = docMap.get("TYPDOC");
     }
 
     void loadGBBT(HashMap<String, String> docMap) {
@@ -112,6 +119,30 @@ public class Mapping {
 
     public String getSTAMNUMMER() {
         return STAMNUMMER;
+    }
+
+
+    public String getDOCIDT() {
+        return DOCIDT;
+    }
+
+
+    public String getONDERWERP() {
+        return ONDERWERP;
+    }
+
+
+    public String getREFERENCIE() {
+        return REFERENCIE;
+    }
+
+
+    public String getSLEUTELWORDEN() {
+        return SLEUTELWORDEN;
+    }
+
+    public String getTYPEDOC() {
+        return TYPEDOC;
     }
 
 }

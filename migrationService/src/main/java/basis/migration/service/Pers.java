@@ -33,6 +33,26 @@ public class Pers {
         if (mapping.getSTAMNUMMER()!=null) basisDoc.setDocReference(mapping.getSTAMNUMMER());
         else basisDoc.setDocReference("");
 
+        String comment = "";
+
+        if (mapping.getOPSTELER()!=null)
+        {
+            comment = comment + "Opsteller :" +  mapping.getOPSTELER() + "<BR>";
+        }
+
+        if (mapping.getAFSENDER()!=null)
+        {
+            comment = comment + "Afsender :" +  mapping.getAFSENDER() + "<BR>";
+        }
+
+        if (mapping.getSTAMNUMMER()!=null)
+        {
+            comment = comment + "Stamnummer/matricule :" +  mapping.getSTAMNUMMER() + "<BR>";
+        }
+
+
+        basisDoc.setDocComments(comment);
+
         basisDoc.setSysDate(sysdate);
         return basisDoc;
     }

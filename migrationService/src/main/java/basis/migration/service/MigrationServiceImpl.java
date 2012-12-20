@@ -18,6 +18,7 @@ public class MigrationServiceImpl implements MigrationService
     private String jcrpath;
     private String documentsErrorPath;
     private String documentsMigratePath;
+    private String displayRNN;
 
     public MigrationServiceImpl() {
         log.debug("basis.migration.service.MigrationServiceImpl");
@@ -47,6 +48,7 @@ public class MigrationServiceImpl implements MigrationService
         this.documentsErrorPath = prop.getProperty(BO+".basis.documentsErrorPath");
         this.jcrpath = prop.getProperty(BO+".basis.jcrPath");
         this.documentsMigratePath = prop.getProperty(BO+".basis.documentsMigratedPath");
+        this.displayRNN = prop.getProperty(BO+".basis.displayRNN");
 
 
         log.info("Starting Migration of fastdoc folder :" + path + " in jcr path :" + jcrpath );
@@ -62,7 +64,7 @@ public class MigrationServiceImpl implements MigrationService
         {
             Node boNode = rootNode.addNode(jcrpath, "basis:basisBO");
             boNode.setProperty("basis:BOCount", "00000000");
-            boNode.setProperty("basis:BODisplayRNN", false);
+            boNode.setProperty("basis:BODisplayRNN",  Boolean.valueOf(displayRNN).booleanValue());
             session.save();
         }
 

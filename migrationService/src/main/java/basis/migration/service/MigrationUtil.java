@@ -19,6 +19,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
 import javax.jcr.Node;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import java.io.*;
@@ -215,8 +216,8 @@ public class MigrationUtil {
             String basisFolderNodeTitle = folderId[0] + "." + folderId[1].substring(0, 2) + "." + folderId[1].substring(2, 5) + "." + folderId[1].substring(5);
             nodeBasisFolder.setProperty("exo:title",basisFolderNodeTitle) ;
             nodeBasisFolder.setProperty("basis:folderLanguage", "NL");
-            nodeBasisFolder.setProperty("basis:folderExternalReference", basisFolder.getFolderExternalReference());
-            nodeBasisFolder.setProperty("basis:folderComments", basisFolder.getFolderComments());
+            if (basisFolder.getFolderExternalReference()!=null) nodeBasisFolder.setProperty("basis:folderExternalReference", basisFolder.getFolderExternalReference());
+            if (basisFolder.getFolderComments()!=null) nodeBasisFolder.setProperty("basis:folderComments", basisFolder.getFolderComments());
         }
         else  nodeBasisFolder =  rootNode.getNode(basisFolder.getFolderId());
 
@@ -235,7 +236,21 @@ public class MigrationUtil {
 
             String basisDocNodeTitle = docid[0] + "." + docid[1].substring(0, 2) + "." + docid[1].substring(2, 5) + "." + docid[1].substring(5);
             nodeBasisDoc.setProperty("exo:title",basisDocNodeTitle) ;
-            nodeBasisDoc.setProperty("basis:docReference", basisDocument.getDocReference());
+            if (basisDocument.getDocReference()!=null) nodeBasisDoc.setProperty("basis:docReference", basisDocument.getDocReference());
+            if (basisDocument.getDocComments()!=null) nodeBasisDoc.setProperty("basis:docComments", basisDocument.getDocComments());
+            if (basisDocument.getDocExternSenderAdress()!=null) nodeBasisDoc.setProperty("basis:docExternSenderAdress", basisDocument.getDocExternSenderAdress());
+            if (basisDocument.getDocKeywords()!=null)
+            {
+                Property prop = nodeBasisDoc.getProperty("basis:docKeywords");
+                String[] values = {basisDocument.getDocKeywords()};
+                prop.setValue(values);
+            }
+            if (basisDocument.getDocDate()!=null)
+            {
+                Calendar cal=Calendar.getInstance();
+                cal.setTime(basisDocument.getDocDate());
+                nodeBasisDoc.setProperty("basis:docDate", cal);
+            }
             session.save();
 
             nodeBasisDoc.checkin();
@@ -268,7 +283,7 @@ public class MigrationUtil {
 
     public static String checkDosNum (String dosNum, String BOCountPattern)
     {
-        while (dosNum.length()!=6)
+        while (dosNum.length()<=6)
         {
             dosNum = "0"+dosNum;
         }

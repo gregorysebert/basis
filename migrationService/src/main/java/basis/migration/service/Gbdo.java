@@ -29,8 +29,31 @@ public class Gbdo {
         } catch (ParseException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        basisDoc.setDocReference(mapping.getSTAMNUMMER());
+        basisDoc.setDocReference(mapping.getZAAK());
         basisDoc.setSysDate(sysdate);
+        basisDoc.setDocDate(sysdate);
+        basisDoc.setDocExternSenderAdress(mapping.getAFSENDER());
+
+        String comment ="";
+        if (mapping.getKLASSEMENT()!=null)
+            comment =  "Klassement :" + mapping.getKLASSEMENT()+ "<BR>";
+        if ( mapping.getONDERWERP()!=null)
+            comment =  "Onderwerp :" + mapping.getONDERWERP()+ "<BR>";
+        if (mapping.getREFERENCIE()!=null)
+            comment =  "Referentie :" + mapping.getREFERENCIE()+ "<BR>";
+        if (mapping.getBESTEMMELING()!=null)
+            comment =  "Bestemmeling :" + mapping.getBESTEMMELING()+ "<BR>";
+        if (mapping.getOPSTELER()!=null)
+            comment =  "Opsteller :" + mapping.getOPSTELER()+ "<BR>";
+        if (mapping.getTYPEDOC()!=null)
+            comment =  "Type document :" + mapping.getTYPEDOC()+ "<BR>";
+        if (mapping.getDOCIDT()!=null)
+            comment =  "Document IDT :" + mapping.getDOCIDT()+ "<BR>";
+
+        basisDoc.setDocComments(comment);
+
+        basisDoc.setDocKeywords(mapping.getSLEUTELWORDEN());
+
         return basisDoc;
     }
 
@@ -40,8 +63,24 @@ public class Gbdo {
         String dosNum = MigrationUtil.checkDosNum(mapping.getDOSNUM(), BOCountPattern);
 
         basisFolder.setFolderId(BO+"."+dosNum);
-        basisFolder.setFolderExternalReference(mapping.getZAAK());
-        basisFolder.setFolderComments("Opsteller :" +  mapping.getOPSTELER() + "<BR>" +   "Afsender :" +  mapping.getAFSENDER() + "<BR>" + "Stamnummer/matricale :" +  mapping.getSTAMNUMMER() + "<BR>");
+
+        String comment ="";
+        if (mapping.getKLASSEMENT()!=null)
+            comment =  "Klassement :" + mapping.getKLASSEMENT()+ "<BR>";
+        if ( mapping.getONDERWERP()!=null)
+            comment =  "Onderwerp :" + mapping.getONDERWERP()+ "<BR>";
+        if (mapping.getREFERENCIE()!=null)
+            comment =  "Referentie :" + mapping.getREFERENCIE()+ "<BR>";
+        if (mapping.getBESTEMMELING()!=null)
+            comment =  "Bestemmeling :" + mapping.getBESTEMMELING()+ "<BR>";
+        if (mapping.getOPSTELER()!=null)
+            comment =  "Opsteller :" + mapping.getOPSTELER()+ "<BR>";
+        if (mapping.getTYPEDOC()!=null)
+            comment =  "Type document :" + mapping.getTYPEDOC()+ "<BR>";
+        if (mapping.getDOCIDT()!=null)
+            comment =  "Document IDT :" + mapping.getDOCIDT()+ "<BR>";
+
+        basisFolder.setFolderComments(comment);
 
         return basisFolder;
     }
@@ -52,10 +91,9 @@ public class Gbdo {
         basisFiche.setFicheId("FU-000");
         basisFiche.setFollowRequiredAction("Import Basis");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyddMM");
-        ParsePosition pos = new ParsePosition(0);
         Date sysdate = null;
         try {
-            sysdate = formatter.parse(mapping.getSYSDAT().trim());
+            sysdate = formatter.parse(mapping.getSYSDAT());
         } catch (ParseException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

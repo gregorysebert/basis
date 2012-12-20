@@ -24,6 +24,15 @@ public class BasisDocument {
     private String docExternSenderCity;
     private String docExternSenderCountry;
     private Date sysDate;
+    private String docComments;
+
+    public String getDocComments() {
+        return docComments;
+    }
+
+    public void setDocComments(String docComments) {
+        this.docComments = docComments;
+    }
 
     public String getDocId() {
         return docId;
