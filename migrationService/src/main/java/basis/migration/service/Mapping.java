@@ -83,7 +83,6 @@ public class Mapping {
     }
 
 
-
     public String getDOSNUM() {
         return DOSNUM;
     }

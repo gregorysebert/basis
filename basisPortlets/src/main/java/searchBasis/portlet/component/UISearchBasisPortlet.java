@@ -35,6 +35,7 @@ public class UISearchBasisPortlet extends UIPortletApplication {
     private QueryResult queryResult = null;
     private String typeQuery = "";
     private String attribute = "";
+    private String from = "" ;
     private Map<String,String[]> mapFolder = new HashMap<String,String[]>();
     private Map<String,String[]> mapDoc = new HashMap<String,String[]>();
     private Map<String,String[]> mapFollowDoc = new HashMap<String,String[]>();
@@ -118,6 +119,14 @@ public class UISearchBasisPortlet extends UIPortletApplication {
 
     public void setMapFollowFolder(Map<String, String[]> mapFollowFolder) {
         this.mapFollowFolder = mapFollowFolder;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
     }
 
     static public class SwitchTabActionListener extends EventListener<UISearchBasisPortlet>

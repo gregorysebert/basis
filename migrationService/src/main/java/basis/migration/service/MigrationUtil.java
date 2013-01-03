@@ -133,9 +133,29 @@ public class MigrationUtil {
             bis = new BufferedInputStream(fis);
             dis = new DataInputStream(bis);
 
+
+
             // dis.available() returns 0 if the file does not have more lines.
             while (dis.available() != 0) {
-                String[] FieldList = dis.readLine().split("</#FIELD>");
+
+                String disRead = dis.readLine();
+                String tmpProperty = "" ;
+                if (!disRead.contains("<#FIELD NAME = ") && !disRead.contains("</#FIELD>")){
+                    disRead = " <#FIELD NAME = " + tmpProperty + ">" + disRead + " </#FIELD>";
+                    //log.info("add all property");
+                }
+                else if(!disRead.contains("</#FIELD>")){
+                    disRead = disRead + " </#FIELD>";
+                    //log.info("Replace space");
+                }
+                else if(!disRead.contains("<#FIELD NAME = ")){
+                    disRead = " <#FIELD NAME = " + tmpProperty + ">" + disRead;
+                    //log.info("add property");
+                }
+
+                //log.info(disRead);
+
+                String[] FieldList = disRead.split("</#FIELD>");
                 for (String field : FieldList)
                 {
                     field = field.replace("<#FIELD NAME = ","");
@@ -143,13 +163,14 @@ public class MigrationUtil {
 
                     if (temp.length == 2)
                     {
-                    dataBasis.put(temp[0],temp[1]);
+                        dataBasis.put(temp[0],temp[1]);
+                        tmpProperty = temp[0];
                     }
                     else
                     {
-                        fis.close();
-                        bis.close();
                         dis.close();
+                        bis.close();
+                        fis.close();
                         file.renameTo(new File(documentsErrorPath+"/"+file.getName()));
                         log.error("Unable to read file" + path);
                     }
@@ -158,9 +179,9 @@ public class MigrationUtil {
             }
 
             // dispose all the resources after using them.
-            fis.close();
-            bis.close();
             dis.close();
+            bis.close();
+            fis.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

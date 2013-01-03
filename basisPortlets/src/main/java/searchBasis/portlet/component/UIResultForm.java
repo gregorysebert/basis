@@ -11,11 +11,11 @@ import org.exoplatform.webui.form.UIFormStringInput;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,7 +33,8 @@ public class UIResultForm extends UIForm {
 
     private QueryResult queryResult;
     private NodeIterator nodeIterator1;
-    Session session = null;
+    private Session session = null;
+    private String lastId = "";
 
     public UIResultForm () throws Exception{
         ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
@@ -110,275 +111,76 @@ public class UIResultForm extends UIForm {
     }
     public  void updateAdvanced()throws Exception{
         UISearchBasisPortlet uiSearchBasisPortlet = this.getAncestorOfType(UISearchBasisPortlet.class);
+        String from = uiSearchBasisPortlet.getFrom();
+        Map<String,String[]> mapFollowDocProperty = uiSearchBasisPortlet.getMapFollowDoc();
+        Map<String,String[]> mapDocument = uiSearchBasisPortlet.getMapDoc();
         try{
             if(uiSearchBasisPortlet.getQueryResult() != null){
+                UIAdvancedSearchForm uiAdvancedSearchForm = uiSearchBasisPortlet.getChild(UIAdvancedSearchForm.class);
+                UIBasisFollowFolderForm uiBasisFollowFolderForm = uiAdvancedSearchForm.getChildById("Follow folder");
+                UIBasisFollowDocForm uiBasisFollowDocForm = uiAdvancedSearchForm.getChildById("Follow document");
+
                 queryResult = uiSearchBasisPortlet.getQueryResult();
                 nodeIterator1 = queryResult.getNodes();
                 while(nodeIterator1.hasNext()){
                     Node basisFolderNode = nodeIterator1.nextNode();
-                    UIAdvancedSearchForm uiAdvancedSearchForm = uiSearchBasisPortlet.getChild(UIAdvancedSearchForm.class);
-                    UIBasisFollowFolderForm uiBasisFollowFolderForm = uiAdvancedSearchForm.getChildById("Follow folder");
-                    UIBasisFollowDocForm uiBasisFollowDocForm = uiAdvancedSearchForm.getChildById("Follow document");
 
-                    if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+
+
+                    if(from.equals("Folder")){
+
+                        if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+                            lastFollowFolder(basisFolderNode, basisFolderNode, uiSearchBasisPortlet, uiBasisFollowDocForm, from);
+
+                        }
+                        else{
+                            if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                                lastFollowDoc(basisFolderNode, basisFolderNode , uiSearchBasisPortlet, from);
+                            }
+                            else{
+
+                                addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                                String path = basisFolderNode.getPath() ;
+                                String pathSlippted [] = path.split("/Files/BO");
+                                addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                            }
+                        }
+                    }
+                    else if(from.equals("Document")){
+
                         String url = Util.getPortalRequestContext().getRequestURI();
                         String urlSplitted[] = url.split("BO:");
                         String nameBO[] = urlSplitted[1].split("/");
 
-                        String selectFollowFolderByFolder = "/jcr:root/Files/BO/"+nameBO[0]+"/*/*/*/"+basisFolderNode.getName()+"/element (*,basis:basisFollow) order by @exo:dateCreated descending";
-
+                        String selectDocumentByFolder = "/jcr:root/Files/BO/"+nameBO[0]+"/*/*/*/"+basisFolderNode.getName()+"/element (*,basis:basisDocument)";
                         QueryManager queryManager = session.getWorkspace().getQueryManager();
-                        Query selectFollowByFolderQuery = queryManager.createQuery(selectFollowFolderByFolder, Query.XPATH);
-                        QueryResult resultQuery2 = selectFollowByFolderQuery.execute();
+                        Query selectDocumentByFolderQuery = queryManager.createQuery(selectDocumentByFolder, Query.XPATH);
+                        QueryResult resultQuery2 = selectDocumentByFolderQuery.execute();
                         NodeIterator nodeIterator2 = resultQuery2.getNodes();
-                        Node basisFollowFolderNode = nodeIterator2.nextNode();
-                        Map<String,String[]> mapFollowFolder = uiSearchBasisPortlet.getMapFollowFolder();
-                        if(!mapFollowFolder.isEmpty()){
-                            for (String mapKey : mapFollowFolder.keySet()) {
-                                String[] value = mapFollowFolder.get(mapKey);
-                                if(value[0].equals("Equals")){
-                                    if(basisFollowFolderNode.getProperty(mapKey).getString().equals(value[1])){
-                                        if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
-                                            String url2 = Util.getPortalRequestContext().getRequestURI();
-                                            String urlSplitted2[] = url2.split("BO:");
-                                            String nameBO2[] = urlSplitted2[1].split("/");
 
-                                            String selectFollowDocByFolder = "/jcr:root/Files/BO/"+nameBO2[0]+"/*/*/*/"+basisFolderNode.getName()+"/*/element (*,basis:basisFollow) order by @exo:dateCreated descending";
+                        while(nodeIterator2.hasNext()){
+                            Node basisDocumentNode = nodeIterator2.nextNode();
 
-                                            QueryManager queryManager2 = session.getWorkspace().getQueryManager();
-                                            Query selectFollowDocByFolderQuery = queryManager2.createQuery(selectFollowDocByFolder, Query.XPATH);
-                                            QueryResult resultQuery3 = selectFollowDocByFolderQuery.execute();
-                                            NodeIterator nodeIterator3 = resultQuery3.getNodes();
-                                            Node basisFollowDocNode = nodeIterator3.nextNode();
-                                            Map<String,String[]> mapFollowDoc = uiSearchBasisPortlet.getMapFollowDoc();
-                                            if(!mapFollowDoc.isEmpty()){
-                                                for (String mapKey2 : mapFollowDoc.keySet()) {
-                                                    String[] value2 = mapFollowDoc.get(mapKey2);
-                                                    if(value2[0].equals("Equals")){
-                                                        if(basisFollowDocNode.getProperty(mapKey2).getString().equals(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Contains")){
-                                                        if(basisFollowDocNode.getProperty(mapKey2).getString().contains(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Not_Equals")){
-                                                        if(!basisFollowDocNode.getProperty(mapKey2).getString().equals(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Not_Contains")){
-                                                        if(!basisFollowDocNode.getProperty(mapKey2).getString().contains(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else{
+                            if(!mapDocument.isEmpty()){
+                                filter(mapDocument, basisDocumentNode,basisFolderNode, uiBasisFollowFolderForm, uiBasisFollowDocForm, uiSearchBasisPortlet, from );
+                            }
+                            else{
+                                if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+                                    lastFollowFolder(basisDocumentNode, basisFolderNode, uiSearchBasisPortlet, uiBasisFollowDocForm, from);
 
-                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                            String path = basisFolderNode.getPath() ;
-                                            String pathSlippted [] = path.split("/Files/BO");
-                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                        }
-                                    }
                                 }
-                                else if(value[0].equals("Contains")){
-                                    if(basisFollowFolderNode.getProperty(mapKey).getString().contains(value[1])){
-                                        if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
-                                            String url2 = Util.getPortalRequestContext().getRequestURI();
-                                            String urlSplitted2[] = url2.split("BO:");
-                                            String nameBO2[] = urlSplitted2[1].split("/");
-
-                                            String selectFollowDocByFolder = "/jcr:root/Files/BO/"+nameBO2[0]+"/*/*/*/"+basisFolderNode.getName()+"/*/element (*,basis:basisFollow) order by @exo:dateCreated descending";
-
-                                            QueryManager queryManager2 = session.getWorkspace().getQueryManager();
-                                            Query selectFollowDocByFolderQuery = queryManager2.createQuery(selectFollowDocByFolder, Query.XPATH);
-                                            QueryResult resultQuery3 = selectFollowDocByFolderQuery.execute();
-                                            NodeIterator nodeIterator3 = resultQuery3.getNodes();
-                                            Node basisFollowDocNode = nodeIterator3.nextNode();
-                                            Map<String,String[]> mapFollowDoc = uiSearchBasisPortlet.getMapFollowDoc();
-                                            if(!mapFollowDoc.isEmpty()){
-                                                for (String mapKey2 : mapFollowDoc.keySet()) {
-                                                    String[] value2 = mapFollowDoc.get(mapKey2);
-                                                    if(value2[0].equals("Equals")){
-                                                        if(basisFollowDocNode.getProperty(mapKey2).getString().equals(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Contains")){
-                                                        if(basisFollowDocNode.getProperty(mapKey2).getString().contains(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Not_Equals")){
-                                                        if(!basisFollowDocNode.getProperty(mapKey2).getString().equals(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Not_Contains")){
-                                                        if(!basisFollowDocNode.getProperty(mapKey2).getString().contains(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else{
-
-                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                            String path = basisFolderNode.getPath() ;
-                                            String pathSlippted [] = path.split("/Files/BO");
-                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                        }
+                                else{
+                                    if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                                        lastFollowDoc(basisDocumentNode, basisFolderNode , uiSearchBasisPortlet, from);
                                     }
-                                }
-                                else if(value[0].equals("Not_Equals")){
-                                    if(!basisFollowFolderNode.getProperty(mapKey).getString().equals(value[1])){
-                                        if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
-                                            String url2 = Util.getPortalRequestContext().getRequestURI();
-                                            String urlSplitted2[] = url2.split("BO:");
-                                            String nameBO2[] = urlSplitted2[1].split("/");
+                                    else{
 
-                                            String selectFollowDocByFolder = "/jcr:root/Files/BO/"+nameBO2[0]+"/*/*/*/"+basisFolderNode.getName()+"/*/element (*,basis:basisFollow) order by @exo:dateCreated descending";
-
-                                            QueryManager queryManager2 = session.getWorkspace().getQueryManager();
-                                            Query selectFollowDocByFolderQuery = queryManager2.createQuery(selectFollowDocByFolder, Query.XPATH);
-                                            QueryResult resultQuery3 = selectFollowDocByFolderQuery.execute();
-                                            NodeIterator nodeIterator3 = resultQuery3.getNodes();
-                                            Node basisFollowDocNode = nodeIterator3.nextNode();
-                                            Map<String,String[]> mapFollowDoc = uiSearchBasisPortlet.getMapFollowDoc();
-                                            if(!mapFollowDoc.isEmpty()){
-                                                for (String mapKey2 : mapFollowDoc.keySet()) {
-                                                    String[] value2 = mapFollowDoc.get(mapKey2);
-                                                    if(value2[0].equals("Equals")){
-                                                        if(basisFollowDocNode.getProperty(mapKey2).getString().equals(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Contains")){
-                                                        if(basisFollowDocNode.getProperty(mapKey2).getString().contains(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Not_Equals")){
-                                                        if(!basisFollowDocNode.getProperty(mapKey2).getString().equals(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Not_Contains")){
-                                                        if(!basisFollowDocNode.getProperty(mapKey2).getString().contains(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                        if(!mapFollowDocProperty.isEmpty()){
+                                            filterDocByAllFollowDoc(mapFollowDocProperty, basisDocumentNode,basisFolderNode);
                                         }
                                         else{
-
-                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                            String path = basisFolderNode.getPath() ;
-                                            String pathSlippted [] = path.split("/Files/BO");
-                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                        }
-                                    }
-                                }
-                                else if(value[0].equals("Not_Contains")){
-                                    if(!basisFollowFolderNode.getProperty(mapKey).getString().contains(value[1])){
-                                        if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
-                                            String url2 = Util.getPortalRequestContext().getRequestURI();
-                                            String urlSplitted2[] = url2.split("BO:");
-                                            String nameBO2[] = urlSplitted2[1].split("/");
-
-                                            String selectFollowDocByFolder = "/jcr:root/Files/BO/"+nameBO2[0]+"/*/*/*/"+basisFolderNode.getName()+"/*/element (*,basis:basisFollow) order by @exo:dateCreated descending";
-
-                                            QueryManager queryManager2 = session.getWorkspace().getQueryManager();
-                                            Query selectFollowDocByFolderQuery = queryManager2.createQuery(selectFollowDocByFolder, Query.XPATH);
-                                            QueryResult resultQuery3 = selectFollowDocByFolderQuery.execute();
-                                            NodeIterator nodeIterator3 = resultQuery3.getNodes();
-                                            Node basisFollowDocNode = nodeIterator3.nextNode();
-                                            Map<String,String[]> mapFollowDoc = uiSearchBasisPortlet.getMapFollowDoc();
-                                            if(!mapFollowDoc.isEmpty()){
-                                                for (String mapKey2 : mapFollowDoc.keySet()) {
-                                                    String[] value2 = mapFollowDoc.get(mapKey2);
-                                                    if(value2[0].equals("Equals")){
-                                                        if(basisFollowDocNode.getProperty(mapKey2).getString().equals(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Contains")){
-                                                        if(basisFollowDocNode.getProperty(mapKey2).getString().contains(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Not_Equals")){
-                                                        if(!basisFollowDocNode.getProperty(mapKey2).getString().equals(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                    else if(value2[0].equals("Not_Contains")){
-                                                        if(!basisFollowDocNode.getProperty(mapKey2).getString().contains(value2[1])){
-                                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                                            String path = basisFolderNode.getPath() ;
-                                                            String pathSlippted [] = path.split("/Files/BO");
-                                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else{
-
-                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                            String path = basisFolderNode.getPath() ;
+                                            addUIFormInput(new UIFormStringInput(basisDocumentNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                                            String path = basisDocumentNode.getPath() ;
                                             String pathSlippted [] = path.split("/Files/BO");
                                             addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         }
@@ -388,65 +190,119 @@ public class UIResultForm extends UIForm {
                         }
 
                     }
-                    else{
-                        if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
-                            String url = Util.getPortalRequestContext().getRequestURI();
-                            String urlSplitted[] = url.split("BO:");
-                            String nameBO[] = urlSplitted[1].split("/");
+                    else if(from.equals("Follow_folder")){
+                        String url = Util.getPortalRequestContext().getRequestURI();
+                        String urlSplitted[] = url.split("BO:");
+                        String nameBO[] = urlSplitted[1].split("/");
+                        int i = 0 ;
 
-                            String selectFollowDocByFolder = "/jcr:root/Files/BO/"+nameBO[0]+"/*/*/*/"+basisFolderNode.getName()+"/*/element (*,basis:basisFollow) order by @exo:dateCreated descending";
+                        String selectFollowFolderByFolder = "/jcr:root/Files/BO/"+nameBO[0]+"/*/*/*/"+basisFolderNode.getName()+"/element (*,basis:basisFollow)";
+                        Map<String,String[]> mapFollowFolder = uiSearchBasisPortlet.getMapFollowFolder();
+                        if(!mapFollowFolder.isEmpty()){
+                            selectFollowFolderByFolder += "[";
+                            for (String mapKey : mapFollowFolder.keySet()) {
+                                String[] value = mapFollowFolder.get(mapKey);
 
-                            QueryManager queryManager = session.getWorkspace().getQueryManager();
-                            Query selectFollowDocByFolderQuery = queryManager.createQuery(selectFollowDocByFolder, Query.XPATH);
-                            QueryResult resultQuery2 = selectFollowDocByFolderQuery.execute();
-                            NodeIterator nodeIterator2 = resultQuery2.getNodes();
-                            Node basisFollowDocNode = nodeIterator2.nextNode();
-                            Map<String,String[]> mapFollowDoc = uiSearchBasisPortlet.getMapFollowDoc();
-                            if(!mapFollowDoc.isEmpty()){
-                                for (String mapKey : mapFollowDoc.keySet()) {
-                                    String[] value = mapFollowDoc.get(mapKey);
-                                    if(value[0].equals("Equals")){
-                                        if(basisFollowDocNode.getProperty(mapKey).getString().equals(value[1])){
-                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                            String path = basisFolderNode.getPath() ;
-                                            String pathSlippted [] = path.split("/Files/BO");
-                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                if(value[0].equals("Equals")){
+                                    if(!mapKey.contains("Date")){
+                                        if(i == 0){
+                                            selectFollowFolderByFolder += "@"+mapKey+"='"+value[1]+"'";
+                                        }
+                                        else{
+                                            selectFollowFolderByFolder += " and @"+mapKey+"='"+value[1]+"'";
                                         }
                                     }
-                                    else if(value[0].equals("Contains")){
-                                        if(basisFollowDocNode.getProperty(mapKey).getString().contains(value[1])){
-                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                            String path = basisFolderNode.getPath() ;
-                                            String pathSlippted [] = path.split("/Files/BO");
-                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                    else{
+                                        if(i == 0){
+                                            selectFollowFolderByFolder += "@"+mapKey+"=xs:dateTime('"+value[1]+"')";
                                         }
-                                    }
-                                    else if(value[0].equals("Not_Equals")){
-                                        if(!basisFollowDocNode.getProperty(mapKey).getString().equals(value[1])){
-                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                            String path = basisFolderNode.getPath() ;
-                                            String pathSlippted [] = path.split("/Files/BO");
-                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                                        }
-                                    }
-                                    else if(value[0].equals("Not_Contains")){
-                                        if(!basisFollowDocNode.getProperty(mapKey).getString().contains(value[1])){
-                                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                                            String path = basisFolderNode.getPath() ;
-                                            String pathSlippted [] = path.split("/Files/BO");
-                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        else{
+                                            selectFollowFolderByFolder += " and @"+mapKey+"=xs:dateTime('"+value[1]+"')";
                                         }
                                     }
                                 }
+                                else if(value[0].equals("Contains")){
+                                    if(!mapKey.contains("Date")){
+                                        if(i == 0){
+                                            selectFollowFolderByFolder += "jcr:like(@"+mapKey+",'%"+value[1]+"%')";
+                                        }
+                                        else{
+                                            selectFollowFolderByFolder += " and jcr:like(@"+mapKey+",'%"+value[1]+"%')";
+                                        }
+                                    }
+                                    else{
+                                        selectFollowFolderByFolder += "";
+                                    }
+                                }
+                                else if(value[0].equals("Not_Equals")){
+                                    if(!mapKey.contains("Date")){
+                                        if(i == 0){
+                                            selectFollowFolderByFolder += "not(@"+mapKey+"='"+value[1]+"')";
+                                        }
+                                        else{
+                                            selectFollowFolderByFolder += " and not(@"+mapKey+"='"+value[1]+"')";
+                                        }
+                                    }
+                                    else{
+                                        if(i == 0){
+                                            selectFollowFolderByFolder += "not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                                        }
+                                        else{
+                                            selectFollowFolderByFolder += " and not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                                        }
+                                    }
+                                }
+                                else if(value[0].equals("Not_Contains")){
+                                    if(!mapKey.contains("Date")){
+                                        if(i == 0){
+                                            selectFollowFolderByFolder += "not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
+                                        }
+                                        else{
+                                            selectFollowFolderByFolder += " and not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
+                                        }
+                                    }
+                                    else{
+                                        selectFollowFolderByFolder += "";
+                                    }
+                                }
+
+                                i++;
+
+                            }
+                            selectFollowFolderByFolder += "]";
+                        }
+
+
+                        System.out.println("Query : " + selectFollowFolderByFolder);
+
+                        QueryManager queryManager = session.getWorkspace().getQueryManager();
+                        Query selectDocumentByFolderQuery = queryManager.createQuery(selectFollowFolderByFolder, Query.XPATH);
+                        QueryResult resultQuery2 = selectDocumentByFolderQuery.execute();
+                        NodeIterator nodeIterator2 = resultQuery2.getNodes();
+
+                        while(nodeIterator2.hasNext()){
+                            Node basisFollowFolderNode = nodeIterator2.nextNode();
+
+                            if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+                                lastFollowFolder(basisFollowFolderNode, basisFolderNode, uiSearchBasisPortlet, uiBasisFollowDocForm, from);
+
+                            }
+                            else{
+                                if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                                    lastFollowDoc(basisFollowFolderNode, basisFolderNode , uiSearchBasisPortlet, from);
+                                }
+                                else{
+                                    addUIFormInput(new UIFormStringInput(basisFollowFolderNode.getProperty("exo:name").getString(), basisFolderNode.getProperty("exo:name").getString(), null));
+                                    String path = basisFollowFolderNode.getPath() ;
+                                    String pathSlippted [] = path.split("/Files/BO");
+                                    addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                }
                             }
                         }
-                        else{
 
-                            addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
-                            String path = basisFolderNode.getPath() ;
-                            String pathSlippted [] = path.split("/Files/BO");
-                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
-                        }
+                    }
+                    else if(from.equals("Follow_document")){
+
                     }
                 }
             }
@@ -457,11 +313,557 @@ public class UIResultForm extends UIForm {
 
     }
 
-    public QueryResult getQueryResult() {
-        return queryResult;
+
+    public void filter(Map<String,String[]> mapNodeProperty, Node basisNode, Node basisFolderNode, UIBasisFollowFolderForm uiBasisFollowFolderForm, UIBasisFollowDocForm uiBasisFollowDocForm,  UISearchBasisPortlet uiSearchBasisPortlet, String from)throws Exception{
+        String valueProperty;
+        for (String mapKey : mapNodeProperty.keySet()) {
+            String[] value = mapNodeProperty.get(mapKey);
+            if(mapKey.contains("Date")){
+                valueProperty =  basisNode.getProperty(mapKey).getString().split("T")[0];
+            }
+            else{
+                valueProperty =  basisNode.getProperty(mapKey).getString();
+            }
+            if(value[0].equals("Equals")){
+                if(valueProperty.equals(value[1])){
+                    if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+                        lastFollowFolder(basisNode, basisFolderNode, uiSearchBasisPortlet, uiBasisFollowDocForm, from);
+
+                    }
+                    else{
+                        if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                            lastFollowDoc(basisNode, basisFolderNode , uiSearchBasisPortlet, from);
+                        }
+                        else{
+                            if(from.equals("Document")) {
+                                Map<String,String[]> mapFollowDocProperty = uiSearchBasisPortlet.getMapFollowDoc();
+                                if(!mapFollowDocProperty.isEmpty()){
+                                    filterDocByAllFollowDoc(mapFollowDocProperty, basisNode,basisFolderNode);
+                                }
+                                else{
+                                    addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                                    String path = basisNode.getPath() ;
+                                    String pathSlippted [] = path.split("/Files/BO");
+                                    addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                }
+                            }
+                            else{
+                                if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                    addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisFolderNode.getProperty("exo:name").getString(), null));
+                                    String path = basisNode.getPath() ;
+                                    String pathSlippted [] = path.split("/Files/BO");
+                                    addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                }
+                                lastId = basisNode.getProperty("exo:name").getString();
+                            }
+                        }
+                    }
+                }
+            }
+            else if(value[0].equals("Contains")){
+                if(basisNode.getProperty(mapKey).getString().contains(value[1])){
+                    if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+                        lastFollowFolder(basisNode, basisFolderNode, uiSearchBasisPortlet, uiBasisFollowDocForm, from);
+
+                    }
+                    else{
+                        if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                            lastFollowDoc(basisNode, basisFolderNode , uiSearchBasisPortlet, from);
+                        }
+                        else{
+                            if(from.equals("Document")) {
+                                Map<String,String[]> mapFollowDocProperty = uiSearchBasisPortlet.getMapFollowDoc();
+                                if(!mapFollowDocProperty.isEmpty()){
+                                    filterDocByAllFollowDoc(mapFollowDocProperty, basisNode,basisFolderNode);
+                                }
+                                else{
+                                    addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                                    String path = basisNode.getPath() ;
+                                    String pathSlippted [] = path.split("/Files/BO");
+                                    addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                }
+                            }
+                            else{
+                                if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                    addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisFolderNode.getProperty("exo:name").getString(), null));
+                                    String path = basisNode.getPath() ;
+                                    String pathSlippted [] = path.split("/Files/BO");
+                                    addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                }
+                                lastId = basisNode.getProperty("exo:name").getString();
+                            }
+                        }
+                    }
+                }
+            }
+            else if(value[0].equals("Not_Equals")){
+                if(!valueProperty.equals(value[1])){
+                    if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+                        lastFollowFolder(basisNode, basisFolderNode, uiSearchBasisPortlet, uiBasisFollowDocForm, from);
+
+                    }
+                    else{
+                        if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                            lastFollowDoc(basisNode, basisFolderNode , uiSearchBasisPortlet, from);
+                        }
+                        else{
+                            if(from.equals("Document")) {
+                                Map<String,String[]> mapFollowDocProperty = uiSearchBasisPortlet.getMapFollowDoc();
+                                if(!mapFollowDocProperty.isEmpty()){
+                                    filterDocByAllFollowDoc(mapFollowDocProperty, basisNode,basisFolderNode);
+                                }
+                                else{
+                                    addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                                    String path = basisNode.getPath() ;
+                                    String pathSlippted [] = path.split("/Files/BO");
+                                    addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                }
+                            }
+                            else{
+                                if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                    addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisFolderNode.getProperty("exo:name").getString(), null));
+                                    String path = basisNode.getPath() ;
+                                    String pathSlippted [] = path.split("/Files/BO");
+                                    addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                }
+                                lastId = basisNode.getProperty("exo:name").getString();
+                            }
+                        }
+                    }
+                }
+            }
+            else if(value[0].equals("Not_Contains")){
+                if(!basisNode.getProperty(mapKey).getString().contains(value[1])){
+                    if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+                        lastFollowFolder(basisNode, basisFolderNode, uiSearchBasisPortlet, uiBasisFollowDocForm, from);
+
+                    }
+                    else{
+                        if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                            lastFollowDoc(basisNode, basisFolderNode , uiSearchBasisPortlet, from);
+                        }
+                        else{
+                            if(from.equals("Document")) {
+                                Map<String,String[]> mapFollowDocProperty = uiSearchBasisPortlet.getMapFollowDoc();
+                                if(!mapFollowDocProperty.isEmpty()){
+                                    filterDocByAllFollowDoc(mapFollowDocProperty, basisNode,basisFolderNode);
+                                }
+                                else{
+                                    addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                                    String path = basisNode.getPath() ;
+                                    String pathSlippted [] = path.split("/Files/BO");
+                                    addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                }
+                            }
+                            else{
+                                if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                    addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisFolderNode.getProperty("exo:name").getString(), null));
+                                    String path = basisNode.getPath() ;
+                                    String pathSlippted [] = path.split("/Files/BO");
+                                    addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                }
+                                lastId = basisNode.getProperty("exo:name").getString();
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    public void setQueryResult(QueryResult queryResult) {
-        this.queryResult = queryResult;
+
+
+    public void lastFollowFolder(Node basisNode,Node basisFolderNode, UISearchBasisPortlet uiSearchBasisPortlet, UIBasisFollowDocForm uiBasisFollowDocForm, String from) throws Exception {
+
+        String url = Util.getPortalRequestContext().getRequestURI();
+        String urlSplitted[] = url.split("BO:");
+        String nameBO[] = urlSplitted[1].split("/");
+
+        String selectFollowFolderByFolder = null;
+        try {
+            selectFollowFolderByFolder = "/jcr:root/Files/BO/"+nameBO[0]+"/*/*/*/"+basisFolderNode.getName()+"/element (*,basis:basisFollow) order by @exo:dateCreated descending";
+
+
+            QueryManager queryManager = session.getWorkspace().getQueryManager();
+            Query selectFollowByFolderQuery = queryManager.createQuery(selectFollowFolderByFolder, Query.XPATH);
+            QueryResult resultQuery2 = selectFollowByFolderQuery.execute();
+            NodeIterator nodeIterator2 = resultQuery2.getNodes();
+            Node basisFollowFolderNode = nodeIterator2.nextNode();
+            Map<String,String[]> mapFollowFolder = uiSearchBasisPortlet.getMapFollowFolder();
+            if(!mapFollowFolder.isEmpty()){
+                for (String mapKey : mapFollowFolder.keySet()) {
+                    String[] value = mapFollowFolder.get(mapKey);
+                    if(value[0].equals("Equals")){
+                        if(basisFollowFolderNode.getProperty(mapKey).getString().equals(value[1])){
+                            if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                                lastFollowDoc(basisNode, basisFolderNode, uiSearchBasisPortlet, from);
+                            }
+                            else{
+                                if(from.equals("Folder")) {
+                                    if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                    }
+                                    lastId = basisNode.getProperty("exo:title").getString();
+                                }
+                                else if(from.equals("Document")){
+                                    Map<String,String[]> mapFollowDocProperty = uiSearchBasisPortlet.getMapFollowDoc();
+                                    if(!mapFollowDocProperty.isEmpty()){
+                                        filterDocByAllFollowDoc(mapFollowDocProperty, basisNode,basisFolderNode);
+                                    }
+                                    else{
+                                        if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                            addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                                            String path = basisNode.getPath() ;
+                                            String pathSlippted [] = path.split("/Files/BO");
+                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        }
+                                        lastId = basisNode.getProperty("exo:title").getString();
+                                    }
+                                }
+                                else{
+                                    if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                    }
+                                    lastId = basisNode.getProperty("exo:name").getString();
+                                }
+                            }
+                        }
+                    }
+                    else if(value[0].equals("Contains")){
+                        if(basisFollowFolderNode.getProperty(mapKey).getString().contains(value[1])){
+                            if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                                lastFollowDoc(basisNode, basisFolderNode, uiSearchBasisPortlet, from);
+                            }
+                            else{
+                                if(from.equals("Folder")) {
+                                    if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                    }
+                                    lastId = basisNode.getProperty("exo:title").getString();
+                                }
+                                else if(from.equals("Document")){
+                                    Map<String,String[]> mapFollowDocProperty = uiSearchBasisPortlet.getMapFollowDoc();
+                                    if(!mapFollowDocProperty.isEmpty()){
+                                        filterDocByAllFollowDoc(mapFollowDocProperty, basisNode,basisFolderNode);
+                                    }
+                                    else{
+                                        if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                            addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                                            String path = basisNode.getPath() ;
+                                            String pathSlippted [] = path.split("/Files/BO");
+                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        }
+                                        lastId = basisNode.getProperty("exo:title").getString();
+                                    }
+                                }
+                                else{
+                                    if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                    }
+                                    lastId = basisNode.getProperty("exo:name").getString();
+                                }
+                            }
+                        }
+                    }
+                    else if(value[0].equals("Not_Equals")){
+                        if(!basisFollowFolderNode.getProperty(mapKey).getString().equals(value[1])){
+                            if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                                lastFollowDoc(basisNode, basisFolderNode, uiSearchBasisPortlet, from);
+                            }
+                            else{
+                                if(from.equals("Folder")) {
+                                    if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                    }
+                                    lastId = basisNode.getProperty("exo:title").getString();
+                                }
+                                else if(from.equals("Document")){
+                                    Map<String,String[]> mapFollowDocProperty = uiSearchBasisPortlet.getMapFollowDoc();
+                                    if(!mapFollowDocProperty.isEmpty()){
+                                        filterDocByAllFollowDoc(mapFollowDocProperty, basisNode,basisFolderNode);
+                                    }
+                                    else{
+                                        if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                            addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                                            String path = basisNode.getPath() ;
+                                            String pathSlippted [] = path.split("/Files/BO");
+                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        }
+                                        lastId = basisNode.getProperty("exo:title").getString();
+                                    }
+                                }
+                                else{
+                                    if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                    }
+                                    lastId = basisNode.getProperty("exo:name").getString();
+                                }
+                            }
+                        }
+                    }
+                    else if(value[0].equals("Not_Contains")){
+                        if(!basisFollowFolderNode.getProperty(mapKey).getString().contains(value[1])){
+                            if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                                lastFollowDoc(basisNode, basisFolderNode, uiSearchBasisPortlet, from);
+                            }
+                            else{
+                                if(from.equals("Folder")) {
+                                    if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                    }
+                                    lastId = basisNode.getProperty("exo:title").getString();
+                                }
+                                else if(from.equals("Document")){
+                                    Map<String,String[]> mapFollowDocProperty = uiSearchBasisPortlet.getMapFollowDoc();
+                                    if(!mapFollowDocProperty.isEmpty()){
+                                        filterDocByAllFollowDoc(mapFollowDocProperty, basisNode,basisFolderNode);
+                                    }
+                                    else{
+                                        if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                            addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                                            String path = basisNode.getPath() ;
+                                            String pathSlippted [] = path.split("/Files/BO");
+                                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        }
+                                        lastId = basisNode.getProperty("exo:title").getString();
+                                    }
+                                }
+                                else{
+                                    if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                    }
+                                    lastId = basisNode.getProperty("exo:name").getString();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (RepositoryException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    public void lastFollowDoc(Node basisNode, Node basisFolderNode, UISearchBasisPortlet uiSearchBasisPortlet, String from){
+        String url = Util.getPortalRequestContext().getRequestURI();
+        String urlSplitted[] = url.split("BO:");
+        String nameBO[] = urlSplitted[1].split("/");
+
+        String selectFollowDocByFolder = null;
+        try {
+            if(from.equals("Folder")){
+                selectFollowDocByFolder = "/jcr:root/Files/BO/"+nameBO[0]+"/*/*/*/"+basisFolderNode.getName()+"/*/element (*,basis:basisFollow) order by @exo:dateCreated descending";
+            }
+            else if(from.equals("Document")){
+                selectFollowDocByFolder = "/jcr:root/Files/BO/"+nameBO[0]+"/*/*/*/"+basisFolderNode.getName()+"/"+basisNode.getName()+"/element (*,basis:basisFollow) order by @exo:dateCreated descending";
+            }
+            else if(from.equals("Follow_folder")){
+                selectFollowDocByFolder = "/jcr:root/Files/BO/"+nameBO[0]+"/*/*/*/"+basisFolderNode.getName()+"/*/element (*,basis:basisFollow) order by @exo:dateCreated descending";
+            }
+            else if(from.equals("Follow_document")){
+
+            }
+
+
+            QueryManager queryManager = session.getWorkspace().getQueryManager();
+            Query selectFollowDocByFolderQuery = queryManager.createQuery(selectFollowDocByFolder, Query.XPATH);
+            QueryResult resultQuery2 = selectFollowDocByFolderQuery.execute();
+            NodeIterator nodeIterator2 = resultQuery2.getNodes();
+            if(nodeIterator2.hasNext()){
+                Node basisFollowDocNode = nodeIterator2.nextNode();
+                Map<String,String[]> mapFollowDoc = uiSearchBasisPortlet.getMapFollowDoc();
+                if(!mapFollowDoc.isEmpty()){
+                    for (String mapKey : mapFollowDoc.keySet()) {
+                        String[] value = mapFollowDoc.get(mapKey);
+                        if(value[0].equals("Equals")){
+                            if(basisFollowDocNode.getProperty(mapKey).getString().equals(value[1])){
+                                if(from.equals("Document") || from.equals("Folder")) {
+                                    if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        lastId = basisNode.getProperty("exo:title").getString();
+                                    }
+                                }
+                                else{
+                                    if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        lastId = basisNode.getProperty("exo:name").getString();
+                                    }
+                                }
+                            }
+                        }
+                        else if(value[0].equals("Contains")){
+                            if(basisFollowDocNode.getProperty(mapKey).getString().contains(value[1])){
+                                if(from.equals("Document") || from.equals("Folder")) {
+                                    if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        lastId = basisNode.getProperty("exo:title").getString();
+                                    }
+                                }
+                                else{
+                                    if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        lastId = basisNode.getProperty("exo:name").getString();
+                                    }
+                                }
+                            }
+                        }
+                        else if(value[0].equals("Not_Equals")){
+                            if(!basisFollowDocNode.getProperty(mapKey).getString().equals(value[1])){
+                                if(from.equals("Document") || from.equals("Folder")) {
+                                    if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        lastId = basisNode.getProperty("exo:title").getString();
+                                    }
+                                }
+                                else{
+                                    if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        lastId = basisNode.getProperty("exo:name").getString();
+                                    }
+                                }
+                            }
+                        }
+                        else if(value[0].equals("Not_Contains")){
+                            if(!basisFollowDocNode.getProperty(mapKey).getString().contains(value[1])){
+
+                                if(from.equals("Document") || from.equals("Folder")) {
+                                    if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        lastId = basisNode.getProperty("exo:title").getString();
+                                    }
+                                }
+                                else{
+                                    if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
+                                        addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
+                                        String path = basisNode.getPath() ;
+                                        String pathSlippted [] = path.split("/Files/BO");
+                                        addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                                        lastId = basisNode.getProperty("exo:name").getString();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (RepositoryException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    public void filterDocByAllFollowDoc(Map<String,String[]> mapFollowDocProperty, Node basisDocumentNode, Node basisFolderNode) throws Exception{
+        String url = Util.getPortalRequestContext().getRequestURI();
+        String urlSplitted[] = url.split("BO:");
+        String nameBO[] = urlSplitted[1].split("/");
+        String valueProperty;
+
+        String selectFollowDocByFolder = "/jcr:root/Files/BO/"+nameBO[0]+"/*/*/*/"+basisFolderNode.getName()+"/"+basisDocumentNode.getName()+"/element (*,basis:basisFollow)";
+        QueryManager queryManager = session.getWorkspace().getQueryManager();
+        Query selectFollowDocByFolderQuery = queryManager.createQuery(selectFollowDocByFolder, Query.XPATH);
+        QueryResult resultQuery3 = selectFollowDocByFolderQuery.execute();
+        NodeIterator nodeIterator3 = resultQuery3.getNodes();
+        while(nodeIterator3.hasNext()){
+            Node basisFollowDocNode = nodeIterator3.nextNode();
+            for (String mapKey : mapFollowDocProperty.keySet()) {
+                String[] value = mapFollowDocProperty.get(mapKey);
+                if(mapKey.contains("Date")){
+                    valueProperty =  basisFollowDocNode.getProperty(mapKey).getString().split("T")[0];
+                }
+                else{
+                    valueProperty =  basisFollowDocNode.getProperty(mapKey).getString();
+                }
+                if(value[0].equals("Equals")){
+                    if(valueProperty.equals(value[1])){
+                        if(!lastId.equals(basisDocumentNode.getProperty("exo:title").getString())){
+                            addUIFormInput(new UIFormStringInput(basisDocumentNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                            String path = basisDocumentNode.getPath() ;
+                            String pathSlippted [] = path.split("/Files/BO");
+                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                        }
+                        lastId = basisDocumentNode.getProperty("exo:title").getString();
+                    }
+                }
+                else if(value[0].equals("Contains")){
+                    if(basisFollowDocNode.getProperty(mapKey).getString().contains(value[1])){
+                        if(!lastId.equals(basisDocumentNode.getProperty("exo:title").getString())){
+                            addUIFormInput(new UIFormStringInput(basisDocumentNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                            String path = basisDocumentNode.getPath() ;
+                            String pathSlippted [] = path.split("/Files/BO");
+                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                        }
+                        lastId = basisDocumentNode.getProperty("exo:title").getString();
+                    }
+                }
+                else if(value[0].equals("Not_Equals")){
+                    if(!valueProperty.equals(value[1])){
+                        if(!lastId.equals(basisDocumentNode.getProperty("exo:title").getString())){
+                            addUIFormInput(new UIFormStringInput(basisDocumentNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                            String path = basisDocumentNode.getPath() ;
+                            String pathSlippted [] = path.split("/Files/BO");
+                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                        }
+                        lastId = basisDocumentNode.getProperty("exo:title").getString();
+                    }
+                }
+                else if(value[0].equals("Not_Contains")){
+                    if(!basisFollowDocNode.getProperty(mapKey).getString().contains(value[1])){
+                        if(!lastId.equals(basisDocumentNode.getProperty("exo:title").getString())){
+                            addUIFormInput(new UIFormStringInput(basisDocumentNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                            String path = basisDocumentNode.getPath() ;
+                            String pathSlippted [] = path.split("/Files/BO");
+                            addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                        }
+                        lastId = basisDocumentNode.getProperty("exo:title").getString();
+                    }
+                }
+            }
+        }
+
+
     }
 }
