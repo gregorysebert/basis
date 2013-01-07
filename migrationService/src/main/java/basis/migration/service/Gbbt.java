@@ -17,7 +17,7 @@ public class Gbbt {
     public static BasisDocument getBasisDoc(String BO, Mapping mapping, String BOCountPattern)  {
         BasisDocument basisDoc= new BasisDocument();
 
-        String dosNum = MigrationUtil.checkDosNum(mapping.getDOSNUM(), BOCountPattern);
+        String dosNum = MigrationUtil.checkDosNum(mapping.getDOSNUM(), mapping.getDOCIDT(), BOCountPattern);
 
         basisDoc.setDocId(BO+"."+dosNum+"-"+mapping.getDOCNUM());
 
@@ -37,7 +37,7 @@ public class Gbbt {
     public static BasisFolder getBasisFolder(String BO,Mapping mapping, String BOCountPattern)
     {
         BasisFolder basisFolder= new BasisFolder();
-        String dosNum = MigrationUtil.checkDosNum(mapping.getDOSNUM(), BOCountPattern);
+        String dosNum = MigrationUtil.checkDosNum(mapping.getDOSNUM(), mapping.getDOCIDT(), BOCountPattern);
 
         basisFolder.setFolderId(BO+"."+dosNum);
         basisFolder.setFolderExternalReference(mapping.getZAAK());

@@ -302,8 +302,14 @@ public class MigrationUtil {
         session.save();
     }
 
-    public static String checkDosNum (String dosNum, String BOCountPattern)
+    public static String checkDosNum (String dosNum, String dosIdt, String BOCountPattern)
     {
+        if(dosNum == null || dosNum.contains(" ")){
+            log.info("dosIdt split : "+dosIdt.split("\\.")[2]);
+            dosNum = dosIdt.split("\\.")[2];
+        }
+
+
         while (dosNum.length()<=6)
         {
             dosNum = "0"+dosNum;
