@@ -1,12 +1,6 @@
 <style type="text/css">
-  #basisFolder.label.folderNumber {
-     width: 400px;
-     text-align:left;
-     font-size: 15px;
-    }
      #basisFolder.label.folderInternSender{
          width: 400px;
-         text-align:left;
          font-size: 15px;
      }
     #BasisProperty {
@@ -25,6 +19,16 @@
      }
   </style>
 
+  <%import org.exoplatform.webui.core.model.SelectItemOption;
+    import java.util.List;
+
+    List<SelectItemOption<String>> lsListBox = new ArrayList<SelectItemOption<String>>() ;
+    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Equals"), "Equals")) ;
+    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Contains"), "Contains")) ;
+    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Not_Equals"), "Not_Equals")) ;
+    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Not_Contains"), "Not_Contains")) ;
+  %>
+
 <% String fieldName; %>
 
         <%
@@ -37,6 +41,7 @@
                     <td id="BasisCheckBox"><% uiform.renderField(field) %></td>
                 <%}
                  if(fieldName.contains("searchType")){
+                    uicomponent.getChildById(fieldName).setOptions(lsListBox);
                     if(fieldName.contains("comments")){%>
 					
 						<% def fieldNameComments = fieldName.split("_searchType")[0]; 
@@ -68,7 +73,7 @@
                 if(!fieldName.contains("searchType") && !fieldName.contains("checkBox")) {
                 %>
 
-                        <td id="$field.id"><% uiform.renderField(field) %></td>
+                        <td><% uiform.renderField(field) %></td>
                 <%}%>
 
             <%

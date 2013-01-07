@@ -42,7 +42,22 @@
         <label>
             <From>Liste:</From>
         </label>
+        <ListBox>
+            <Folder>Dossier</Folder>
+            <Document>Document</Document>
+            <Follow_folder>Suivi de dossier</Follow_folder>
+            <Follow_document>Suivi de document</Follow_document>
+        </ListBox>
     </UIAdvancedSearchForm>
+
+    <UIPropertyInputForm>
+        <ListBox>
+            <Equals>Egal</Equals>
+            <Contains>Contient</Contains>
+            <Not_Equals>Pas égal</Not_Equals>
+            <Not_Contains>Ne contient pas</Not_Contains>
+        </ListBox>
+    </UIPropertyInputForm>
 
 
     <UIBasisFollowDocForm>
@@ -50,6 +65,9 @@
             <All>Tout</All>
             <Last>Dernier</Last>
         </radiobox>
+        <legend>
+            <Followdocument>Suivi de document</Followdocument>
+        </legend>
     </UIBasisFollowDocForm>
 
     <UIBasisFollowFolderForm>
@@ -57,7 +75,22 @@
             <All>Tout</All>
             <Last>Dernier</Last>
         </radiobox>
+        <legend>
+            <Followfolder>Suivi de dossier</Followfolder>
+        </legend>
     </UIBasisFollowFolderForm>
+
+    <UIBasisDocForm>
+        <legend>
+            <Document>Document</Document>
+        </legend>
+    </UIBasisDocForm>
+
+    <UIBasisFolderForm>
+        <legend>
+            <Folder>Dossier</Folder>
+        </legend>
+    </UIBasisFolderForm>
 
     <basisFolder>
         <label>

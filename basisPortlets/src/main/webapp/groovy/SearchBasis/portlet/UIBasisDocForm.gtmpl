@@ -15,7 +15,7 @@
 
 <div id="UIForm $uicomponent.id">
 		<fieldset id="fieldsetDoc">
-		<legend>$uicomponent.id</legend>
+		<legend><%=_ctx.appRes("UIBasisDocForm.legend.Document")%></legend>
 			<table id="TableQueryAdvanced">
 				 <% for(uiChild in uicomponent.getChildren()) {%>
 							<tr><%uicomponent.renderChild(uiChild) ;%> </tr> <%

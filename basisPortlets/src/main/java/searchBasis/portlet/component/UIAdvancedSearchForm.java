@@ -59,10 +59,10 @@ public class UIAdvancedSearchForm extends UIForm  {
         uiBasisFollowFolderForm.load(FIELD_FOLLOW_FOLDER);
 
         List<SelectItemOption<String>> lsFrom = new ArrayList<SelectItemOption<String>>() ;
-        lsFrom.add(new SelectItemOption<String>("Folder", "Folder")) ;
+        /*lsFrom.add(new SelectItemOption<String>("Folder", "Folder")) ;
         lsFrom.add(new SelectItemOption<String>("Document", "Document")) ;
         lsFrom.add(new SelectItemOption<String>("Follow Folder", "Follow_folder")) ;
-        lsFrom.add(new SelectItemOption<String>("Follow Document", "Follow_document")) ;
+        lsFrom.add(new SelectItemOption<String>("Follow Document", "Follow_document")) ; */
         UIFormSelectBox uiSelectBoxFrom = new UIFormSelectBox(FIELD_FROM, FIELD_FROM, lsFrom) ;
         addChild(uiSelectBoxFrom);
 

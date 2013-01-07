@@ -22,7 +22,7 @@
 
 <div id="UIForm $uicomponent.id">
 		<fieldset id="fieldsetFollowFolder">
-		<legend>$uicomponent.id</legend>
+		<legend><%=_ctx.appRes("UIBasisFollowFolderForm.legend.Followfolder")%></legend>
 			<table id="TableQueryAdvanced">
 				 <% for(uiChild in uicomponent.getChildren()) {%>
 				            <%if(uiChild.getName().equals("RadioBox_folder")){

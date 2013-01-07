@@ -50,10 +50,10 @@ public class UIPropertyInputForm extends UIForm {
         addUIFormInput(uiCheckBoxInput);
 
         List<SelectItemOption<String>> lsSearch = new ArrayList<SelectItemOption<String>>() ;
-        lsSearch.add(new SelectItemOption<String>("Equals", "Equals")) ;
+        /*lsSearch.add(new SelectItemOption<String>("Equals", "Equals")) ;
         lsSearch.add(new SelectItemOption<String>("Contains", "Contains")) ;
         lsSearch.add(new SelectItemOption<String>("Not Equals", "Not_Equals")) ;
-        lsSearch.add(new SelectItemOption<String>("Not Contains", "Not_Contains")) ;
+        lsSearch.add(new SelectItemOption<String>("Not Contains", "Not_Contains")) ;        */
         addUIFormInput(new UIFormSelectBox(labelProperty+"_searchType", null, lsSearch));
         if(property != null){
             if(property.getRequiredType() != 5){

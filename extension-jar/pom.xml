@@ -21,7 +21,7 @@
 	<artifactId>basis-extension-jar</artifactId>
 	<name>Basis Extension Configuration</name>
 	<description>Extension Configuration</description>
-	<version>1.0</version>
+	<version>1.1</version>
 	<packaging>jar</packaging>
 	<build>
 		<resources>

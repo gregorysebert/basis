@@ -23,7 +23,7 @@
 
 <div id="UIForm $uicomponent.id">
 		<fieldset id="fieldsetFollowDoc">
-		<legend>$uicomponent.id</legend>
+		<legend><%=_ctx.appRes("UIBasisFollowDocForm.legend.Followdocument")%></legend>
 			<table id="TableQueryAdvanced">
 				 <% for(uiChild in uicomponent.getChildren()) {%>
                     <%if(uiChild.getName().equals("RadioBox_doc")){

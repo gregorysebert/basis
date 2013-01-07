@@ -8,12 +8,23 @@
     }
   </style>
 <div class="UIForm $uicomponent.id">
-	<%uiform.begin()%>
+	<%uiform.begin()
+
+	import org.exoplatform.webui.core.model.SelectItemOption;
+    import java.util.List;
+
+    List<SelectItemOption<String>> lsListBox = new ArrayList<SelectItemOption<String>>() ;
+    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIAdvancedSearchForm.ListBox.Folder"), "Folder")) ;
+    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIAdvancedSearchForm.ListBox.Document"), "Document")) ;
+    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIAdvancedSearchForm.ListBox.Follow_folder"), "Follow_folder")) ;
+    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIAdvancedSearchForm.ListBox.Follow_document"), "Follow_document")) ;
+    %>
 
 	<label id ="From">
         <%=_ctx.appRes("UIAdvancedSearchForm.label.From")%>
     </label>
-    <% uiform.renderField("From") ;%>
+    <% uicomponent.getChildById("From").setOptions(lsListBox);
+    uiform.renderField("From") ;%>
 
 
 				<% for(uiChild in uicomponent.getChildren()) {

@@ -39,7 +39,25 @@
             <Search>Search</Search>
             <Cancel>Cancel</Cancel>
         </action>
+        <label>
+            <From>List:</From>
+        </label>
+        <ListBox>
+            <Folder>Folder</Folder>
+            <Document>Document</Document>
+            <Follow_folder>Follow folder</Follow_folder>
+            <Follow_document>Follow document</Follow_document>
+        </ListBox>
     </UIAdvancedSearchForm>
+
+    <UIPropertyInputForm>
+        <ListBox>
+            <Equals>Equals</Equals>
+            <Contains>Contains</Contains>
+            <Not_Equals>Not Equals</Not_Equals>
+            <Not_Contains>Not Contains</Not_Contains>
+        </ListBox>
+    </UIPropertyInputForm>
 
     <UIAdvancedSearchForm>
         <action>
@@ -56,6 +74,9 @@
             <All>All</All>
             <Last>Last</Last>
         </radiobox>
+        <legend>
+            <Followdocument>Follow Document</Followdocument>
+        </legend>
     </UIBasisFollowDocForm>
 
     <UIBasisFollowFolderForm>
@@ -63,7 +84,22 @@
             <All>All</All>
             <Last>Last</Last>
         </radiobox>
+        <legend>
+            <Followfolder>Follow Folder</Followfolder>
+        </legend>
     </UIBasisFollowFolderForm>
+
+    <UIBasisDocForm>
+        <legend>
+            <Document>Document</Document>
+        </legend>
+    </UIBasisDocForm>
+
+    <UIBasisFolderForm>
+        <legend>
+            <Folder>Folder</Folder>
+        </legend>
+    </UIBasisFolderForm>
 
     <basisFolder>
         <label>
