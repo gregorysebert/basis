@@ -197,7 +197,6 @@ public class MigrationUtil {
     public static String createDateFolder(Date date, Session session, String path) throws RepositoryException {
         Node rootNode = session.getRootNode().getNode(path);
 
-
         //log.info("Check YEAR folder: "+ yearFormat.format(date));
         if (!rootNode.hasNode(yearFormat.format(date)))
         {
@@ -263,7 +262,7 @@ public class MigrationUtil {
             if (basisDocument.getDocKeywords()!=null)
             {
                 String[] values = {basisDocument.getDocKeywords()};
-                Property prop = nodeBasisDoc.setProperty("basis:docKeywords",values);
+                nodeBasisDoc.setProperty("basis:docKeywords", values);
             }
             if (basisDocument.getDocDate()!=null)
             {
@@ -304,7 +303,6 @@ public class MigrationUtil {
     public static String checkDosNum (String dosNum, String dosIdt, String BOCountPattern)
     {
         if(dosNum == null || dosNum.trim().equals("")){
-            log.info("dosIdt split : "+dosIdt.split("\\.")[2]);
             dosNum = dosIdt.split("\\.")[2];
         }
 

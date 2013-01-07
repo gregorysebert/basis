@@ -21,7 +21,7 @@ public class Pers {
 
         basisDoc.setDocId(BO+"."+dosNum+"-"+mapping.getDOCNUM());
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyddMM");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         ParsePosition pos = new ParsePosition(0);
         Date sysdate = null;
         try {

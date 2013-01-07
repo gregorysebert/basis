@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.exoplatform.services.log.Log;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +22,7 @@ public class Gbdo {
 
         basisDoc.setDocId(BO+"."+dosNum+"-"+mapping.getDOCNUM());
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyddMM");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         ParsePosition pos = new ParsePosition(0);
         Date sysdate = null;
         try {
