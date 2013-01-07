@@ -303,7 +303,7 @@ public class MigrationUtil {
 
     public static String checkDosNum (String dosNum, String dosIdt, String BOCountPattern)
     {
-        if(dosNum == null || dosNum.contains(" ")){
+        if(dosNum == null || dosNum.trim().equals("")){
             log.info("dosIdt split : "+dosIdt.split("\\.")[2]);
             dosNum = dosIdt.split("\\.")[2];
         }
