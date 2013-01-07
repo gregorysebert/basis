@@ -262,9 +262,8 @@ public class MigrationUtil {
             if (basisDocument.getDocExternSenderAdress()!=null) nodeBasisDoc.setProperty("basis:docExternSenderAdress", basisDocument.getDocExternSenderAdress());
             if (basisDocument.getDocKeywords()!=null)
             {
-                Property prop = nodeBasisDoc.getProperty("basis:docKeywords");
                 String[] values = {basisDocument.getDocKeywords()};
-                prop.setValue(values);
+                Property prop = nodeBasisDoc.setProperty("basis:docKeywords",values);
             }
             if (basisDocument.getDocDate()!=null)
             {
