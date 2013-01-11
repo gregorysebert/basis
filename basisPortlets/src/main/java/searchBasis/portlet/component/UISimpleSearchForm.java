@@ -49,6 +49,7 @@ public class UISimpleSearchForm extends UIForm {
 
     private  static final String QUERY = "Query";
     private  static final String LANGUAGE = "Language";
+    private  static final String NUMBERRESULT = "NumberResult";
     private  static final String ATTRIBUT = "Attribut";
 
     private static final String BASIS_FOLDER_BY_CURRENT_USER_XPATH_QUERY = "currentUser" ;
@@ -66,6 +67,14 @@ public class UISimpleSearchForm extends UIForm {
         UIFormSelectBox uiFormSelectBoxLanguage = new UIFormSelectBox(LANGUAGE,LANGUAGE,lsLanguage);
         uiFormSelectBoxLanguage.setOnChange("Change");
         addUIFormInput(uiFormSelectBoxLanguage);
+
+        List<SelectItemOption<String>> lsNumber = new ArrayList<SelectItemOption<String>>() ;
+        lsNumber.add(new SelectItemOption<String>("5", "5")) ;
+        lsNumber.add(new SelectItemOption<String>("10", "10")) ;
+        lsNumber.add(new SelectItemOption<String>("20", "20")) ;
+        lsNumber.add(new SelectItemOption<String>("50", "50")) ;
+        UIFormSelectBox uiFormSelectBoxNumber = new UIFormSelectBox(NUMBERRESULT,NUMBERRESULT,lsNumber);
+        addUIFormInput(uiFormSelectBoxNumber);
 
         List<SelectItemOption<String>> lsQuery = new ArrayList<SelectItemOption<String>>() ;
         UIFormSelectBox uiFormSelectBoxQuery = new UIFormSelectBox(QUERY, QUERY, lsQuery) ;
@@ -105,13 +114,13 @@ public class UISimpleSearchForm extends UIForm {
                 if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("currentUser")){
                     String remoteUser =  Util.getPortalRequestContext().getRemoteUser();
                     if(language.equals("FR")){
-                        xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageFR+"]";
+                        xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageFR+"] order by @exo:name ascending";
                     }
                     else if(language.equals("EN")){
-                        xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageEN+"]";
+                        xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageEN+"] order by @exo:name ascending";
                     }
                     else if(language.equals("NL")) {
-                        xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageNL+"]";
+                        xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+remoteUser+"') "+statusLanguageNL+"] order by @exo:name ascending";
                     }
                     uiSearchBasisPortlet.setTypeQuery(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue());
 
@@ -122,13 +131,13 @@ public class UISimpleSearchForm extends UIForm {
                     uiSearchBasisPortlet.setTypeQuery(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue());
                     if(!group.equals(null)) {
                         if(language.equals("FR")){
-                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageFR+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageFR+"] order by @exo:name ascending";
                         }
                         else if(language.equals("EN")){
-                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageEN+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageEN+"] order by @exo:name ascending";
                         }
                         else if(language.equals("NL")) {
-                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageNL+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followGroupInternEditor,'"+group+"') "+statusLanguageNL+"] order by @exo:name ascending";
                         }
                         //uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     }
@@ -142,15 +151,15 @@ public class UISimpleSearchForm extends UIForm {
                     if(!user.equals(null)){
                         if(language.equals("FR")){
                             uiSearchBasisPortlet.setAttribute(user);
-                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+user+"') "+statusLanguageFR+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+user+"') "+statusLanguageFR+"] order by @exo:name ascending";
                         }
                         else if(language.equals("EN")){
                             uiSearchBasisPortlet.setAttribute(user);
-                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+user+"') "+statusLanguageEN+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+user+"') "+statusLanguageEN+"] order by @exo:name ascending";
                         }
                         else if(language.equals("NL")) {
                             uiSearchBasisPortlet.setAttribute(user);
-                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+user+"') "+statusLanguageNL+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followUserInternEditor,'"+user+"') "+statusLanguageNL+"] order by @exo:name ascending";
                         }
                         //uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     }
@@ -165,13 +174,13 @@ public class UISimpleSearchForm extends UIForm {
                     uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     if(!action.equals(null)) {
                         if(language.equals("FR")){
-                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followRequiredAction,'"+action+"') "+statusLanguageFR+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followRequiredAction,'"+action+"') "+statusLanguageFR+"] order by @exo:name ascending";
                         }
                         else if(language.equals("EN")){
-                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followRequiredAction,'"+action+"') "+statusLanguageEN+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followRequiredAction,'"+action+"') "+statusLanguageEN+"] order by @exo:name ascending";
                         }
                         else if(language.equals("NL")) {
-                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followRequiredAction,'"+action+"') "+statusLanguageNL+"]";
+                            xpathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [jcr:like(*/@basis:followRequiredAction,'"+action+"') "+statusLanguageNL+"] order by @exo:name ascending";
                         }
                         //uiSimpleSearchForm.removeChildById(ATTRIBUT);
                     }

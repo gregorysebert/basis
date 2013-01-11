@@ -6,10 +6,11 @@
             <Path>Pad</Path>
             <Action>Actie</Action>
         </header>
-        <label>
-            <View>Bekijk document</View>
-            <NoResult>Geen resultaat!</NoResult>
-        </label>
+        <action>
+            <title>
+                <ViewNode>Bekijk document</ViewNode>
+            </title>
+        </action>
     </UIResultForm>
 
     <UISearchBasisPortlet>
@@ -20,6 +21,7 @@
 
     <UISimpleSearchForm>
         <label>
+            <NumberResult>Aantal resultaten per pagina</NumberResult>
             <Query>Vraag</Query>
             <Language>Taal</Language>
             <Attribut>Attribuut</Attribut>

@@ -1,92 +1,24 @@
 <style type="text/css">
-  #NameBasis {
-     border : 1px solid black;
-     text-align:center;
-     font-size: 15px;
-     height : 20px;
-     font-weight:bold;
-     background-color: rgb(227,227,227);
-    }
-    #PathBasis {
-     border : 1px solid black;
-     text-align:center;
-     font-size: 15px;
-     height : 20px;
-     background-color: rgb(227,227,227);
-    }
-  #ActionBasis{
-     border: 1px solid black;
-     text-align:center;
-     font-size: 15px;
-     height : 20px;
-     background-color: rgb(227,227,227);
-  }
-  #ErrorBasis{
-    text-align:center;
-    font-size: 17px;
-    height : 30px;
-    color : red;
-    font-weight:bold;
-  }
-  #thBasis{
-    border : 1px solid black;
-    background-color: grey;
-    height : 20px;
-    font-weight:italic;
-  }
+.UIGrid .ViewNodeIcon {
+    background: url("/ecmexplorer/skin/webui/component/explorer/../../../icons/16x16/DefaultSkin/YellowLight.gif") no-repeat scroll 0 0 transparent;
+    height: 16px;
+    margin: auto;
+    width: 16px;
+}
+#Resultat{
+      text-align:center;
+      font-size: 15px;
+      font-weight:bold;
+}
   </style>
-<% import org.exoplatform.portal.webui.util.Util;
-String fieldName;
- String url = Util.getPortalRequestContext().getRequestURI();%>
-<div class="UIForm $uicomponent.id">
-	<%uiform.begin()%>
-	<div class="HorizontalLayout">
-		<div class="FormContainer">
-			<table class="UIFormGrid" style="width: 60%">
-			<th id="thBasis"><%=_ctx.appRes("UIResultForm.header.Name")%></th>     <th id="thBasis"><%=_ctx.appRes("UIResultForm.header.Path")%></th>   <th id="thBasis"><%=_ctx.appRes("UIResultForm.header.Action")%></th>
-				<%   def i = 0;
-				    if(uiform.hasChildren()){
-                            for(field in uiform.getChildren()) {
-                                if(field.isRendered()) {
-                                    i++;
-
-                                    fieldName = uicomponent.getLabel(field.getName());
-                                    if(fieldName != null && fieldName.length() > 0) {
-
-                                        if(i%2!=0){
-                                %>
-                                            <tr>
-                                                    <td id="NameBasis">
-                                                       <label for="Name">
-                                                        <%=uicomponent.getLabel(field.getName()) %>
-                                                        </label>
-                                                    </td>
-                                <%
-                                        }
-                                        else {
-                                        %>
-                                                    <td id="PathBasis">
-                                                       <label for="Path">
-                                                        <%=uicomponent.getLabel(field.getName()) %>
-                                                        </label>
-                                                    </td>
-                                                    <td id="ActionBasis">
-                                                        <a href="$url?path=Order Desk/Files/BO$field.id"><%=_ctx.appRes("UIResultForm.label.View")%></a>
-                                                    </td>
-                                            </tr>
-
-                                         <% }
-
-                                    }
-                                }
-                            }
-                    }
-                    else{%>
-                        <tr><td id="ErrorBasis"><label for="Error"><%=_ctx.appRes("UIResultForm.label.NoResult")%></label></td> </tr>
-                    <%}
-				%>
-			</table>
-		</div>
-	</div>
-	<%uiform.end()%>
+<%
+String numberResult = uicomponent.getSizeResultList();
+%>
+<div id="$uicomponent.id">
+<%
+          println "<p id=\"Resultat\">" + numberResult + "</p>";
+          for(uiChild in uicomponent.getChildren()) {
+            uicomponent.renderChild(uiChild) ;
+          }
+%>
 </div>

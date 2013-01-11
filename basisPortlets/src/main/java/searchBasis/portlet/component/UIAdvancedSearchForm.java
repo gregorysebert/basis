@@ -44,6 +44,8 @@ public class UIAdvancedSearchForm extends UIForm  {
     public static final String FIELD_FOLLOW_DOC = "Follow document" ;
     public static final String FIELD_FOLLOW_FOLDER = "Follow folder" ;
     public static final String FIELD_FROM = "From" ;
+    private  static final String NUMBERRESULT = "NumberResult";
+    private int i;
 
     public UIAdvancedSearchForm() throws Exception {
         UIBasisFolderForm uiBasisFolderForm = addChild(UIBasisFolderForm.class,null,FIELD_FOLDER);
@@ -59,16 +61,25 @@ public class UIAdvancedSearchForm extends UIForm  {
         uiBasisFollowFolderForm.load(FIELD_FOLLOW_FOLDER);
 
         List<SelectItemOption<String>> lsFrom = new ArrayList<SelectItemOption<String>>() ;
-        /*lsFrom.add(new SelectItemOption<String>("Folder", "Folder")) ;
-        lsFrom.add(new SelectItemOption<String>("Document", "Document")) ;
-        lsFrom.add(new SelectItemOption<String>("Follow Folder", "Follow_folder")) ;
-        lsFrom.add(new SelectItemOption<String>("Follow Document", "Follow_document")) ; */
         UIFormSelectBox uiSelectBoxFrom = new UIFormSelectBox(FIELD_FROM, FIELD_FROM, lsFrom) ;
         addChild(uiSelectBoxFrom);
-
-
-
         setActions(new String[]{"Search", "Cancel"}) ;
+
+        List<SelectItemOption<String>> lsNumber = new ArrayList<SelectItemOption<String>>() ;
+        lsNumber.add(new SelectItemOption<String>("5", "5")) ;
+        lsNumber.add(new SelectItemOption<String>("10", "10")) ;
+        lsNumber.add(new SelectItemOption<String>("20", "20")) ;
+        lsNumber.add(new SelectItemOption<String>("50", "50")) ;
+        UIFormSelectBox uiFormSelectBoxNumber = new UIFormSelectBox(NUMBERRESULT,NUMBERRESULT,lsNumber);
+        addUIFormInput(uiFormSelectBoxNumber);
+    }
+
+    public int getI() {
+        return i;
+    }
+
+    public void setI(int i) {
+        this.i = i;
     }
 
     static public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
@@ -85,6 +96,8 @@ public class UIAdvancedSearchForm extends UIForm  {
             String urlSplitted[] = url.split("BO:");
             String nameBO[] = urlSplitted[1].split("/");
             String xPathStatement = "";
+
+            uiAdvancedSearchForm.setI(0);
 
 
             //Parcours des propriétés du folder
@@ -275,315 +288,20 @@ public class UIAdvancedSearchForm extends UIForm  {
                 parameter[1] = uiPropertyInputForm.getUIStringInput("document_basisFollow_basis.label.comments").getValue();
                 mapFollowDoc.put("basis:followComments", parameter);
             }
-
             uiSearchBasisPortlet.setMapFollowDoc(mapFollowDoc);
-
-
             uiSearchBasisPortlet.setFrom(from);
 
             //Etablissement de la requete
             xPathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) [";
-            int i = 0 ;
-            //Vérification du contenu de la map folder et parcours de la map
-            if(!mapFolder.isEmpty()){
-                for (String mapKey : mapFolder.keySet()) {
-                    String[] value = mapFolder.get(mapKey);
-
-                    if(value[0].equals("Equals")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "@"+mapKey+"='"+value[1]+"'";
-                            }
-                            else{
-                                xPathStatement += " and @"+mapKey+"='"+value[1]+"'";
-                            }
-                        }
-                        else{
-                            if(i == 0){
-                                xPathStatement += "@"+mapKey+"=xs:dateTime('"+value[1]+"')";
-                            }
-                            else{
-                                xPathStatement += " and @"+mapKey+"=xs:dateTime('"+value[1]+"')";
-                            }
-                        }
-                    }
-                    else if(value[0].equals("Contains")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "jcr:like(@"+mapKey+",'%"+value[1]+"%')";
-                            }
-                            else{
-                                xPathStatement += " and jcr:like(@"+mapKey+",'%"+value[1]+"%')";
-                            }
-                        }
-                        else{
-                            xPathStatement += "";
-                        }
-                    }
-                    else if(value[0].equals("Not_Equals")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "not(@"+mapKey+"='"+value[1]+"')";
-                            }
-                            else{
-                                xPathStatement += " and not(@"+mapKey+"='"+value[1]+"')";
-                            }
-                        }
-                        else{
-                            if(i == 0){
-                                xPathStatement += "not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
-                            }
-                            else{
-                                xPathStatement += " and not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
-                            }
-                        }
-                    }
-                    else if(value[0].equals("Not_Contains")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
-                            }
-                            else{
-                                xPathStatement += " and not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
-                            }
-                        }
-                        else{
-                            xPathStatement += "";
-                        }
-                    }
-
-                    i++;
-
-                }
-            }
-
-            //Vérification du contenu de la map document et parcours de la map
-            if(!mapDoc.isEmpty()){
-                for (String mapKey : mapDoc.keySet()) {
-                    String[] value = mapDoc.get(mapKey);
-
-                    if(value[0].equals("Equals")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "*/@"+mapKey+"='"+value[1]+"'";
-                            }
-                            else{
-                                xPathStatement += " and */@"+mapKey+"='"+value[1]+"'";
-                            }
-                        }
-                        else{
-                            if(i == 0){
-                                xPathStatement += "*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
-                            }
-                            else{
-                                xPathStatement += " and */@"+mapKey+"=xs:dateTime('"+value[1]+"')";
-                            }
-                        }
-                    }
-                    else if(value[0].equals("Contains")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "jcr:like(*/@"+mapKey+",'%"+value[1]+"%')";
-                            }
-                            else{
-                                xPathStatement += " and jcr:like(*/@"+mapKey+",'%"+value[1]+"%')";
-                            }
-                        }
-                        else{
-                            xPathStatement += "";
-                        }
-                    }
-                    else if(value[0].equals("Not_Equals")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "not(*/@"+mapKey+"='"+value[1]+"')";
-                            }
-                            else{
-                                xPathStatement += " and not(*/@"+mapKey+"='"+value[1]+"')";
-                            }
-                        }
-                        else{
-                            if(i == 0){
-                                xPathStatement += "not(*/@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
-                            }
-                            else{
-                                xPathStatement += " and not(*/@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
-                            }
-                        }
-                    }
-                    else if(value[0].equals("Not_Contains")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "not(jcr:like(*/@"+mapKey+",'%"+value[1]+"%'))";
-                            }
-                            else{
-                                xPathStatement += " and not(jcr:like(*/@"+mapKey+",'%"+value[1]+"%'))";
-                            }
-                        }
-                        else{
-                            xPathStatement += "";
-                        }
-                    }
-
-                    i++;
-
-                }
-            }
-
-            //Vérification du contenu de la map follow folder et parcours de la map
-            if(!mapFollowFolder.isEmpty()){
-                for (String mapKey : mapFollowFolder.keySet()) {
-                    String[] value = mapFollowFolder.get(mapKey);
-
-                    if(value[0].equals("Equals")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "*/@"+mapKey+"='"+value[1]+"'";
-                            }
-                            else{
-                                xPathStatement += " and */@"+mapKey+"='"+value[1]+"'";
-                            }
-                        }
-                        else{
-                            if(i == 0){
-                                xPathStatement += "*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
-                            }
-                            else{
-                                xPathStatement += " and */@"+mapKey+"=xs:dateTime('"+value[1]+"')";
-                            }
-                        }
-                    }
-                    else if(value[0].equals("Contains")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "jcr:like(*/@"+mapKey+",'%"+value[1]+"%')";
-                            }
-                            else{
-                                xPathStatement += " and jcr:like(*/@"+mapKey+",'%"+value[1]+"%')";
-                            }
-                        }
-                        else{
-                            xPathStatement += "";
-                        }
-                    }
-                    else if(value[0].equals("Not_Equals")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "not(*/@"+mapKey+"='"+value[1]+"')";
-                            }
-                            else{
-                                xPathStatement += " and not(*/@"+mapKey+"='"+value[1]+"')";
-                            }
-                        }
-                        else{
-                            if(i == 0){
-                                xPathStatement += "not(*/@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
-                            }
-                            else{
-                                xPathStatement += " and not(*/@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
-                            }
-                        }
-                    }
-                    else if(value[0].equals("Not_Contains")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "not(jcr:like(*/@"+mapKey+",'%"+value[1]+"%'))";
-                            }
-                            else{
-                                xPathStatement += " and not(jcr:like(*/@"+mapKey+",'%"+value[1]+"%'))";
-                            }
-                        }
-                        else{
-                            xPathStatement += "";
-                        }
-                    }
-
-                    i++;
-
-                }
-            }
-
-            //Vérification du contenu de la map follow document et parcours de la map
-            if(!mapFollowDoc.isEmpty()){
-                for (String mapKey : mapFollowDoc.keySet()) {
-                    String[] value = mapFollowDoc.get(mapKey);
-
-                    if(value[0].equals("Equals")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "*/*/@"+mapKey+"='"+value[1]+"'";
-                            }
-                            else{
-                                xPathStatement += " and */*/@"+mapKey+"='"+value[1]+"'";
-                            }
-                        }
-                        else{
-                            if(i == 0){
-                                xPathStatement += "*/*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
-                            }
-                            else{
-                                xPathStatement += " and */*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
-                            }
-                        }
-                    }
-                    else if(value[0].equals("Contains")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%')";
-                            }
-                            else{
-                                xPathStatement += " and jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%')";
-                            }
-                        }
-                        else{
-                            xPathStatement += "";
-                        }
-                    }
-                    else if(value[0].equals("Not_Equals")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "not(*/*/@"+mapKey+"='"+value[1]+"')";
-                            }
-                            else{
-                                xPathStatement += " and not(*/*/@"+mapKey+"='"+value[1]+"')";
-                            }
-                        }
-                        else{
-                            if(i == 0){
-                                xPathStatement += "not(*/*/@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
-                            }
-                            else{
-                                xPathStatement += " and not(*/*/@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
-                            }
-                        }
-                    }
-                    else if(value[0].equals("Not_Contains")){
-                        if(!mapKey.contains("Date")){
-                            if(i == 0){
-                                xPathStatement += "not(jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%'))";
-                            }
-                            else{
-                                xPathStatement += " and not(jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%'))";
-                            }
-                        }
-                        else{
-                            xPathStatement += "";
-                        }
-                    }
-
-                    i++;
-
-                }
-            }
-            xPathStatement += "]";
+            xPathStatement = uiAdvancedSearchForm.firstChildRequest(mapFolder, xPathStatement);
+            xPathStatement = uiAdvancedSearchForm.secondChildRequest(mapDoc, xPathStatement);
+            xPathStatement = uiAdvancedSearchForm.secondChildRequest(mapFollowFolder, xPathStatement);
+            xPathStatement = uiAdvancedSearchForm.thirdChildRequest(mapFollowDoc, xPathStatement);
+            xPathStatement += "] order by @exo:name ascending";
 
             if(mapFolder.isEmpty() && mapDoc.isEmpty() && mapFollowDoc.isEmpty() && mapFollowFolder.isEmpty()){
-                xPathStatement = "";
+                xPathStatement = "/jcr:root/Files/BO/"+nameBO[0]+"//element (*,basis:basisFolder) order by @exo:name ascending";
             }
-
-
-            System.out.println("xpathstatement : " + xPathStatement + "\n\n");
-
 
             //Execution requete
             if(xPathStatement != ""){
@@ -611,7 +329,230 @@ public class UIAdvancedSearchForm extends UIForm  {
         }
     }
 
+    public String firstChildRequest(Map<String,String[]> mapProperty, String xPathStatement){
+        if(!mapProperty.isEmpty()){
+            for (String mapKey : mapProperty.keySet()) {
+                String[] value = mapProperty.get(mapKey);
 
+                if(value[0].equals("Equals")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "@"+mapKey+"='"+value[1]+"'";
+                        }
+                        else{
+                            xPathStatement += " and @"+mapKey+"='"+value[1]+"'";
+                        }
+                    }
+                    else{
+                        if(i == 0){
+                            xPathStatement += "@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        }
+                        else{
+                            xPathStatement += " and @"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        }
+                    }
+                }
+                else if(value[0].equals("Contains")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "jcr:like(@"+mapKey+",'%"+value[1]+"%')";
+                        }
+                        else{
+                            xPathStatement += " and jcr:like(@"+mapKey+",'%"+value[1]+"%')";
+                        }
+                    }
+                    else{
+                        xPathStatement += "";
+                    }
+                }
+                else if(value[0].equals("Not_Equals")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "not(@"+mapKey+"='"+value[1]+"')";
+                        }
+                        else{
+                            xPathStatement += " and not(@"+mapKey+"='"+value[1]+"')";
+                        }
+                    }
+                    else{
+                        if(i == 0){
+                            xPathStatement += "not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                        }
+                        else{
+                            xPathStatement += " and not(@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                        }
+                    }
+                }
+                else if(value[0].equals("Not_Contains")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
+                        }
+                        else{
+                            xPathStatement += " and not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
+                        }
+                    }
+                    else{
+                        xPathStatement += "";
+                    }
+                }
+
+                i++;
+
+            }
+        }
+        return xPathStatement;
+    }
+
+    public String secondChildRequest(Map<String,String[]> mapProperty, String xPathStatement){
+        if(!mapProperty.isEmpty()){
+            for (String mapKey : mapProperty.keySet()) {
+                String[] value = mapProperty.get(mapKey);
+
+                if(value[0].equals("Equals")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "*/@"+mapKey+"='"+value[1]+"'";
+                        }
+                        else{
+                            xPathStatement += " and */@"+mapKey+"='"+value[1]+"'";
+                        }
+                    }
+                    else{
+                        if(i == 0){
+                            xPathStatement += "*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        }
+                        else{
+                            xPathStatement += " and */@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        }
+                    }
+                }
+                else if(value[0].equals("Contains")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "jcr:like(*/@"+mapKey+",'%"+value[1]+"%')";
+                        }
+                        else{
+                            xPathStatement += " and jcr:like(*/@"+mapKey+",'%"+value[1]+"%')";
+                        }
+                    }
+                    else{
+                        xPathStatement += "";
+                    }
+                }
+                else if(value[0].equals("Not_Equals")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "not(*/@"+mapKey+"='"+value[1]+"')";
+                        }
+                        else{
+                            xPathStatement += " and not(*/@"+mapKey+"='"+value[1]+"')";
+                        }
+                    }
+                    else{
+                        if(i == 0){
+                            xPathStatement += "not(*/@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                        }
+                        else{
+                            xPathStatement += " and not(*/@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                        }
+                    }
+                }
+                else if(value[0].equals("Not_Contains")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "not(jcr:like(*/@"+mapKey+",'%"+value[1]+"%'))";
+                        }
+                        else{
+                            xPathStatement += " and not(jcr:like(*/@"+mapKey+",'%"+value[1]+"%'))";
+                        }
+                    }
+                    else{
+                        xPathStatement += "";
+                    }
+                }
+
+                i++;
+
+            }
+        }
+        return xPathStatement;
+    }
+
+    public String thirdChildRequest(Map<String,String[]> mapProperty, String xPathStatement){
+        if(!mapProperty.isEmpty()){
+            for (String mapKey : mapProperty.keySet()) {
+                String[] value = mapProperty.get(mapKey);
+
+                if(value[0].equals("Equals")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "*/*/@"+mapKey+"='"+value[1]+"'";
+                        }
+                        else{
+                            xPathStatement += " and */*/@"+mapKey+"='"+value[1]+"'";
+                        }
+                    }
+                    else{
+                        if(i == 0){
+                            xPathStatement += "*/*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        }
+                        else{
+                            xPathStatement += " and */*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        }
+                    }
+                }
+                else if(value[0].equals("Contains")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%')";
+                        }
+                        else{
+                            xPathStatement += " and jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%')";
+                        }
+                    }
+                    else{
+                        xPathStatement += "";
+                    }
+                }
+                else if(value[0].equals("Not_Equals")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "not(*/*/@"+mapKey+"='"+value[1]+"')";
+                        }
+                        else{
+                            xPathStatement += " and not(*/*/@"+mapKey+"='"+value[1]+"')";
+                        }
+                    }
+                    else{
+                        if(i == 0){
+                            xPathStatement += "not(*/*/@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                        }
+                        else{
+                            xPathStatement += " and not(*/*/@"+mapKey+"=xs:dateTime('"+value[1]+"'))";
+                        }
+                    }
+                }
+                else if(value[0].equals("Not_Contains")){
+                    if(!mapKey.contains("Date")){
+                        if(i == 0){
+                            xPathStatement += "not(jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%'))";
+                        }
+                        else{
+                            xPathStatement += " and not(jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%'))";
+                        }
+                    }
+                    else{
+                        xPathStatement += "";
+                    }
+                }
+
+                i++;
+
+            }
+        }
+        return xPathStatement;
+    }
 }
 
 

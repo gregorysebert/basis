@@ -6,10 +6,11 @@
             <Path>Chemin</Path>
             <Action>Action</Action>
         </header>
-        <label>
-            <View>Voir document</View>
-            <NoResult>Pas de résultat!</NoResult>
-        </label>
+        <action>
+            <title>
+                <ViewNode>Voir document</ViewNode>
+            </title>
+        </action>
     </UIResultForm>
 
     <UISearchBasisPortlet>
@@ -20,6 +21,7 @@
 
     <UISimpleSearchForm>
         <label>
+            <NumberResult>Nombre de résultats par page</NumberResult>
             <Query>Requête</Query>
             <Language>Langue</Language>
             <Attribut>Attribut</Attribut>

@@ -6,6 +6,11 @@
       margin-left: 50px;
       margin-top: 25px;
     }
+    #NumberResult{
+      width: 80px;
+       text-align:left;
+       font-size: 15px;
+    }
   </style>
 <div class="UIForm $uicomponent.id">
 	<%uiform.begin()
@@ -24,11 +29,12 @@
         <%=_ctx.appRes("UIAdvancedSearchForm.label.From")%>
     </label>
     <% uicomponent.getChildById("From").setOptions(lsListBox);
-    uiform.renderField("From") ;%>
+    uiform.renderField("From") ;
+    uiform.renderField("NumberResult") ;%>
 
 
 				<% for(uiChild in uicomponent.getChildren()) {
-				        if(uicomponent.getLabel(uiChild.getName())!= "From"){
+				        if(uicomponent.getLabel(uiChild.getName())!= "From" && uicomponent.getLabel(uiChild.getName())!= "NumberResult"){
 				              uicomponent.renderChild(uiChild) ;
 				        }
                    }
