@@ -19,7 +19,6 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
 import javax.jcr.Node;
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import java.io.*;
@@ -59,6 +58,7 @@ public class MigrationUtil {
     public static List<String> getFileList(String path)
     {
         String [] s = new File(path).list();
+        Arrays.sort(s);
         List<String> filesList = new ArrayList<String>();
         for (int i=0; i<s.length;i++)
         {
@@ -69,6 +69,7 @@ public class MigrationUtil {
 
     public static boolean addBasisDocument(Session session, String BO, String path, String jcrpath,String documentsErrorPath,String documentsMigratePath, String BOCountPattern) {
         HashMap<String, String>  mapDoc=  readBasisFile(path,documentsErrorPath);
+
         try {
        BOCountPattern = BOCountPattern;
        Mapping mapping = new Mapping(BO, mapDoc);
@@ -101,9 +102,6 @@ public class MigrationUtil {
        String folderPath = createBasisFolder(session,basisFolderPath,basisFolder);
        createBasisDocument(session,folderPath,basisDoc);
        createBasisFiche(session,folderPath,basisFiche);
-
-       session.save();
-
        File file=   new File(path);
        file.renameTo(new File(documentsMigratePath+"/"+file.getName()));
 
@@ -113,8 +111,6 @@ public class MigrationUtil {
         file.renameTo(new File(documentsErrorPath+"/"+file.getName()));
         e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-
-
         return true;
     }
 
@@ -201,7 +197,6 @@ public class MigrationUtil {
         if (!rootNode.hasNode(yearFormat.format(date)))
         {
             rootNode.addNode(yearFormat.format(date),"basis:basisDate");
-            session.save();
         }
 
         rootNode = session.getRootNode().getNode(path+"/"+yearFormat.format(date));
@@ -210,7 +205,6 @@ public class MigrationUtil {
         if (!rootNode.hasNode(monthFormat.format(date)))
         {
             rootNode.addNode(monthFormat.format(date),"basis:basisDate");
-            session.save();
         }
 
         rootNode = session.getRootNode().getNode(path+"/"+yearFormat.format(date)+"/"+monthFormat.format(date));
@@ -219,7 +213,6 @@ public class MigrationUtil {
         if (!rootNode.hasNode(dayFormat.format(date)))
         {
             rootNode.addNode(dayFormat.format(date),"basis:basisDate");
-            session.save();
         }
         return rootNode.getNode(dayFormat.format(date)).getPath().substring(1,rootNode.getNode(dayFormat.format(date)).getPath().length());
     }
@@ -242,8 +235,6 @@ public class MigrationUtil {
         else  nodeBasisFolder =  rootNode.getNode(basisFolder.getFolderId());
 
         path = nodeBasisFolder.getPath().substring(1,nodeBasisFolder.getPath().length());
-        session.save();
-
         return path;
         }
 
@@ -270,14 +261,7 @@ public class MigrationUtil {
                 cal.setTime(basisDocument.getDocDate());
                 nodeBasisDoc.setProperty("basis:docDate", cal);
             }
-            session.save();
-
-            nodeBasisDoc.checkin();
-            nodeBasisDoc.checkout();
-            session.save();
         }
-
-        session.save();
     }
 
     public static void createBasisFiche(Session session, String path, BasisFiche basisFiche) throws RepositoryException {
@@ -290,14 +274,7 @@ public class MigrationUtil {
             Calendar cal=Calendar.getInstance();
             cal.setTime(basisFiche.getFollowAnswerByDate());
             nodeBasisFiche.setProperty("basis:followAnswerByDate", cal);
-            session.save();
-
-            nodeBasisFiche.checkin();
-            nodeBasisFiche.checkout();
-            session.save();
         }
-
-        session.save();
     }
 
     public static String checkDosNum (String dosNum, String dosIdt, String BOCountPattern)
@@ -307,7 +284,7 @@ public class MigrationUtil {
         }
 
 
-        while (dosNum.length()<=6)
+        while (dosNum.length()<=5)
         {
             dosNum = "0"+dosNum;
         }
