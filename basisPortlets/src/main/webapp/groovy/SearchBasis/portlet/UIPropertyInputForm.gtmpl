@@ -1,10 +1,14 @@
 <style type="text/css">
-     #basisFolder.label.folderInternSender{
-         width: 400px;
-         font-size: 15px;
+     #folder.test{
+        width: 400px;
+        font-size: 15px;
+     }
+     input[type=text]{
+        width: 400px;
+        font-size: 15px;
      }
     #BasisProperty {
-     width: 200px;
+     width: 300px;
      text-align:left;
      font-size: 15px;
     }

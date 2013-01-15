@@ -42,7 +42,7 @@ public class Pers {
 
         if (mapping.getAFSENDER()!=null)
         {
-            comment = comment + "Afsender :" +  mapping.getAFSENDER() + "<BR>";
+            comment = comment + "Afzender :" +  mapping.getAFSENDER() + "<BR>";
         }
 
         if (mapping.getSTAMNUMMER()!=null)
@@ -74,7 +74,7 @@ public class Pers {
 
         if (mapping.getAFSENDER()!=null)
         {
-            comment = comment + "Afsender :" +  mapping.getAFSENDER() + "<BR>";
+            comment = comment + "Afzender :" +  mapping.getAFSENDER() + "<BR>";
         }
 
         if (mapping.getSTAMNUMMER()!=null)

@@ -45,7 +45,6 @@ public class UIBasisFolderForm extends UIForm {
                     uiPropertyInputForm.load(property,"basisFolder");
                 }
             }
-
         }
     }
 
