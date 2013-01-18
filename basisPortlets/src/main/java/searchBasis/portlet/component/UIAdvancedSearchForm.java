@@ -353,17 +353,12 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Contains")){
-                    if(!mapKey.contains("Date")){
                         if(i == 0){
                             xPathStatement += "jcr:like(@"+mapKey+",'%"+value[1]+"%')";
                         }
                         else{
                             xPathStatement += " and jcr:like(@"+mapKey+",'%"+value[1]+"%')";
                         }
-                    }
-                    else{
-                        xPathStatement += "";
-                    }
                 }
                 else if(value[0].equals("Not_Equals")){
                     if(!mapKey.contains("Date")){
@@ -384,16 +379,19 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Not_Contains")){
-                    if(!mapKey.contains("Date")){
                         if(i == 0){
                             xPathStatement += "not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
                         }
                         else{
                             xPathStatement += " and not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
                         }
+                }
+                else if(value[0].equals("Between")){
+                    if(i == 0){
+                        xPathStatement += "@"+mapKey+"=xs:dateTime('"+value[1]+"')";
                     }
                     else{
-                        xPathStatement += "";
+                        xPathStatement += " and @"+mapKey+"=xs:dateTime('"+value[1]+"')";
                     }
                 }
 
@@ -428,17 +426,12 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Contains")){
-                    if(!mapKey.contains("Date")){
                         if(i == 0){
                             xPathStatement += "jcr:like(*/@"+mapKey+",'%"+value[1]+"%')";
                         }
                         else{
                             xPathStatement += " and jcr:like(*/@"+mapKey+",'%"+value[1]+"%')";
                         }
-                    }
-                    else{
-                        xPathStatement += "";
-                    }
                 }
                 else if(value[0].equals("Not_Equals")){
                     if(!mapKey.contains("Date")){
@@ -459,16 +452,19 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Not_Contains")){
-                    if(!mapKey.contains("Date")){
                         if(i == 0){
                             xPathStatement += "not(jcr:like(*/@"+mapKey+",'%"+value[1]+"%'))";
                         }
                         else{
                             xPathStatement += " and not(jcr:like(*/@"+mapKey+",'%"+value[1]+"%'))";
                         }
+                }
+                else if(value[0].equals("Between")){
+                    if(i == 0){
+                        xPathStatement += "*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
                     }
                     else{
-                        xPathStatement += "";
+                        xPathStatement += " and */@"+mapKey+"=xs:dateTime('"+value[1]+"')";
                     }
                 }
 
@@ -503,17 +499,12 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Contains")){
-                    if(!mapKey.contains("Date")){
                         if(i == 0){
                             xPathStatement += "jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%')";
                         }
                         else{
                             xPathStatement += " and jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%')";
                         }
-                    }
-                    else{
-                        xPathStatement += "";
-                    }
                 }
                 else if(value[0].equals("Not_Equals")){
                     if(!mapKey.contains("Date")){
@@ -534,16 +525,19 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Not_Contains")){
-                    if(!mapKey.contains("Date")){
                         if(i == 0){
                             xPathStatement += "not(jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%'))";
                         }
                         else{
                             xPathStatement += " and not(jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%'))";
                         }
+                }
+                else if(value[0].equals("Between")){
+                    if(i == 0){
+                        xPathStatement += "*/*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
                     }
                     else{
-                        xPathStatement += "";
+                        xPathStatement += " and */*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
                     }
                 }
 

@@ -52,13 +52,7 @@ public class UISimpleSearchForm extends UIForm {
     private  static final String NUMBERRESULT = "NumberResult";
     private  static final String ATTRIBUT = "Attribut";
 
-    private static final String BASIS_FOLDER_BY_CURRENT_USER_XPATH_QUERY = "currentUser" ;
-    private static final String BASIS_FOLDER_BY_GROUP_XPATH_QUERY = "byGroup" ;
-    private static final String BASIS_FOLDER_BY_USER_XPATH_QUERY = "byUser" ;
-    private static final String BASIS_FOLDER_BY_ACTION_XPATH_QUERY = "byAction" ;
-
     public UISimpleSearchForm() throws Exception {
-        PortletRequestContext portletRequestContext = WebuiRequestContext.getCurrentInstance();
 
         List<SelectItemOption<String>> lsLanguage = new ArrayList<SelectItemOption<String>>() ;
         lsLanguage.add(new SelectItemOption<String>("NL", "NL")) ;
@@ -76,8 +70,7 @@ public class UISimpleSearchForm extends UIForm {
         UIFormSelectBox uiFormSelectBoxNumber = new UIFormSelectBox(NUMBERRESULT,NUMBERRESULT,lsNumber);
         addUIFormInput(uiFormSelectBoxNumber);
 
-        List<SelectItemOption<String>> lsQuery = new ArrayList<SelectItemOption<String>>() ;
-        UIFormSelectBox uiFormSelectBoxQuery = new UIFormSelectBox(QUERY, QUERY, lsQuery) ;
+        UIFormSelectBox uiFormSelectBoxQuery = new UIFormSelectBox(QUERY, QUERY, null) ;
         uiFormSelectBoxQuery.setOnChange("Change");
         addUIFormInput(uiFormSelectBoxQuery);
 
@@ -88,7 +81,6 @@ public class UISimpleSearchForm extends UIForm {
     static public class SearchActionListener extends EventListener<UISimpleSearchForm> {
         public void execute(Event<UISimpleSearchForm> event) throws Exception {
             UISimpleSearchForm uiSimpleSearchForm = event.getSource();
-            UIApplication uiApp = uiSimpleSearchForm.getAncestorOfType(UIApplication.class);
             String xpathStatement = "";
 
             String url = Util.getPortalRequestContext().getRequestURI();

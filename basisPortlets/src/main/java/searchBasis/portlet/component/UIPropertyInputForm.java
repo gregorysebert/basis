@@ -1,5 +1,6 @@
 package searchBasis.portlet.component;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -25,8 +26,12 @@ import java.util.List;
  */
 @ComponentConfig(
         lifecycle = UIFormLifecycle.class,
-        template =  "app:/groovy/SearchBasis/portlet/UIPropertyInputForm.gtmpl"
+        template =  "app:/groovy/SearchBasis/portlet/UIPropertyInputForm.gtmpl",
+        events = {
+                @EventConfig(listeners = UIPropertyInputForm.ChangeActionListener.class)
+        }
 )
+@Serialized
 public class UIPropertyInputForm extends UIForm {
 
     public UIPropertyInputForm() throws Exception {
@@ -49,8 +54,10 @@ public class UIPropertyInputForm extends UIForm {
         UICheckBoxInput uiCheckBoxInput = new UICheckBoxInput(labelProperty+"_checkBox",null,null);
         addUIFormInput(uiCheckBoxInput);
 
-        List<SelectItemOption<String>> lsSearch = new ArrayList<SelectItemOption<String>>() ;
-        addUIFormInput(new UIFormSelectBox(labelProperty+"_searchType", null, lsSearch));
+        UIFormSelectBox uiFormSelectBoxSearchType = new UIFormSelectBox(labelProperty+"_searchType", null, null);
+        uiFormSelectBoxSearchType.setOnChange("Change");
+        addUIFormInput(uiFormSelectBoxSearchType);
+
         if(property != null){
             if(property.getRequiredType() != 5){
                 addUIFormInput(new UIFormStringInput(labelProperty, null, null));
@@ -62,9 +69,16 @@ public class UIPropertyInputForm extends UIForm {
         else{
             addUIFormInput(new UIFormStringInput(labelProperty, null, null));
         }
-
-
     }
 
+    static public class ChangeActionListener extends EventListener<UIPropertyInputForm> {
+        public void execute(Event<UIPropertyInputForm> event) throws Exception {
 
+            UIPropertyInputForm uiPropertyInputForm = event.getSource() ;
+            UIAdvancedSearchForm uiManager = uiPropertyInputForm.getAncestorOfType(UIAdvancedSearchForm.class) ;
+            System.out.println("coucou :) ");
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
+
+        }
+    }
 }

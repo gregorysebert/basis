@@ -7,13 +7,13 @@
         width: 400px;
         font-size: 15px;
      }
+     .selectbox{
+        width: 150px;
+        text-align:left;
+        font-size: 15px;
+     }
     #BasisProperty {
      width: 300px;
-     text-align:left;
-     font-size: 15px;
-    }
-    #searchType{
-     width: 120px;
      text-align:left;
      font-size: 15px;
     }
@@ -25,12 +25,8 @@
 
   <%import org.exoplatform.webui.core.model.SelectItemOption;
     import java.util.List;
-
+    
     List<SelectItemOption<String>> lsListBox = new ArrayList<SelectItemOption<String>>() ;
-    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Equals"), "Equals")) ;
-    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Contains"), "Contains")) ;
-    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Not_Equals"), "Not_Equals")) ;
-    lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Not_Contains"), "Not_Contains")) ;
   %>
 
 <% String fieldName; %>
@@ -45,8 +41,12 @@
                     <td id="BasisCheckBox"><% uiform.renderField(field) %></td>
                 <%}
                  if(fieldName.contains("searchType")){
-                    uicomponent.getChildById(fieldName).setOptions(lsListBox);
-                    if(fieldName.contains("comments")){%>
+                    if(fieldName.contains("comments")){
+					
+						lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Contains"), "Contains")) ;
+						lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Not_Contains"), "Not_Contains")) ;
+						uicomponent.getChildById(fieldName).setOptions(lsListBox);
+				%>
 					
 						<% def fieldNameComments = fieldName.split("_searchType")[0]; 
 							if(fieldNameComments.contains("folder_basisFollow") || fieldNameComments.contains("document_basisFollow")){%>
@@ -59,7 +59,20 @@
                         <td id="searchType"><% uiform.renderField(field) %></td>
 							
                 <%	}
-					else{%>
+					else{
+					
+						if(fieldName.contains("Date")){
+							lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Equals"), "Equals")) ;
+							lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Not_Equals"), "Not_Equals")) ;
+							lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Between"), "Between")) ;
+						}
+						else{
+							lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Contains"), "Contains")) ;
+							lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Equals"), "Equals")) ;
+							lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Not_Contains"), "Not_Contains")) ;
+							lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIPropertyInputForm.ListBox.Not_Equals"), "Not_Equals")) ;
+						}
+						uicomponent.getChildById(fieldName).setOptions(lsListBox);%>
                         
 							<%def fieldNameProperty = fieldName.split("_searchType")[0];
 							  if(fieldNameProperty.contains("folder_basisFollow") || fieldNameProperty.contains("document_basisFollow")){
@@ -72,7 +85,7 @@
                           <%}%>
                         
                         <td id="searchType"><% uiform.renderField(field) %></td>
-                <%	}
+                <%}
 				}
                 if(!fieldName.contains("searchType") && !fieldName.contains("checkBox")) {
                 %>
