@@ -2,11 +2,10 @@ package searchBasis.portlet.component;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
-import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 
 import javax.jcr.nodetype.NodeType;
@@ -22,10 +21,9 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @ComponentConfig(
-        lifecycle = UIFormLifecycle.class,
         template =  "app:/groovy/SearchBasis/portlet/UIBasisFollowFolderForm.gtmpl"
 )
-public class UIBasisFollowFolderForm extends UIForm {
+public class UIBasisFollowFolderForm extends UIContainer {
 
     public static final String FIELD_RADIOBOX = "RadioBox_folder" ;
     private PropertyDefinition[] basisFollowFolderNodetypeProperties;
@@ -49,7 +47,7 @@ public class UIBasisFollowFolderForm extends UIForm {
 
         }
         List<SelectItemOption<String>> lsRadioBox = new ArrayList<SelectItemOption<String>>() ;
-        addUIFormInput(new UIFormRadioBoxInput(FIELD_RADIOBOX,FIELD_RADIOBOX,lsRadioBox));
+        addChild(new UIFormRadioBoxInput(FIELD_RADIOBOX,FIELD_RADIOBOX,lsRadioBox));
     }
 
     public PropertyDefinition[] getBasisFollowFolderNodetypeProperties() {

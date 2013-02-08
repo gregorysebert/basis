@@ -6,24 +6,19 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.core.model.SelectItemOption;
-import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormSelectBox;
-import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.UIFormRadioBoxInput;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.query.QueryResult;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
+import javax.jcr.query.QueryResult;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -173,11 +168,13 @@ public class UIResultForm extends UIForm {
                     Node basisFolderNode = nodeIterator1.nextNode();
 
                     if(from.equals("Folder")){
-                        if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+                        UIFormRadioBoxInput uiFormRadioBoxInputFolder =  uiBasisFollowFolderForm.getChildById("RadioBox_folder");
+                        UIFormRadioBoxInput uiFormRadioBoxInputDocument =  uiBasisFollowDocForm.getChildById("RadioBox_doc");
+                        if(uiFormRadioBoxInputFolder.getValue().toString().equals("Last")){
                             lastFollowFolder(basisFolderNode, basisFolderNode, uiSearchBasisPortlet, uiBasisFollowDocForm, from, null);
                         }
                         else{
-                            if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                            if(uiFormRadioBoxInputDocument.getValue().toString().equals("Last")){
                                 lastFollowDoc(basisFolderNode, basisFolderNode , uiSearchBasisPortlet, from, null);
                             }
                             else{
@@ -191,6 +188,9 @@ public class UIResultForm extends UIForm {
                         }
                     }
                     else if(from.equals("Document")){
+                        UIFormRadioBoxInput uiFormRadioBoxInputFolder =  uiBasisFollowFolderForm.getChildById("RadioBox_folder");
+                        UIFormRadioBoxInput uiFormRadioBoxInputDocument =  uiBasisFollowDocForm.getChildById("RadioBox_doc");
+
                         String url = Util.getPortalRequestContext().getRequestURI();
                         String urlSplitted[] = url.split("BO:");
                         String nameBO[] = urlSplitted[1].split("/");
@@ -215,12 +215,12 @@ public class UIResultForm extends UIForm {
                         while(nodeIterator2.hasNext()){
                             Node basisDocumentNode = nodeIterator2.nextNode();
 
-                            if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+                            if(uiFormRadioBoxInputFolder.getValue().toString().equals("Last")){
                                 lastFollowFolder(basisDocumentNode, basisFolderNode, uiSearchBasisPortlet, uiBasisFollowDocForm, from, null);
 
                             }
                             else{
-                                if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                                if(uiFormRadioBoxInputDocument.getValue().toString().equals("Last")){
                                     lastFollowDoc(basisDocumentNode, basisFolderNode , uiSearchBasisPortlet, from, null);
                                 }
                                 else{
@@ -236,6 +236,9 @@ public class UIResultForm extends UIForm {
 
                     }
                     else if(from.equals("Follow_folder")){
+                        UIFormRadioBoxInput uiFormRadioBoxInputFolder =  uiBasisFollowFolderForm.getChildById("RadioBox_folder");
+                        UIFormRadioBoxInput uiFormRadioBoxInputDocument =  uiBasisFollowDocForm.getChildById("RadioBox_doc");
+
                         String url = Util.getPortalRequestContext().getRequestURI();
                         String urlSplitted[] = url.split("BO:");
                         String nameBO[] = urlSplitted[1].split("/");
@@ -259,12 +262,12 @@ public class UIResultForm extends UIForm {
                         while(nodeIterator2.hasNext()){
                             Node basisFollowFolderNode = nodeIterator2.nextNode();
 
-                            if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+                            if(uiFormRadioBoxInputFolder.getValue().toString().equals("Last")){
                                 lastFollowFolder(basisFollowFolderNode, basisFolderNode, uiSearchBasisPortlet, uiBasisFollowDocForm, from, null);
 
                             }
                             else{
-                                if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                                if(uiFormRadioBoxInputDocument.getValue().toString().equals("Last")){
                                     lastFollowDoc(basisFollowFolderNode, basisFolderNode , uiSearchBasisPortlet, from, null);
                                 }
                                 else{
@@ -280,6 +283,9 @@ public class UIResultForm extends UIForm {
 
                     }
                     else if(from.equals("Follow_document")){
+                        UIFormRadioBoxInput uiFormRadioBoxInputFolder =  uiBasisFollowFolderForm.getChildById("RadioBox_folder");
+                        UIFormRadioBoxInput uiFormRadioBoxInputDocument =  uiBasisFollowDocForm.getChildById("RadioBox_doc");
+
                         String url = Util.getPortalRequestContext().getRequestURI();
                         String urlSplitted[] = url.split("BO:");
                         String nameBO[] = urlSplitted[1].split("/");
@@ -321,12 +327,12 @@ public class UIResultForm extends UIForm {
                             while(nodeIterator3.hasNext()){
                                 Node basisFollowDocumentNode = nodeIterator3.nextNode();
 
-                                if(uiBasisFollowFolderForm.getUIInput("RadioBox_folder").getValue().toString().equals("Last")){
+                                if(uiFormRadioBoxInputFolder.getValue().toString().equals("Last")){
                                     lastFollowFolder(basisFollowDocumentNode, basisFolderNode, uiSearchBasisPortlet, uiBasisFollowDocForm, from, basisDocumentNode);
 
                                 }
                                 else{
-                                    if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                                    if(uiFormRadioBoxInputDocument.getValue().toString().equals("Last")){
                                         lastFollowDoc(basisFollowDocumentNode, basisFolderNode , uiSearchBasisPortlet, from, basisDocumentNode);
                                     }
                                     else{
@@ -374,7 +380,8 @@ public class UIResultForm extends UIForm {
                     String[] value = mapFollowFolder.get(mapKey);
                     if(value[0].equals("Equals")){
                         if(basisFollowFolderNode.getProperty(mapKey).getString().equals(value[1])){
-                            if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                            UIFormRadioBoxInput uiFormRadioBoxInputDocument =  uiBasisFollowDocForm.getChildById("RadioBox_doc");
+                            if(uiFormRadioBoxInputDocument.getValue().toString().equals("Last")){
                                 lastFollowDoc(basisNode, basisFolderNode, uiSearchBasisPortlet, from, basisDocumentNode);
                             }
                             else{
@@ -405,7 +412,8 @@ public class UIResultForm extends UIForm {
                     }
                     else if(value[0].equals("Contains")){
                         if(basisFollowFolderNode.getProperty(mapKey).getString().contains(value[1])){
-                            if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                            UIFormRadioBoxInput uiFormRadioBoxInputDocument =  uiBasisFollowDocForm.getChildById("RadioBox_doc");
+                            if(uiFormRadioBoxInputDocument.getValue().toString().equals("Last")){
                                 lastFollowDoc(basisNode, basisFolderNode, uiSearchBasisPortlet, from, basisDocumentNode);
                             }
                             else{
@@ -436,7 +444,8 @@ public class UIResultForm extends UIForm {
                     }
                     else if(value[0].equals("Not_Equals")){
                         if(!basisFollowFolderNode.getProperty(mapKey).getString().equals(value[1])){
-                            if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                            UIFormRadioBoxInput uiFormRadioBoxInputDocument =  uiBasisFollowDocForm.getChildById("RadioBox_doc");
+                            if(uiFormRadioBoxInputDocument.getValue().toString().equals("Last")){
                                 lastFollowDoc(basisNode, basisFolderNode, uiSearchBasisPortlet, from, basisDocumentNode);
                             }
                             else{
@@ -467,7 +476,8 @@ public class UIResultForm extends UIForm {
                     }
                     else if(value[0].equals("Not_Contains")){
                         if(!basisFollowFolderNode.getProperty(mapKey).getString().contains(value[1])){
-                            if(uiBasisFollowDocForm.getUIInput("RadioBox_doc").getValue().toString().equals("Last")){
+                            UIFormRadioBoxInput uiFormRadioBoxInputDocument =  uiBasisFollowDocForm.getChildById("RadioBox_doc");
+                            if(uiFormRadioBoxInputDocument.getValue().toString().equals("Last")){
                                 lastFollowDoc(basisNode, basisFolderNode, uiSearchBasisPortlet, from, basisDocumentNode);
                             }
                             else{

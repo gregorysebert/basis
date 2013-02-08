@@ -2,12 +2,9 @@ package searchBasis.portlet.component;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
-import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.input.UICheckBoxInput;
-import sun.rmi.runtime.NewThreadAction;
 
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.PropertyDefinition;
@@ -20,10 +17,9 @@ import javax.jcr.nodetype.PropertyDefinition;
  * To change this template use File | Settings | File Templates.
  */
 @ComponentConfig(
-        lifecycle = UIFormLifecycle.class,
         template =  "app:/groovy/SearchBasis/portlet/UIBasisFolderForm.gtmpl"
 )
-public class UIBasisFolderForm extends UIForm {
+public class UIBasisFolderForm extends UIContainer {
 
     public static final String FIELD_FOLDER_ID = "exo:title" ;
     private PropertyDefinition[] basisFolderNodetypeProperties;

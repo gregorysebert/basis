@@ -1,6 +1,6 @@
 <style type="text/css">
   #TableQueryAdvanced{
-       width: 1000px;
+       width: auto;
        text-align:left;
   }
   #fieldsetFolder{
@@ -9,17 +9,15 @@
        margin-bottom: 10px;
        overflow:hidden;
        border: 1px solid #b7b7b7;
-       width: 950px;
+       width: auto;
     }
   </style>
 
-<div id="UIForm $uicomponent.id">
-
+<div id="$uicomponent.id">
 		<fieldset id="fieldsetFolder">
 		<legend><%=_ctx.appRes("UIBasisFolderForm.legend.Folder")%></legend>
 			<table id="TableQueryAdvanced">
-				 <% for(uiChild in uicomponent.getChildren()) {
-							String labelId = uiChild.getId();%>
+				 <% for(uiChild in uicomponent.getChildren()) {%>
 							<tr><%uicomponent.renderChild(uiChild) ;%> </tr> <%
 					   }
 				  %>

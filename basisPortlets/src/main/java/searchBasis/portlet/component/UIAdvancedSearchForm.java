@@ -11,17 +11,17 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
+import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 
 import javax.jcr.Session;
 import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,7 +35,8 @@ import java.util.Map;
         template =  "app:/groovy/SearchBasis/portlet/UIAdvancedSearchForm.gtmpl",
         events = {
                 @EventConfig(listeners = UIAdvancedSearchForm.SearchActionListener.class),
-                @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class)
+                @EventConfig(listeners = UIAdvancedSearchForm.CancelActionListener.class),
+                @EventConfig(listeners = UIAdvancedSearchForm.ChangeActionListener.class, phase= Event.Phase.DECODE )
         }
 )
 public class UIAdvancedSearchForm extends UIForm  {
@@ -84,6 +85,7 @@ public class UIAdvancedSearchForm extends UIForm  {
 
     static public class SearchActionListener extends EventListener<UIAdvancedSearchForm> {
         public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
+            String language =  Util.getPortalRequestContext().getLocale().getDisplayName();
             UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource();
             UISearchBasisPortlet uiSearchBasisPortlet = uiAdvancedSearchForm.getAncestorOfType(UISearchBasisPortlet.class);
             Map<String,String[]> mapFolder = new HashMap<String,String[]>();
@@ -103,17 +105,31 @@ public class UIAdvancedSearchForm extends UIForm  {
             //Parcours des propriétés du folder
             UIBasisFolderForm uiBasisFolderForm = uiAdvancedSearchForm.getChildById(FIELD_FOLDER);
             UIPropertyInputForm uiPropertyInputForm = uiBasisFolderForm.getChildById(FIELD_FOLDER+"_basis:folderComments");
-            if(uiPropertyInputForm.getUICheckBoxInput("basisFolder_basis.label.comments_checkBox").getValue()){
+            UICheckBoxInput uiCheckBoxInput = uiPropertyInputForm.getChildById("basisFolder_basis.label.comments_checkBox");
+
+            UIFormSelectBox uiFormSelectBox;
+            UIFormStringInput uiFormStringInput;
+            UIFormDateTimeInput uiFormDateTimeInput;
+            if(uiCheckBoxInput.getValue()){
                 String[] parameter= new String[2];
-                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisFolder_basis.label.comments_searchType").getValue();
-                parameter[1] = uiPropertyInputForm.getUIStringInput("basisFolder_basis.label.comments").getValue();
+
+                uiFormSelectBox  = uiPropertyInputForm.getChildById("basisFolder_basis.label.comments_searchType");
+                parameter[0] = uiFormSelectBox.getValue();
+                uiFormStringInput = uiPropertyInputForm.getChildById("basisFolder_basis_comments");
+                parameter[1] = uiFormStringInput.getValue();
+
                 mapFolder.put("basis:folderComments", parameter);
             }
             uiPropertyInputForm = uiBasisFolderForm.getChildById("exo:title");
-            if(uiPropertyInputForm.getUICheckBoxInput("basisFolder.label.folderNumber_checkBox").getValue()){
+            uiCheckBoxInput = uiPropertyInputForm.getChildById("basisFolder.label.folderNumber_checkBox");
+            if(uiCheckBoxInput.getValue()){
                 String[] parameter= new String[2];
-                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisFolder.label.folderNumber_searchType").getValue();
-                parameter[1] = uiPropertyInputForm.getUIStringInput("basisFolder.label.folderNumber").getValue();
+
+                uiFormSelectBox  = uiPropertyInputForm.getChildById("basisFolder.label.folderNumber_searchType");
+                parameter[0] = uiFormSelectBox.getValue();
+                uiFormStringInput = uiPropertyInputForm.getChildById("basisFolder.label.folderNumber");
+                parameter[1] = uiFormStringInput.getValue();
+
                 mapFolder.put("exo:title", parameter);
             }
 
@@ -124,23 +140,60 @@ public class UIAdvancedSearchForm extends UIForm  {
                     if(!propertyFolder.getName().contains("folderLanguage") && !propertyFolder.getName().contains("folderComments")) {
                         if(propertyFolder.getRequiredType() != 5){
                             uiPropertyInputForm = uiBasisFolderForm.getChildById(FIELD_FOLDER+"_"+propertyFolder.getName());
-                            if(uiPropertyInputForm.getUICheckBoxInput("basisFolder.label."+propertyFolder.getName().split("basis:")[1]+"_checkBox").getValue()){
+                            uiCheckBoxInput = uiPropertyInputForm.getChildById("basisFolder.label."+propertyFolder.getName().split("basis:")[1]+"_checkBox");
+                            if(uiCheckBoxInput.getValue()){
                                 String[] parameter= new String[2];
-                                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisFolder.label." + propertyFolder.getName().split("basis:")[1] + "_searchType").getValue();
-                                parameter[1] = uiPropertyInputForm.getUIStringInput("basisFolder.label." + propertyFolder.getName().split("basis:")[1]).getValue();
+
+                                uiFormSelectBox  = uiPropertyInputForm.getChildById("basisFolder.label." + propertyFolder.getName().split("basis:")[1] + "_searchType");
+                                parameter[0] = uiFormSelectBox.getValue();
+                                uiFormStringInput = uiPropertyInputForm.getChildById("basisFolder_" + propertyFolder.getName().split("basis:")[1]);
+                                parameter[1] = uiFormStringInput.getValue();
+
                                 mapFolder.put(propertyFolder.getName(), parameter);
                             }
                         }
                         else{
                             uiPropertyInputForm = uiBasisFolderForm.getChildById(FIELD_FOLDER+"_"+propertyFolder.getName());
-                            if(uiPropertyInputForm.getUICheckBoxInput("basisFolder.label."+propertyFolder.getName().split("basis:")[1]+"_checkBox").getValue()){
-                                String date = uiPropertyInputForm.getUIFormDateTimeInput("basisFolder.label." + propertyFolder.getName().split("basis:")[1]).getValue();
-                                String [] dateSplitted = date.split("/");
-                                String propertyDate=dateSplitted[2]+"-"+dateSplitted[1]+"-"+dateSplitted[0];
+                            uiCheckBoxInput = uiPropertyInputForm.getChildById("basisFolder.label."+propertyFolder.getName().split("basis:")[1]+"_checkBox");
+                            if(uiCheckBoxInput.getValue()){
+                                uiFormDateTimeInput = uiPropertyInputForm.getChildById("basisFolder_" + propertyFolder.getName().split("basis:")[1]);
+                                String date = uiFormDateTimeInput.getValue();
+                                String day = date.substring(0,2);
+                                String month = date.substring(3,5);
+                                String year = date.substring(6,10);
 
-                                String[] parameter= new String[2];
-                                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisFolder.label." + propertyFolder.getName().split("basis:")[1]+"_searchType").getValue();
+                                String propertyDate;
+                                if(language.equals("English")){
+                                    propertyDate=year+"-"+day+"-"+month;
+                                }
+                                else{
+                                    propertyDate=year+"-"+month+"-"+day;
+                                }
+
+                                String[] parameter= new String[3];
+
+                                uiFormSelectBox  = uiPropertyInputForm.getChildById("basisFolder.label." + propertyFolder.getName().split("basis:")[1]+"_searchType");
+                                parameter[0] = uiFormSelectBox.getValue();
                                 parameter[1] = propertyDate;
+
+                                if(uiPropertyInputForm.findComponentById("basisFolder_" + propertyFolder.getName().split("basis:")[1]+"_second") != null){
+                                    uiFormDateTimeInput = uiPropertyInputForm.getChildById("basisFolder_" + propertyFolder.getName().split("basis:")[1]+"_second");
+                                    String date2 = uiFormDateTimeInput.getValue();
+                                    String day2 = date2.substring(0,2);
+                                    String month2 = date2.substring(3,5);
+                                    String year2 = date2.substring(6,10);
+
+                                    //String [] dateSplitted = date.split("/");
+                                    //String propertyDate=dateSplitted[2]+"-"+dateSplitted[1]+"-"+dateSplitted[0];
+                                    String propertyDate2;
+                                    if(language.equals("English")){
+                                        propertyDate2=year2+"-"+day2+"-"+month2;
+                                    }
+                                    else{
+                                        propertyDate2=year2+"-"+month2+"-"+day2;
+                                    }
+                                    parameter[2] = propertyDate2;
+                                }
 
                                 mapFolder.put(propertyFolder.getName(),parameter);
                             }
@@ -160,23 +213,58 @@ public class UIAdvancedSearchForm extends UIForm  {
                     if(!propertyDoc.getName().contains("docSenderType") && !propertyDoc.getName().contains("docComments")) {
                         if(propertyDoc.getRequiredType() != 5){
                             uiPropertyInputForm = uiBasisDocForm.getChildById(FIELD_DOC+"_"+propertyDoc.getName());
-                            if(uiPropertyInputForm.getUICheckBoxInput("basisDocument.label."+propertyDoc.getName().split("basis:")[1]+"_checkBox").getValue()){
+                            uiCheckBoxInput = uiPropertyInputForm.getChildById("basisDocument.label."+propertyDoc.getName().split("basis:")[1]+"_checkBox");
+                            if(uiCheckBoxInput.getValue()){
                                 String[] parameter= new String[2];
-                                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisDocument.label." + propertyDoc.getName().split("basis:")[1] + "_searchType").getValue();
-                                parameter[1] = uiPropertyInputForm.getUIStringInput("basisDocument.label." + propertyDoc.getName().split("basis:")[1]).getValue();
+
+                                uiFormSelectBox  = uiPropertyInputForm.getChildById("basisDocument.label." + propertyDoc.getName().split("basis:")[1] + "_searchType");
+                                parameter[0] = uiFormSelectBox.getValue();
+                                uiFormStringInput = uiPropertyInputForm.getChildById("basisDocument_" + propertyDoc.getName().split("basis:")[1]);
+                                parameter[1] = uiFormStringInput.getValue();
+
                                 mapDoc.put(propertyDoc.getName(), parameter);
                             }
                         }
                         else{
                             uiPropertyInputForm = uiBasisDocForm.getChildById(FIELD_DOC+"_"+propertyDoc.getName());
-                            if(uiPropertyInputForm.getUICheckBoxInput("basisDocument.label."+propertyDoc.getName().split("basis:")[1]+"_checkBox").getValue()){
-                                String date = uiPropertyInputForm.getUIFormDateTimeInput("basisDocument.label." + propertyDoc.getName().split("basis:")[1]).getValue();
-                                String [] dateSplitted = date.split("/");
-                                String propertyDate=dateSplitted[2]+"-"+dateSplitted[1]+"-"+dateSplitted[0];
+                            uiCheckBoxInput = uiPropertyInputForm.getChildById("basisDocument.label."+propertyDoc.getName().split("basis:")[1]+"_checkBox");
+                            if(uiCheckBoxInput.getValue()){
+                                uiFormDateTimeInput = uiPropertyInputForm.getChildById("basisDocument_" + propertyDoc.getName().split("basis:")[1]);
+                                String date = uiFormDateTimeInput.getValue();
+                                String day = date.substring(0,2);
+                                String month = date.substring(3,5);
+                                String year = date.substring(6,10);
 
-                                String[] parameter= new String[2];
-                                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisDocument.label." + propertyDoc.getName().split("basis:")[1]+"_searchType").getValue();
+                                String propertyDate;
+                                if(language.equals("English")){
+                                    propertyDate=year+"-"+day+"-"+month;
+                                }
+                                else{
+                                    propertyDate=year+"-"+month+"-"+day;
+                                }
+
+                                String[] parameter= new String[3];
+
+                                uiFormSelectBox  = uiPropertyInputForm.getChildById("basisDocument.label." + propertyDoc.getName().split("basis:")[1]+"_searchType");
+                                parameter[0] = uiFormSelectBox.getValue();
                                 parameter[1] = propertyDate;
+
+                                if(uiPropertyInputForm.findComponentById("basisDocument_" + propertyDoc.getName().split("basis:")[1]+"_second") != null){
+                                    uiFormDateTimeInput = uiPropertyInputForm.getChildById("basisDocument_" + propertyDoc.getName().split("basis:")[1]+"_second");
+                                    String date2 = uiFormDateTimeInput.getValue();
+                                    String day2 = date2.substring(0,2);
+                                    String month2 = date2.substring(3,5);
+                                    String year2 = date2.substring(6,10);
+
+                                    String propertyDate2;
+                                    if(language.equals("English")){
+                                        propertyDate2=year2+"-"+day2+"-"+month2;
+                                    }
+                                    else{
+                                        propertyDate2=year2+"-"+month2+"-"+day2;
+                                    }
+                                    parameter[2] = propertyDate2;
+                                }
 
                                 mapDoc.put(propertyDoc.getName(),parameter);
                             }
@@ -186,17 +274,27 @@ public class UIAdvancedSearchForm extends UIForm  {
             }
 
             uiPropertyInputForm = uiBasisDocForm.getChildById(FIELD_DOC+"_basis:docComments");
-            if(uiPropertyInputForm.getUICheckBoxInput("basisDocument_basis.label.comments_checkBox").getValue()){
+            uiCheckBoxInput = uiPropertyInputForm.getChildById("basisDocument_basis.label.comments_checkBox");
+            if(uiCheckBoxInput.getValue()){
                 String[] parameter= new String[2];
-                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisDocument_basis.label.comments_searchType").getValue();
-                parameter[1] = uiPropertyInputForm.getUIStringInput("basisDocument_basis.label.comments").getValue();
+
+                uiFormSelectBox  = uiPropertyInputForm.getChildById("basisDocument_basis.label.comments_searchType");
+                parameter[0] = uiFormSelectBox.getValue();
+                uiFormStringInput = uiPropertyInputForm.getChildById("basisDocument_basis_comments");
+                parameter[1] = uiFormStringInput.getValue();
+
                 mapDoc.put("basis:docComments", parameter);
             }
             uiPropertyInputForm = uiBasisDocForm.getChildById("exo:title");
-            if(uiPropertyInputForm.getUICheckBoxInput("basisDocument.label.docId_checkBox").getValue()){
+            uiCheckBoxInput = uiPropertyInputForm.getChildById("basisDocument.label.docId_checkBox");
+            if(uiCheckBoxInput.getValue()){
                 String[] parameter= new String[2];
-                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("basisDocument.label.docId_searchType").getValue();
-                parameter[1] = uiPropertyInputForm.getUIStringInput("basisDocument.label.docId").getValue();
+
+                uiFormSelectBox  = uiPropertyInputForm.getChildById("basisDocument.label.docId_searchType");
+                parameter[0] = uiFormSelectBox.getValue();
+                uiFormStringInput = uiPropertyInputForm.getChildById("basisDocument.label.docId");
+                parameter[1] = uiFormStringInput.getValue();
+
                 mapDoc.put("exo:title", parameter);
             }
 
@@ -212,23 +310,57 @@ public class UIAdvancedSearchForm extends UIForm  {
                     if(!propertyFollowFolder.getName().contains("followEditorType") && !propertyFollowFolder.getName().contains("followComments")) {
                         if(propertyFollowFolder.getRequiredType() != 5){
                             uiPropertyInputForm = uiBasisFollowFolderForm.getChildById(FIELD_FOLLOW_FOLDER+"_"+propertyFollowFolder.getName());
-                            if(uiPropertyInputForm.getUICheckBoxInput("folder_basisFollow.label."+propertyFollowFolder.getName().split("basis:")[1]+"_checkBox").getValue()){
+                            uiCheckBoxInput = uiPropertyInputForm.getChildById("folder_basisFollow.label."+propertyFollowFolder.getName().split("basis:")[1]+"_checkBox");
+                            if(uiCheckBoxInput.getValue()){
                                 String[] parameter= new String[2];
-                                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("folder_basisFollow.label." + propertyFollowFolder.getName().split("basis:")[1] + "_searchType").getValue();
-                                parameter[1] = uiPropertyInputForm.getUIStringInput("folder_basisFollow.label." + propertyFollowFolder.getName().split("basis:")[1]).getValue();
+
+                                uiFormSelectBox  = uiPropertyInputForm.getChildById("folder_basisFollow.label." + propertyFollowFolder.getName().split("basis:")[1] + "_searchType");
+                                parameter[0] = uiFormSelectBox.getValue();
+                                uiFormStringInput = uiPropertyInputForm.getChildById("folder_basisFollow_" + propertyFollowFolder.getName().split("basis:")[1]);
+                                parameter[1] = uiFormStringInput.getValue();
+
                                 mapFollowFolder.put(propertyFollowFolder.getName(), parameter);
                             }
                         }
                         else{
                             uiPropertyInputForm = uiBasisFollowFolderForm.getChildById(FIELD_FOLLOW_FOLDER+"_"+propertyFollowFolder.getName());
-                            if(uiPropertyInputForm.getUICheckBoxInput("folder_basisFollow.label."+propertyFollowFolder.getName().split("basis:")[1]+"_checkBox").getValue()){
-                                String date = uiPropertyInputForm.getUIFormDateTimeInput("folder_basisFollow.label." + propertyFollowFolder.getName().split("basis:")[1]).getValue();
-                                String [] dateSplitted = date.split("/");
-                                String propertyDate=dateSplitted[2]+"-"+dateSplitted[1]+"-"+dateSplitted[0];
+                            uiCheckBoxInput = uiPropertyInputForm.getChildById("folder_basisFollow.label."+propertyFollowFolder.getName().split("basis:")[1]+"_checkBox");
+                            if(uiCheckBoxInput.getValue()){
+                                uiFormDateTimeInput = uiPropertyInputForm.getChildById("folder_basisFollow_" + propertyFollowFolder.getName().split("basis:")[1]);
+                                String date = uiFormDateTimeInput.getValue();
+                                String day = date.substring(0,2);
+                                String month = date.substring(3,5);
+                                String year = date.substring(6,10);
 
-                                String[] parameter= new String[2];
-                                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("folder_basisFollow.label." + propertyFollowFolder.getName().split("basis:")[1]+"_searchType").getValue();
+                                String propertyDate;
+                                if(language.equals("English")){
+                                    propertyDate=year+"-"+day+"-"+month;
+                                }
+                                else{
+                                    propertyDate=year+"-"+month+"-"+day;
+                                }
+
+                                String[] parameter= new String[3];
+                                uiFormSelectBox  = uiPropertyInputForm.getChildById("folder_basisFollow.label." + propertyFollowFolder.getName().split("basis:")[1]+"_searchType");
+                                parameter[0] = uiFormSelectBox.getValue();
                                 parameter[1] = propertyDate;
+
+                                if(uiPropertyInputForm.findComponentById("folder_basisFollow_" + propertyFollowFolder.getName().split("basis:")[1]+"_second") != null){
+                                    uiFormDateTimeInput = uiPropertyInputForm.getChildById("folder_basisFollow_" + propertyFollowFolder.getName().split("basis:")[1]+"_second");
+                                    String date2 = uiFormDateTimeInput.getValue();
+                                    String day2 = date2.substring(0,2);
+                                    String month2 = date2.substring(3,5);
+                                    String year2 = date2.substring(6,10);
+
+                                    String propertyDate2;
+                                    if(language.equals("English")){
+                                        propertyDate2=year2+"-"+day2+"-"+month2;
+                                    }
+                                    else{
+                                        propertyDate2=year2+"-"+month2+"-"+day2;
+                                    }
+                                    parameter[2] = propertyDate2;
+                                }
 
                                 mapFollowFolder.put(propertyFollowFolder.getName(),parameter);
                             }
@@ -238,10 +370,15 @@ public class UIAdvancedSearchForm extends UIForm  {
             }
 
             uiPropertyInputForm = uiBasisFollowFolderForm.getChildById(FIELD_FOLLOW_FOLDER+"_basis:followComments");
-            if(uiPropertyInputForm.getUICheckBoxInput("folder_basisFollow_basis.label.comments_checkBox").getValue()){
+            uiCheckBoxInput = uiPropertyInputForm.getChildById("folder_basisFollow_basis.label.comments_checkBox");
+            if(uiCheckBoxInput.getValue()){
                 String[] parameter= new String[2];
-                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("folder_basisFollow_basis.label.comments_searchType").getValue();
-                parameter[1] = uiPropertyInputForm.getUIStringInput("folder_basisFollow_basis.label.comments").getValue();
+
+                uiFormSelectBox  = uiPropertyInputForm.getChildById("folder_basisFollow_basis.label.comments_searchType");
+                parameter[0] = uiFormSelectBox.getValue();
+                uiFormStringInput = uiPropertyInputForm.getChildById("folder_basisFollow_basis_comments");
+                parameter[1] = uiFormStringInput.getValue();
+
                 mapFollowFolder.put("basis:followComments", parameter);
             }
 
@@ -256,23 +393,57 @@ public class UIAdvancedSearchForm extends UIForm  {
                     if(!propertyFollowDoc.getName().contains("followEditorType") && !propertyFollowDoc.getName().contains("followComments")) {
                         if(propertyFollowDoc.getRequiredType() != 5){
                             uiPropertyInputForm = uiBasisFollowDocForm.getChildById(FIELD_FOLLOW_DOC+"_"+propertyFollowDoc.getName());
-                            if(uiPropertyInputForm.getUICheckBoxInput("document_basisFollow.label."+propertyFollowDoc.getName().split("basis:")[1]+"_checkBox").getValue()){
+                            uiCheckBoxInput = uiPropertyInputForm.getChildById("document_basisFollow.label."+propertyFollowDoc.getName().split("basis:")[1]+"_checkBox");
+                            if(uiCheckBoxInput.getValue()){
                                 String[] parameter= new String[2];
-                                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("document_basisFollow.label." + propertyFollowDoc.getName().split("basis:")[1] + "_searchType").getValue();
-                                parameter[1] = uiPropertyInputForm.getUIStringInput("document_basisFollow.label." + propertyFollowDoc.getName().split("basis:")[1]).getValue();
+
+                                uiFormSelectBox  = uiPropertyInputForm.getChildById("document_basisFollow.label." + propertyFollowDoc.getName().split("basis:")[1] + "_searchType");
+                                parameter[0] = uiFormSelectBox.getValue();
+                                uiFormStringInput = uiPropertyInputForm.getChildById("document_basisFollow_" + propertyFollowDoc.getName().split("basis:")[1]);
+                                parameter[1] = uiFormStringInput.getValue();
+
                                 mapFollowDoc.put(propertyFollowDoc.getName(), parameter);
                             }
                         }
                         else{
                             uiPropertyInputForm = uiBasisFollowDocForm.getChildById(FIELD_FOLLOW_DOC+"_"+propertyFollowDoc.getName());
-                            if(uiPropertyInputForm.getUICheckBoxInput("document_basisFollow.label."+propertyFollowDoc.getName().split("basis:")[1]+"_checkBox").getValue()){
-                                String date = uiPropertyInputForm.getUIFormDateTimeInput("document_basisFollow.label." + propertyFollowDoc.getName().split("basis:")[1]).getValue();
-                                String [] dateSplitted = date.split("/");
-                                String propertyDate=dateSplitted[2]+"-"+dateSplitted[1]+"-"+dateSplitted[0];
+                            uiCheckBoxInput = uiPropertyInputForm.getChildById("document_basisFollow.label."+propertyFollowDoc.getName().split("basis:")[1]+"_checkBox");
+                            if(uiCheckBoxInput.getValue()){
+                                uiFormDateTimeInput = uiPropertyInputForm.getChildById("document_basisFollow_" + propertyFollowDoc.getName().split("basis:")[1]);
+                                String date = uiFormDateTimeInput.getValue();
+                                String day = date.substring(0,2);
+                                String month = date.substring(3,5);
+                                String year = date.substring(6,10);
 
-                                String[] parameter= new String[2];
-                                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("document_basisFollow.label." + propertyFollowDoc.getName().split("basis:")[1]+"_searchType").getValue();
+                                String propertyDate;
+                                if(language.equals("English")){
+                                    propertyDate=year+"-"+day+"-"+month;
+                                }
+                                else{
+                                    propertyDate=year+"-"+month+"-"+day;
+                                }
+
+                                String[] parameter= new String[3];
+                                uiFormSelectBox  = uiPropertyInputForm.getChildById("document_basisFollow.label." + propertyFollowDoc.getName().split("basis:")[1]+"_searchType");
+                                parameter[0] = uiFormSelectBox.getValue();
                                 parameter[1] = propertyDate;
+
+                                if(uiPropertyInputForm.findComponentById("document_basisFollow_" + propertyFollowDoc.getName().split("basis:")[1]+"_second") != null){
+                                    uiFormDateTimeInput = uiPropertyInputForm.getChildById("document_basisFollow_" + propertyFollowDoc.getName().split("basis:")[1]+"_second");
+                                    String date2 = uiFormDateTimeInput.getValue();
+                                    String day2 = date2.substring(0,2);
+                                    String month2 = date2.substring(3,5);
+                                    String year2 = date2.substring(6,10);
+
+                                    String propertyDate2;
+                                    if(language.equals("English")){
+                                        propertyDate2=year2+"-"+day2+"-"+month2;
+                                    }
+                                    else{
+                                        propertyDate2=year2+"-"+month2+"-"+day2;
+                                    }
+                                    parameter[2] = propertyDate2;
+                                }
 
                                 mapFollowDoc.put(propertyFollowDoc.getName(),parameter);
                             }
@@ -282,10 +453,15 @@ public class UIAdvancedSearchForm extends UIForm  {
             }
 
             uiPropertyInputForm = uiBasisFollowDocForm.getChildById(FIELD_FOLLOW_DOC+"_basis:followComments");
-            if(uiPropertyInputForm.getUICheckBoxInput("document_basisFollow_basis.label.comments_checkBox").getValue()){
+            uiCheckBoxInput = uiPropertyInputForm.getChildById("document_basisFollow_basis.label.comments_checkBox");
+            if(uiCheckBoxInput.getValue()){
                 String[] parameter= new String[2];
-                parameter[0] = uiPropertyInputForm.getUIFormSelectBox("document_basisFollow_basis.label.comments_searchType").getValue();
-                parameter[1] = uiPropertyInputForm.getUIStringInput("document_basisFollow_basis.label.comments").getValue();
+
+                uiFormSelectBox  = uiPropertyInputForm.getChildById("document_basisFollow_basis.label.comments_searchType");
+                parameter[0] = uiFormSelectBox.getValue();
+                uiFormStringInput = uiPropertyInputForm.getChildById("document_basisFollow_basis_comments");
+                parameter[1] = uiFormStringInput.getValue();
+
                 mapFollowDoc.put("basis:followComments", parameter);
             }
             uiSearchBasisPortlet.setMapFollowDoc(mapFollowDoc);
@@ -326,6 +502,91 @@ public class UIAdvancedSearchForm extends UIForm  {
             UISearchBasisPortlet uiManager = uiAdvancedSearchForm.getAncestorOfType(UISearchBasisPortlet.class) ;
             uiAdvancedSearchForm.reset() ;
             event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
+        }
+    }
+
+    static public class ChangeActionListener extends EventListener<UIAdvancedSearchForm> {
+        public void execute(Event<UIAdvancedSearchForm> event) throws Exception {
+
+            UIAdvancedSearchForm uiAdvancedSearchForm = event.getSource() ;
+            UIBasisFolderForm uiBasisFolderForm = uiAdvancedSearchForm.getChildById(FIELD_FOLDER);
+            UIBasisDocForm uiBasisDocForm = uiAdvancedSearchForm.getChildById(FIELD_DOC);
+            UIBasisFollowFolderForm uiBasisFollowFolderForm = uiAdvancedSearchForm.getChildById(FIELD_FOLLOW_FOLDER);
+            UIBasisFollowDocForm uiBasisFollowDocForm = uiAdvancedSearchForm.getChildById(FIELD_FOLLOW_DOC);
+            UIPropertyInputForm uiPropertyInputForm = null;
+
+            PropertyDefinition[] basisNodetypeProperties = uiBasisFolderForm.getBasisFolderNodetypeProperties();
+            for (PropertyDefinition propertyFolder : basisNodetypeProperties) {
+                if(propertyFolder.getName().contains("basis")) {
+                    if(propertyFolder.getRequiredType() == 5){
+                        uiPropertyInputForm = uiBasisFolderForm.getChildById(FIELD_FOLDER+"_"+propertyFolder.getName());
+                        UIFormSelectBox uiFormSelectBox  = uiPropertyInputForm.getChildById("basisFolder.label." + propertyFolder.getName().split("basis:")[1]+"_searchType");
+                        if(uiFormSelectBox.getValue().equals("Between")){
+                            if(uiPropertyInputForm.findComponentById("basisFolder_" + propertyFolder.getName().split("basis:")[1]+"_second") == null){
+                                uiPropertyInputForm.addChild(new UIFormDateTimeInput("basisFolder_" + propertyFolder.getName().split("basis:")[1]+"_second", null, new Date(), false));
+                            }
+                        }
+                        else{
+                            uiPropertyInputForm.removeChildById("basisFolder_" + propertyFolder.getName().split("basis:")[1]+"_second");
+                        }
+                    }
+                }
+            }
+
+            basisNodetypeProperties = uiBasisDocForm.getBasisDocNodetypeProperties();
+            for (PropertyDefinition propertyDoc : basisNodetypeProperties) {
+                if(propertyDoc.getName().contains("basis")) {
+                    if(propertyDoc.getRequiredType() == 5){
+                        uiPropertyInputForm = uiBasisDocForm.getChildById(FIELD_DOC+"_"+propertyDoc.getName());
+                        UIFormSelectBox uiFormSelectBox  = uiPropertyInputForm.getChildById("basisDocument.label." + propertyDoc.getName().split("basis:")[1]+"_searchType");
+                        if(uiFormSelectBox.getValue().equals("Between")){
+                            if(uiPropertyInputForm.findComponentById("basisDocument_" + propertyDoc.getName().split("basis:")[1]+"_second") == null){
+                                uiPropertyInputForm.addChild(new UIFormDateTimeInput("basisDocument_" + propertyDoc.getName().split("basis:")[1]+"_second", null, new Date(), false));
+                            }
+                        }
+                        else{
+                            uiPropertyInputForm.removeChildById("basisDocument_" + propertyDoc.getName().split("basis:")[1]+"_second");
+                        }
+                    }
+                }
+            }
+
+            basisNodetypeProperties = uiBasisFollowFolderForm.getBasisFollowFolderNodetypeProperties();
+            for (PropertyDefinition propertyFollowFolder : basisNodetypeProperties) {
+                if(propertyFollowFolder.getName().contains("basis")) {
+                    if(propertyFollowFolder.getRequiredType() == 5){
+                        uiPropertyInputForm = uiBasisFollowFolderForm.getChildById(FIELD_FOLLOW_FOLDER+"_"+propertyFollowFolder.getName());
+                        UIFormSelectBox uiFormSelectBox  = uiPropertyInputForm.getChildById("folder_basisFollow.label." + propertyFollowFolder.getName().split("basis:")[1] + "_searchType");
+                        if(uiFormSelectBox.getValue().equals("Between")){
+                            if(uiPropertyInputForm.findComponentById("folder_basisFollow_" + propertyFollowFolder.getName().split("basis:")[1]+"_second") == null){
+                                uiPropertyInputForm.addChild(new UIFormDateTimeInput("folder_basisFollow_" + propertyFollowFolder.getName().split("basis:")[1]+"_second", null, new Date(), false));
+                            }
+                        }
+                        else{
+                            uiPropertyInputForm.removeChildById("folder_basisFollow_" + propertyFollowFolder.getName().split("basis:")[1]+"_second");
+                        }
+                    }
+                }
+            }
+
+            basisNodetypeProperties = uiBasisFollowDocForm.getBasisFollowDocNodetypeProperties();
+            for (PropertyDefinition propertyFollowDoc : basisNodetypeProperties) {
+                if(propertyFollowDoc.getName().contains("basis")) {
+                    if(propertyFollowDoc.getRequiredType() == 5){
+                        uiPropertyInputForm = uiBasisFollowDocForm.getChildById(FIELD_FOLLOW_DOC+"_"+propertyFollowDoc.getName());
+                        UIFormSelectBox uiFormSelectBox  = uiPropertyInputForm.getChildById("document_basisFollow.label." + propertyFollowDoc.getName().split("basis:")[1] + "_searchType");
+                        if(uiFormSelectBox.getValue().equals("Between")){
+                            if(uiPropertyInputForm.findComponentById("document_basisFollow_" + propertyFollowDoc.getName().split("basis:")[1]+"_second") == null){
+                                uiPropertyInputForm.addChild(new UIFormDateTimeInput("document_basisFollow_" + propertyFollowDoc.getName().split("basis:")[1]+"_second", null, new Date(), false));
+                            }
+                        }
+                        else{
+                            uiPropertyInputForm.removeChildById("document_basisFollow_" + propertyFollowDoc.getName().split("basis:")[1]+"_second");
+                        }
+                    }
+                }
+            }
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiAdvancedSearchForm) ;
         }
     }
 
@@ -388,10 +649,10 @@ public class UIAdvancedSearchForm extends UIForm  {
                 }
                 else if(value[0].equals("Between")){
                     if(i == 0){
-                        xPathStatement += "@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        xPathStatement += "@"+mapKey+">=xs:dateTime('"+value[1]+"') and @"+mapKey+"<=xs:dateTime('"+value[2]+"')";
                     }
                     else{
-                        xPathStatement += " and @"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        xPathStatement += " and @"+mapKey+">=xs:dateTime('"+value[1]+"') and @"+mapKey+"<=xs:dateTime('"+value[2]+"')";
                     }
                 }
 
@@ -461,10 +722,10 @@ public class UIAdvancedSearchForm extends UIForm  {
                 }
                 else if(value[0].equals("Between")){
                     if(i == 0){
-                        xPathStatement += "*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        xPathStatement += "*/@"+mapKey+">=xs:dateTime('"+value[1]+"') and */@"+mapKey+"<=xs:dateTime('"+value[2]+"')";
                     }
                     else{
-                        xPathStatement += " and */@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        xPathStatement += " and */@"+mapKey+">=xs:dateTime('"+value[1]+"') and */@"+mapKey+"<=xs:dateTime('"+value[2]+"')";
                     }
                 }
 
@@ -534,10 +795,10 @@ public class UIAdvancedSearchForm extends UIForm  {
                 }
                 else if(value[0].equals("Between")){
                     if(i == 0){
-                        xPathStatement += "*/*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        xPathStatement += "*/*/@"+mapKey+">=xs:dateTime('"+value[1]+"') and */*/@"+mapKey+"<=xs:dateTime('"+value[2]+"')";
                     }
                     else{
-                        xPathStatement += " and */*/@"+mapKey+"=xs:dateTime('"+value[1]+"')";
+                        xPathStatement += " and */*/@"+mapKey+">=xs:dateTime('"+value[1]+"') and */*/@"+mapKey+"<=xs:dateTime('"+value[2]+"')";
                     }
                 }
 

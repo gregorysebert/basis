@@ -96,7 +96,7 @@
 
     <basisFolder>
         <label>
-            <folderInternSender>Interne afzender</folderInternSender>
+            <folderInternSender>RNN Naam</folderInternSender>
         </label>
     </basisFolder>
 </bundle>

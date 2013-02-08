@@ -8,6 +8,9 @@ package searchBasis.portlet.component;
  * To change this template use File | Settings | File Templates.
  */
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -16,6 +19,7 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import javax.jcr.Session;
 import javax.jcr.query.QueryResult;
 import java.util.HashMap;
 import java.util.Map;
