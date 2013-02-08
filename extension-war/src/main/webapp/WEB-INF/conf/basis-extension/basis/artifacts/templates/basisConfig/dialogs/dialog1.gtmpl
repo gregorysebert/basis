@@ -27,6 +27,8 @@
 		   return currentNode;
 	}
 	HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
+	
+	String remoteUser =  Util.getPortalRequestContext().getRemoteUser();
 %>
 <% uicomponent.addInterceptor("ecm-explorer/interceptor/CreateFolderTreeInterceptor.groovy", "post");%>
 
@@ -466,8 +468,8 @@
 					</td>
 				</tr>
 				<%
-				if(folderStatusSelectBox != null && (folderStatusSelectBox.getValue().equals("closed") || folderStatusSelectBox.getValue().equals("afgesloten") || folderStatusSelectBox.getValue().equals("clôturé") 
-				|| folderStatusSelectBox.getValue().equals("cancelled") || folderStatusSelectBox.getValue().equals("geannulleerd") || folderStatusSelectBox.getValue().equals("annulé"))) {
+				if(folderStatusSelectBox != null && (folderStatusSelectBox.getValue().equals("closed") || folderStatusSelectBox.getValue().equals("afgesloten") || folderStatusSelectBox.getValue().equals("cl?tur?") 
+				|| folderStatusSelectBox.getValue().equals("cancelled") || folderStatusSelectBox.getValue().equals("geannulleerd") || folderStatusSelectBox.getValue().equals("annul?"))) {
 				%>
 				<tr>
 					<td class="FastDocFieldLabel"><%=_ctx.appRes("basisFolder.label.folderCloseOnDate")%></td>
@@ -631,7 +633,7 @@
 				    <td class="FieldComponent" colspan="6">
 				        <%
 				        String[] docExternSenderCountryField = ["jcrPath=/node/basis:docExternSenderCountry",
-				        "options=Belgique,België,Afghanistan,Albania,American Samoa,Andorra," +
+				        "options=Belgique,Belgi?,Afghanistan,Albania,American Samoa,Andorra," +
 				        "Angola,Anguilla,Antarctica,Antigua & Barbuda,Argentina," +
 				        "Armenia,Aruba,Ascension Island,Australia,Austria,Azerbaijan," +
 				        "Bahamas,Bahrain,Bangladesh,Barbados,Belarus,Belize," +
@@ -706,7 +708,7 @@
 			          	<%
 						 uicomponent.removeChildById("followGroupInternEditor");
 						 uicomponent.removeChildById("followExternEditor");
-			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues="+remoteUser, "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
 			           	 uicomponent.addActionField("followUserInternEditor", followUserInternEditorField);
 			          	%>
 			        </td>

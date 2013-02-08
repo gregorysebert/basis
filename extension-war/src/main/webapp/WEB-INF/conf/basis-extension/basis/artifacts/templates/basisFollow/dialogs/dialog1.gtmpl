@@ -5,6 +5,7 @@
 	import basis.selector.service.BasisSelectorService;
 	import javax.jcr.Node;
 	import org.exoplatform.webui.core.model.SelectItemOption;
+	import org.exoplatform.portal.webui.util.Util;
 	SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
     String todayS=sdf.format(new Date());
 	private String getTimestampName() {
@@ -42,6 +43,9 @@
     String externEditorOptions = basisSelectorService.getOptions();
     basisSelectorService = new BasisSelectorService(followSelectorNode, "RequiredAction", language);
     String requiredActionOptions = basisSelectorService.getOptions();
+	
+	String remoteUser =  Util.getPortalRequestContext().getRemoteUser();
+	System.out.println("user : "+remoteUser);
 %>
 <% 
 if(!uicomponent.isEditing()) {
@@ -137,7 +141,7 @@ uicomponent.addInterceptor("ecm-explorer/interceptor/GenerateVersionInterceptor.
 			          	<%
 						 uicomponent.removeChildById("followGroupInternEditor");
 						 uicomponent.removeChildById("followExternEditor");
-			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues=", "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
+			          	 String[] followUserInternEditorField = ["jcrPath=/node/basis:followUserInternEditor", "defaultValues="+remoteUser, "validate=empty", "selectorIcon=ActionIcon Search16x16Icon","selectorClass=be.bull.spff.selector.UserSpffSelector", "options=null"];
 			           	 uicomponent.addActionField("followUserInternEditor", followUserInternEditorField);
 			          	%>
 			        </td>
