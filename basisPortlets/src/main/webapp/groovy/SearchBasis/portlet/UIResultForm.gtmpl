@@ -14,11 +14,11 @@
 <%
 String numberResult = uicomponent.getSizeResultList();
 %>
-<div id="$uicomponent.id">
-<%
-          println "<p id=\"Resultat\">" + numberResult + "</p>";
+<div class="UIForm $uicomponent.id">
+          <% println "<p id=\"Resultat\">" + numberResult + "</p>";
           for(uiChild in uicomponent.getChildren()) {
             uicomponent.renderChild(uiChild) ;
           }
 %>
+
 </div>

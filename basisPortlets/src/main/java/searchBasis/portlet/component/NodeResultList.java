@@ -26,8 +26,8 @@ public class NodeResultList extends PageListAccess<NodeResult, List<String>> {
     protected ListAccess<NodeResult> create(List<String> node) throws Exception {
         List<NodeResult> listNodeResults = new ArrayList<NodeResult>();
         for(int i = 0; i<node.size(); i++){
-            if(i%2 == 0){
-                NodeResult nodeResult = new NodeResult(node.get(i), node.get(i+1));
+            if(i%3 == 0){
+                NodeResult nodeResult = new NodeResult(node.get(i), node.get(i+1), node.get(i+2));
                 listNodeResults.add(nodeResult);
             }
         }

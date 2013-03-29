@@ -28,7 +28,7 @@
         <version>trunk</version>
     </parent>
     <artifactId>basis-extension-war</artifactId>
-    <version>1.1</version>
+    <version>1.1.6</version>
     <packaging>war</packaging>
     <name>Basis Extension War</name>
     <description>Basis Extension War</description>

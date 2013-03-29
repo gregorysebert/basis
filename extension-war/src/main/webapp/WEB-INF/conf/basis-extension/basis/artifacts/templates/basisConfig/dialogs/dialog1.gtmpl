@@ -26,9 +26,8 @@
 		   }
 		   return currentNode;
 	}
-	HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
-	
 	String remoteUser =  Util.getPortalRequestContext().getRemoteUser();
+	HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
 %>
 <% uicomponent.addInterceptor("ecm-explorer/interceptor/CreateFolderTreeInterceptor.groovy", "post");%>
 
@@ -58,7 +57,7 @@
 	}
 	#folderType{
     	font-size: 16px;
-	  	width: 99%;
+	  	width: 500px;
 	}
 	#folderCloseBeforeDate{
     	font-size: 16px;
@@ -123,7 +122,7 @@
 	}
 	#docExternSenderAdress{
 		font-size: 16px;
-		width: 500px;
+		width: 200px;
 	}
 	#docExternSenderCountry{
 		font-size: 16px;
@@ -693,7 +692,7 @@
 				    <td class="FastDocFieldLabel"><%=_ctx.appRes("basisFollow.label.followEditorType")%></td>
 				    <td class="FieldComponent" colspan="6">
 				        <%
-				        String[] followEditorTypeField = ["jcrPath=/node/basis:followEditorType", "options=intern user, intern group, extern", "onchange=true"];
+				        String[] followEditorTypeField = ["jcrPath=/node/basis:followEditorType", "options=intern group, intern user, extern", "onchange=true"];
 				        uicomponent.addSelectBoxField("followEditorType", followEditorTypeField);
 				        %>
 				    </td>

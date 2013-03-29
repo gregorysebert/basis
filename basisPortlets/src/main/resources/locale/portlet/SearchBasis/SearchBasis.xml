@@ -3,13 +3,14 @@
     <UIResultForm>
         <header>
             <Name>Name</Name>
-            <Path>Path</Path>
+            <User>File on</User>
             <Action>Action</Action>
         </header>
         <action>
             <title>
                 <ViewNode>View document</ViewNode>
             </title>
+            <Export>Export result</Export>
         </action>
     </UIResultForm>
 
@@ -25,10 +26,18 @@
             <Query>Query</Query>
             <Language>Language</Language>
             <Attribut>Attribut</Attribut>
+            <Date>Date</Date>
+            <Date_second>2nd date</Date_second>
+            <ListDate>Opertor</ListDate>
             <Query1>All folder where follow up editor is the current user</Query1>
             <Query2>All folder where follow up editor is a specific group</Query2>
             <Query3>All folder where follow up editor is a specific user</Query3>
             <Query4>All folder where follow up editor is a specific action</Query4>
+            <Query5>All folder where id folder contains {?}</Query5>
+            <Query6>All folder who has been created by the current user</Query6>
+            <Query7>All folder who has been created by a specific user</Query7>
+            <At>On</At>
+            <Between>Between</Between>
         </label>
         <action>
             <Search>Search</Search>
@@ -43,6 +52,7 @@
         </action>
         <label>
             <From>List: </From>
+            <Limited>Limited search (500 first results)</Limited>
         </label>
         <ListBox>
             <Folder>Folder</Folder>
@@ -50,6 +60,11 @@
             <Follow_folder>Follow folder</Follow_folder>
             <Follow_document>Follow document</Follow_document>
         </ListBox>
+        <legend>
+            <label>Legend</label>
+            <historic1>&amp; = property 1 AND property 2 (ex: contains "000&amp;001")</historic1>
+            <historic2># = property 1 OR property 2 (ex: contains "000#001")</historic2>
+        </legend>
     </UIAdvancedSearchForm>
 
     <UIPropertyInputForm>

@@ -22,11 +22,11 @@
         		<tr>
 					<td class="FieldLabel">
 						<%
-						String[] BODispalyRNNField = ["jcrPath=/node/basis:BODisplayRNN"];
-						uicomponent.addCheckBoxField("BODispalyRNN", BODispalyRNNField);
+						String[] BODisplayRNNField = ["jcrPath=/node/basis:BODisplayRNN"];
+						uicomponent.addCheckBoxField("BODisplayRNN", BODisplayRNNField);
 						%>
 					</td>
-					<td class="FieldComponent"><%=_ctx.appRes("basis.label.dispalyRNN")%></td>
+					<td class="FieldComponent"><%=_ctx.appRes("basis.label.displayRNN")%></td>
 				 </tr>
 			</table>
 		</div>

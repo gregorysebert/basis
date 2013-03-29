@@ -25,16 +25,50 @@
        margin-left: 50px;
        margin-top: 25px;
   }
+  #ListDate{
+    width: 120px;
+    text-align:left;
+    font-size: 15px;
+  }
+    #Date{
+    width: 120px;
+    text-align:left;
+    font-size: 15px;
+    }
+    #Date_second{
+    width: 120px;
+    text-align:left;
+    font-size: 15px;
+    }
   </style>
 <%  import org.exoplatform.webui.core.model.SelectItemOption;
 import java.util.List;
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.OrganizationService;
 
 String fieldName;
 List<SelectItemOption<String>> lsQuery = new ArrayList<SelectItemOption<String>>() ;
     lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query1"), "currentUser")) ;
     lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query2"), "byGroup")) ;
-    lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query3"), "byUser")) ;
     lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query4"), "byAction")) ;
+    lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query5"), "contains")) ;
+    lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query6"), "createdBy")) ;
+
+    ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
+    OrganizationService org =  (OrganizationService) exoContainer.getComponentInstanceOfType(OrganizationService.class);
+    Object[] roles = org.getMembershipHandler().findMembershipsByUser(Util.getPortalRequestContext().getRemoteUser()).toArray();
+    for(int i = 0 ; i< roles.length ; i++){
+        if(roles[i].toString().contains("TeamManager") && roles[i].toString().contains("BO")){
+              lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query7"), "createdByOther")) ;
+              lsQuery.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Query3"), "byUser")) ;
+        }
+    }
+
+List<SelectItemOption<String>> lsDate = new ArrayList<SelectItemOption<String>>() ;
+    lsDate.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.At"), "At")) ;
+    lsDate.add(new SelectItemOption<String>(_ctx.appRes("UISimpleSearchForm.label.Between"), "Between")) ;
 %>
 <div class="UIForm $uicomponent.id">
 <%uiform.begin()%>
@@ -56,7 +90,18 @@ List<SelectItemOption<String>> lsQuery = new ArrayList<SelectItemOption<String>>
                 <%if(field.getName().equals("Query")){
                     field.setOptions(lsQuery);
                     field.setValue(field.getDefaultValue());
-                } %>
+                }
+
+                if(field.getName().equals("ListDate")){
+                    field.setOptions(lsDate);
+                    field.setValue(field.getDefaultValue());
+                }
+
+                if(!uicomponent.getChildById("Query").getValue().equals("createdBy")){
+                    uicomponent.getChildById("ListDate").setDefaultValue("At");
+                    uicomponent.getChildById("ListDate").setValue("At");
+                }
+                %>
                 <td id="FieldSimpleQueryBasis"><% uiform.renderField(field) %></td> </tr>
                 <%}%>
 

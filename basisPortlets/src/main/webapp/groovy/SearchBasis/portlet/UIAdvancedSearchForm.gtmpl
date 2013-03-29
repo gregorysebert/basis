@@ -6,16 +6,36 @@
       margin-left: 50px;
       margin-top: 25px;
     }
+	#leftAdvancedSearch {
+	float:left;
+	  text-align: left;
+    }
+	#rightAdvancedSearch {
+	float:left;
+	  text-align: left;
+    }
+	#legendaryPanel {
+      display: inline;
+	  text-align: center;
+	  margin-left: auto;
+      margin-right: auto;
+	  width : 500px;
+    }
+    #Limited {
+      text-align:left;
+      font-size: 15px;
+      margin-left: 50px;
+      margin-top: 25px;
+     }
     #NumberResult{
       width: 80px;
        text-align:left;
        font-size: 15px;
     }
   </style>
-<div class="UIForm $uicomponent.id">
-	<%uiform.begin()
 
-	import org.exoplatform.webui.core.model.SelectItemOption;
+<%uiform.begin()
+import org.exoplatform.webui.core.model.SelectItemOption;
     import java.util.List;
 
     List<SelectItemOption<String>> lsListBox = new ArrayList<SelectItemOption<String>>() ;
@@ -23,30 +43,49 @@
     lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIAdvancedSearchForm.ListBox.Document"), "Document")) ;
     lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIAdvancedSearchForm.ListBox.Follow_folder"), "Follow_folder")) ;
     lsListBox.add(new SelectItemOption<String>(_ctx.appRes("UIAdvancedSearchForm.ListBox.Follow_document"), "Follow_document")) ;
-    %>
+	%>
 
-	<label id ="From">
-        <%=_ctx.appRes("UIAdvancedSearchForm.label.From")%>
-    </label>
-    <% uicomponent.getChildById("From").setOptions(lsListBox);
-    uiform.renderField("From") ;
-    uiform.renderField("NumberResult") ;%>
+<div class="UIAction">
+	<% for(action in uicomponent.getActions()) {
+	String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action)
+	String link = uicomponent.event(action) ;
+	%>
+		<a href="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
+	<%}%>
+</div>	
+<div id="legendaryPanel">
+	<div id="leftAdvancedSearch">
+		<label id ="From">
+			<%=_ctx.appRes("UIAdvancedSearchForm.label.From")%>
+		</label>
+		<% uicomponent.getChildById("From").setOptions(lsListBox);
+		uiform.renderField("From") ;
+		uiform.renderField("NumberResult") ;%>
+		<br/>
+		<label id ="Limited">
+				<% uiform.renderField("LimitedSearch") ;%>
+				<%=_ctx.appRes("UIAdvancedSearchForm.label.Limited")%>
+		</label>
+	</div>
 
-
+	<div id="rightAdvancedSearch">
+		<fieldset id="fieldsetAdvancedSearchForm">
+			<legend><%=_ctx.appRes("UIAdvancedSearchForm.legend.label")%></legend>
+				<%=_ctx.appRes("UIAdvancedSearchForm.legend.historic1")%>
+				<br/>
+				<%=_ctx.appRes("UIAdvancedSearchForm.legend.historic2")%>
+		</fieldset>
+	</div>
+</div>
+<br/><br/><br/><br/>	
+<div class="UIForm $uicomponent.id">
 				<% for(uiChild in uicomponent.getChildren()) {
-				        if(uicomponent.getLabel(uiChild.getName())!= "From" && uicomponent.getLabel(uiChild.getName())!= "NumberResult"){
+				        if(uicomponent.getLabel(uiChild.getName())!= "From" && uicomponent.getLabel(uiChild.getName())!= "NumberResult" && uicomponent.getLabel(uiChild.getName())!= "LimitedSearch"){
 				              uicomponent.renderChild(uiChild) ;
 				        }
                    }
 				%>
-			 <div class="UIAction">
-                    <% for(action in uicomponent.getActions()) {
-                    String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action)
-                    String link = uicomponent.event(action) ;
-                    %>
-                        <a href="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
-                    <%}%>
-            </div>
+			 
 	<%uiform.end()%>
 </div>
 

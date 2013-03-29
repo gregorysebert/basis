@@ -4,6 +4,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.impl.core.query.QueryImpl;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -15,6 +16,7 @@ import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.input.UICheckBoxInput;
+import javax.jcr.NodeIterator;
 
 import javax.jcr.Session;
 import javax.jcr.nodetype.PropertyDefinition;
@@ -45,6 +47,7 @@ public class UIAdvancedSearchForm extends UIForm  {
     public static final String FIELD_FOLLOW_DOC = "Follow document" ;
     public static final String FIELD_FOLLOW_FOLDER = "Follow folder" ;
     public static final String FIELD_FROM = "From" ;
+    public static final String FIELD_LIMITED_SEARCH = "LimitedSearch";
     private  static final String NUMBERRESULT = "NumberResult";
     private int i;
 
@@ -67,12 +70,14 @@ public class UIAdvancedSearchForm extends UIForm  {
         setActions(new String[]{"Search", "Cancel"}) ;
 
         List<SelectItemOption<String>> lsNumber = new ArrayList<SelectItemOption<String>>() ;
-        lsNumber.add(new SelectItemOption<String>("5", "5")) ;
         lsNumber.add(new SelectItemOption<String>("10", "10")) ;
         lsNumber.add(new SelectItemOption<String>("20", "20")) ;
         lsNumber.add(new SelectItemOption<String>("50", "50")) ;
         UIFormSelectBox uiFormSelectBoxNumber = new UIFormSelectBox(NUMBERRESULT,NUMBERRESULT,lsNumber);
+        uiFormSelectBoxNumber.setValue("20");
         addUIFormInput(uiFormSelectBoxNumber);
+
+        addUIFormInput(new UICheckBoxInput(FIELD_LIMITED_SEARCH,null,true));
     }
 
     public int getI() {
@@ -94,6 +99,7 @@ public class UIAdvancedSearchForm extends UIForm  {
             Map<String,String[]> mapFollowFolder = new HashMap<String,String[]>();
 
             String from = uiAdvancedSearchForm.getUIFormSelectBox(FIELD_FROM).getValue();
+            Boolean limited = uiAdvancedSearchForm.getUICheckBoxInput(FIELD_LIMITED_SEARCH).getValue();
             String url = Util.getPortalRequestContext().getRequestURI();
             String urlSplitted[] = url.split("BO:");
             String nameBO[] = urlSplitted[1].split("/");
@@ -486,7 +492,12 @@ public class UIAdvancedSearchForm extends UIForm  {
                 Session session = (Session) rs.getRepository("repository").getSystemSession("collaboration");
                 QueryManager queryManager = null;
                 queryManager = session.getWorkspace().getQueryManager();
-                Query query = queryManager.createQuery(xPathStatement, Query.XPATH);
+                QueryImpl query = (QueryImpl)queryManager.createQuery(xPathStatement, Query.XPATH);
+                //Query query = queryManager.createQuery(xPathStatement, Query.XPATH);
+                if(limited == true){
+                    query.setLimit(500);
+                    query.setOffset(0);
+                }
                 QueryResult result = query.execute();
 
                 uiSearchBasisPortlet.setQueryResult(result);
@@ -597,11 +608,39 @@ public class UIAdvancedSearchForm extends UIForm  {
 
                 if(value[0].equals("Equals")){
                     if(!mapKey.contains("Date")){
-                        if(i == 0){
-                            xPathStatement += "@"+mapKey+"='"+value[1]+"'";
+                        if(value[1].contains("&")){
+                            String valueSplitted[] = value[1].split("&");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "fn:lower-case(@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                else{
+                                    xPathStatement += " and fn:lower-case(@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                i++;
+                            }
+                        }
+                        else if(value[1].contains("#")){
+                            String valueSplitted[] = value[1].split("#");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "fn:lower-case(@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                else{
+                                    xPathStatement += " or fn:lower-case(@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                i++;
+                            }
                         }
                         else{
-                            xPathStatement += " and @"+mapKey+"='"+value[1]+"'";
+                            if(i == 0){
+                                xPathStatement += "fn:lower-case(@"+mapKey+")='"+value[1].toLowerCase()+"'";
+                            }
+                            else{
+                                xPathStatement += " and fn:lower-case(@"+mapKey+")='"+value[1].toLowerCase()+"'";
+                            }
                         }
                     }
                     else{
@@ -614,20 +653,76 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Contains")){
+                    if(value[1].contains("&")){
+                        String valueSplitted[] = value[1].split("&");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "jcr:like(fn:lower-case(@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            else{
+                                xPathStatement += " and jcr:like(fn:lower-case(@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            i++;
+                        }
+                    }
+                    else if(value[1].contains("#")){
+                        String valueSplitted[] = value[1].split("#");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "jcr:like(fn:lower-case(@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            else{
+                                xPathStatement += " or jcr:like(fn:lower-case(@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            i++;
+                        }
+                    }
+                    else{
                         if(i == 0){
-                            xPathStatement += "jcr:like(@"+mapKey+",'%"+value[1]+"%')";
+                            xPathStatement += "jcr:like(fn:lower-case(@"+mapKey+"),'%"+value[1].toLowerCase()+"%')";
                         }
                         else{
-                            xPathStatement += " and jcr:like(@"+mapKey+",'%"+value[1]+"%')";
+                            xPathStatement += " and jcr:like(fn:lower-case(@"+mapKey+"),'%"+value[1].toLowerCase()+"%')";
                         }
+                    }
                 }
                 else if(value[0].equals("Not_Equals")){
                     if(!mapKey.contains("Date")){
-                        if(i == 0){
-                            xPathStatement += "not(@"+mapKey+"='"+value[1]+"')";
+                        if(value[1].contains("&")){
+                            String valueSplitted[] = value[1].split("&");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "not(fn:lower-case(@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                else{
+                                    xPathStatement += " and not(fn:lower-case(@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                i++;
+                            }
+                        }
+                        else if(value[1].contains("#")){
+                            String valueSplitted[] = value[1].split("#");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "not(fn:lower-case(@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                else{
+                                    xPathStatement += " or not(fn:lower-case(@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                i++;
+                            }
                         }
                         else{
-                            xPathStatement += " and not(@"+mapKey+"='"+value[1]+"')";
+                            if(i == 0){
+                                xPathStatement += "not(fn:lower-case(@"+mapKey+")='"+value[1].toLowerCase()+"')";
+                            }
+                            else{
+                                xPathStatement += " and not(fn:lower-case(@"+mapKey+")='"+value[1].toLowerCase()+"')";
+                            }
                         }
                     }
                     else{
@@ -640,12 +735,40 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Not_Contains")){
+                    if(value[1].contains("&")){
+                        String valueSplitted[] = value[1].split("&");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "not(jcr:like(fn:lower-case(@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            else{
+                                xPathStatement += " and not(jcr:like(fn:lower-case(@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            i++;
+                        }
+                    }
+                    else if(value[1].contains("#")){
+                        String valueSplitted[] = value[1].split("#");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "not(jcr:like(fn:lower-case(@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            else{
+                                xPathStatement += " or not(jcr:like(fn:lower-case(@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            i++;
+                        }
+                    }
+                    else{
                         if(i == 0){
-                            xPathStatement += "not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
+                            xPathStatement += "not(jcr:like(fn:lower-case(@"+mapKey+"),'%"+value[1].toLowerCase()+"%'))";
                         }
                         else{
-                            xPathStatement += " and not(jcr:like(@"+mapKey+",'%"+value[1]+"%'))";
+                            xPathStatement += " and not(jcr:like(fn:lower-case(@"+mapKey+"),'%"+value[1].toLowerCase()+"%'))";
                         }
+                    }
                 }
                 else if(value[0].equals("Between")){
                     if(i == 0){
@@ -670,11 +793,39 @@ public class UIAdvancedSearchForm extends UIForm  {
 
                 if(value[0].equals("Equals")){
                     if(!mapKey.contains("Date")){
-                        if(i == 0){
-                            xPathStatement += "*/@"+mapKey+"='"+value[1]+"'";
+                        if(value[1].contains("&")){
+                            String valueSplitted[] = value[1].split("&");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "fn:lower-case(*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                else{
+                                    xPathStatement += " and fn:lower-case(*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                i++;
+                            }
+                        }
+                        else if(value[1].contains("#")){
+                            String valueSplitted[] = value[1].split("#");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "fn:lower-case(*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                else{
+                                    xPathStatement += " or fn:lower-case(*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                i++;
+                            }
                         }
                         else{
-                            xPathStatement += " and */@"+mapKey+"='"+value[1]+"'";
+                            if(i == 0){
+                                xPathStatement += "fn:lower-case(*/@"+mapKey+")='"+value[1].toLowerCase()+"'";
+                            }
+                            else{
+                                xPathStatement += " and fn:lower-case(*/@"+mapKey+")='"+value[1].toLowerCase()+"'";
+                            }
                         }
                     }
                     else{
@@ -687,20 +838,76 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Contains")){
+                    if(value[1].contains("&")){
+                        String valueSplitted[] = value[1].split("&");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            else{
+                                xPathStatement += " and jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            i++;
+                        }
+                    }
+                    else if(value[1].contains("#")){
+                        String valueSplitted[] = value[1].split("#");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            else{
+                                xPathStatement += " or jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            i++;
+                        }
+                    }
+                    else{
                         if(i == 0){
-                            xPathStatement += "jcr:like(*/@"+mapKey+",'%"+value[1]+"%')";
+                            xPathStatement += "jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+value[1].toLowerCase()+"%')";
                         }
                         else{
-                            xPathStatement += " and jcr:like(*/@"+mapKey+",'%"+value[1]+"%')";
+                            xPathStatement += " and jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+value[1].toLowerCase()+"%')";
                         }
+                    }
                 }
                 else if(value[0].equals("Not_Equals")){
                     if(!mapKey.contains("Date")){
-                        if(i == 0){
-                            xPathStatement += "not(*/@"+mapKey+"='"+value[1]+"')";
+                        if(value[1].contains("&")){
+                            String valueSplitted[] = value[1].split("&");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "not(fn:lower-case(*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                else{
+                                    xPathStatement += " and not(fn:lower-case(*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                i++;
+                            }
+                        }
+                        else if(value[1].contains("#")){
+                            String valueSplitted[] = value[1].split("#");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "not(fn:lower-case(*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                else{
+                                    xPathStatement += " or not(fn:lower-case(*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                i++;
+                            }
                         }
                         else{
-                            xPathStatement += " and not(*/@"+mapKey+"='"+value[1]+"')";
+                            if(i == 0){
+                                xPathStatement += "not(fn:lower-case(*/@"+mapKey+")='"+value[1].toLowerCase()+"')";
+                            }
+                            else{
+                                xPathStatement += " and not(fn:lower-case(*/@"+mapKey+")='"+value[1].toLowerCase()+"')";
+                            }
                         }
                     }
                     else{
@@ -713,12 +920,40 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Not_Contains")){
+                    if(value[1].contains("&")){
+                        String valueSplitted[] = value[1].split("&");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "not(jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            else{
+                                xPathStatement += " and not(jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            i++;
+                        }
+                    }
+                    else if(value[1].contains("#")){
+                        String valueSplitted[] = value[1].split("#");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "not(jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            else{
+                                xPathStatement += " or not(jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            i++;
+                        }
+                    }
+                    else{
                         if(i == 0){
-                            xPathStatement += "not(jcr:like(*/@"+mapKey+",'%"+value[1]+"%'))";
+                            xPathStatement += "not(jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+value[1].toLowerCase()+"%'))";
                         }
                         else{
-                            xPathStatement += " and not(jcr:like(*/@"+mapKey+",'%"+value[1]+"%'))";
+                            xPathStatement += " and not(jcr:like(fn:lower-case(*/@"+mapKey+"),'%"+value[1].toLowerCase()+"%'))";
                         }
+                    }
                 }
                 else if(value[0].equals("Between")){
                     if(i == 0){
@@ -743,11 +978,39 @@ public class UIAdvancedSearchForm extends UIForm  {
 
                 if(value[0].equals("Equals")){
                     if(!mapKey.contains("Date")){
-                        if(i == 0){
-                            xPathStatement += "*/*/@"+mapKey+"='"+value[1]+"'";
+                        if(value[1].contains("&")){
+                            String valueSplitted[] = value[1].split("&");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "fn:lower-case(*/*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                else{
+                                    xPathStatement += " and fn:lower-case(*/*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                i++;
+                            }
+                        }
+                        else if(value[1].contains("#")){
+                            String valueSplitted[] = value[1].split("#");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "fn:lower-case(*/*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                else{
+                                    xPathStatement += " or fn:lower-case(*/*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"'";
+                                }
+                                i++;
+                            }
                         }
                         else{
-                            xPathStatement += " and */*/@"+mapKey+"='"+value[1]+"'";
+                            if(i == 0){
+                                xPathStatement += "fn:lower-case(*/*/@"+mapKey+")='"+value[1].toLowerCase()+"'";
+                            }
+                            else{
+                                xPathStatement += " and fn:lower-case(*/*/@"+mapKey+")='"+value[1].toLowerCase()+"'";
+                            }
                         }
                     }
                     else{
@@ -760,20 +1023,76 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Contains")){
+                    if(value[1].contains("&")){
+                        String valueSplitted[] = value[1].split("&");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            else{
+                                xPathStatement += " and jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            i++;
+                        }
+                    }
+                    else if(value[1].contains("#")){
+                        String valueSplitted[] = value[1].split("#");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            else{
+                                xPathStatement += " or jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%')";
+                            }
+                            i++;
+                        }
+                    }
+                    else{
                         if(i == 0){
-                            xPathStatement += "jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%')";
+                            xPathStatement += "jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+value[1].toLowerCase()+"%')";
                         }
                         else{
-                            xPathStatement += " and jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%')";
+                            xPathStatement += " and jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+value[1].toLowerCase()+"%')";
                         }
+                    }
                 }
                 else if(value[0].equals("Not_Equals")){
                     if(!mapKey.contains("Date")){
-                        if(i == 0){
-                            xPathStatement += "not(*/*/@"+mapKey+"='"+value[1]+"')";
+                        if(value[1].contains("&")){
+                            String valueSplitted[] = value[1].split("&");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "not(fn:lower-case(*/*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                else{
+                                    xPathStatement += " and not(fn:lower-case(*/*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                i++;
+                            }
+                        }
+                        else if(value[1].contains("#")){
+                            String valueSplitted[] = value[1].split("#");
+
+                            for(int j = 0 ; j < valueSplitted.length ; j++){
+                                if(i == 0){
+                                    xPathStatement += "not(fn:lower-case(*/*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                else{
+                                    xPathStatement += " or not(fn:lower-case(*/*/@"+mapKey+")='"+valueSplitted[j].toLowerCase()+"')";
+                                }
+                                i++;
+                            }
                         }
                         else{
-                            xPathStatement += " and not(*/*/@"+mapKey+"='"+value[1]+"')";
+                            if(i == 0){
+                                xPathStatement += "not(fn:lower-case(*/*/@"+mapKey+")='"+value[1].toLowerCase()+"')";
+                            }
+                            else{
+                                xPathStatement += " and not(fn:lower-case(*/*/@"+mapKey+")='"+value[1].toLowerCase()+"')";
+                            }
                         }
                     }
                     else{
@@ -786,12 +1105,40 @@ public class UIAdvancedSearchForm extends UIForm  {
                     }
                 }
                 else if(value[0].equals("Not_Contains")){
+                    if(value[1].contains("&")){
+                        String valueSplitted[] = value[1].split("&");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "not(jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            else{
+                                xPathStatement += " and not(jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            i++;
+                        }
+                    }
+                    else if(value[1].contains("#")){
+                        String valueSplitted[] = value[1].split("#");
+
+                        for(int j = 0 ; j < valueSplitted.length ; j++){
+                            if(i == 0){
+                                xPathStatement += "not(jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            else{
+                                xPathStatement += " or not(jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+valueSplitted[j].toLowerCase()+"%'))";
+                            }
+                            i++;
+                        }
+                    }
+                    else{
                         if(i == 0){
-                            xPathStatement += "not(jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%'))";
+                            xPathStatement += "not(jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+value[1].toLowerCase()+"%'))";
                         }
                         else{
-                            xPathStatement += " and not(jcr:like(*/*/@"+mapKey+",'%"+value[1]+"%'))";
+                            xPathStatement += " and not(jcr:like(fn:lower-case(*/*/@"+mapKey+"),'%"+value[1].toLowerCase()+"%'))";
                         }
+                    }
                 }
                 else if(value[0].equals("Between")){
                     if(i == 0){

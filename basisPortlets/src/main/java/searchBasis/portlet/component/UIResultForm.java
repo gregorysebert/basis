@@ -6,11 +6,16 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPageIterator;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
+import org.exoplatform.webui.form.*;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -19,6 +24,9 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,24 +40,33 @@ import java.util.Map;
  */
 @ComponentConfig(
         lifecycle = UIFormLifecycle.class,
-        template =  "app:/groovy/SearchBasis/portlet/UIResultForm.gtmpl"
+        template =  "app:/groovy/SearchBasis/portlet/UIResultForm.gtmpl",
+        events = {
+                @EventConfig(listeners = UIResultForm.ExportActionListener.class)
+        }
 )
 public class UIResultForm extends UIForm {
     private QueryResult queryResult;
     private NodeIterator nodeIterator1;
     private Session session = null;
     private String lastId = "";
+
+    final static public String FIELD_UPLOAD = "export" ;
     private UIGrid grid_;
 
     private static final String NAME= "Name";
 
-    private static final String PATH = "Path";
+    private static final String USER = "User";
 
-    private static final String[] NODE_BEAN_FIELD = {NAME, PATH};
+    private static final String REFERENCE = "Reference";
+
+    private static final String[] NODE_BEAN_FIELD = {NAME,USER,REFERENCE};
 
     private static final String[] NODE_ACTION = {"ViewNode"};
 
     private List<String> result = new ArrayList<String>();
+
+    private List<String> pathResult = new ArrayList<String>();
 
 
     public UIResultForm () throws Exception{
@@ -61,6 +78,8 @@ public class UIResultForm extends UIForm {
         grid_.configure(NAME, NODE_BEAN_FIELD, NODE_ACTION);
         grid_.getUIPageIterator().setId("UIListResultSearchIterator");
         grid_.getUIPageIterator().setParent(this);
+
+        //setActions(new String[]{"Export"}) ;
     }
 
     private void search(List<String> result, int numberResult) throws Exception {
@@ -79,9 +98,11 @@ public class UIResultForm extends UIForm {
                 queryResult = uiSearchBasisPortlet.getQueryResult();
                 nodeIterator1 = queryResult.getNodes();
                 String typeQuery = uiSearchBasisPortlet.getTypeQuery();
+                int i = 0;
 
                 while(nodeIterator1.hasNext()){
                     Node basisFolderNode = nodeIterator1.nextNode();
+                    i++;
 
                     String url = Util.getPortalRequestContext().getRequestURI();
                     String urlSplitted[] = url.split("BO:");
@@ -103,7 +124,19 @@ public class UIResultForm extends UIForm {
                             String pathSlippted [] = path.split("/Files/BO");
                             //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                             result.add(basisFolderNode.getProperty("exo:title").getString());
-                            result.add(pathSlippted[1]);
+                            if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                            }
+                            else{
+                                result.add("Migration");
+                            }
+                            if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                            }
+                            else{
+                                result.add("");
+                            }
+                            pathResult.add(pathSlippted[1]);
                         }
                     }
                     else if(typeQuery.equals("byGroup")){
@@ -114,7 +147,19 @@ public class UIResultForm extends UIForm {
                             String pathSlippted [] = path.split("/Files/BO");
                             //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                             result.add(basisFolderNode.getProperty("exo:title").getString());
-                            result.add(pathSlippted[1]);
+                            if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                            }
+                            else{
+                                result.add("Migration");
+                            }
+                            if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                            }
+                            else{
+                                result.add("");
+                            }
+                            pathResult.add(pathSlippted[1]);
                         }
                     }
                     else if(typeQuery.equals("byUser")){
@@ -125,8 +170,40 @@ public class UIResultForm extends UIForm {
                             String pathSlippted [] = path.split("/Files/BO");
                             //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                             result.add(basisFolderNode.getProperty("exo:title").getString());
-                            result.add(pathSlippted[1]);
+                            if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                            }
+                            else{
+                                result.add("Migration");
+                            }
+                            if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                            }
+                            else{
+                                result.add("");
+                            }
+                            pathResult.add(pathSlippted[1]);
                         }
+                    }
+                    else if(typeQuery.equals("contains")){
+                        //addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                        String path = basisFolderNode.getPath() ;
+                        String pathSlippted [] = path.split("/Files/BO");
+                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                        result.add(basisFolderNode.getProperty("exo:title").getString());
+                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                        }
+                        else{
+                            result.add("Migration");
+                        }
+                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                        }
+                        else{
+                            result.add("");
+                        }
+                        pathResult.add(pathSlippted[1]);
                     }
                     else if(typeQuery.equals("byAction")){
                         String action = uiSearchBasisPortlet.getAttribute();
@@ -136,9 +213,68 @@ public class UIResultForm extends UIForm {
                             String pathSlippted [] = path.split("/Files/BO");
                             //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                             result.add(basisFolderNode.getProperty("exo:title").getString());
-                            result.add(pathSlippted[1]);
+                            if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                            }
+                            else{
+                                result.add("Migration");
+                            }
+                            if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                            }
+                            else{
+                                result.add("");
+                            }
+                            pathResult.add(pathSlippted[1]);
                         }
                     }
+                    else if(typeQuery.equals("createdBy")){
+                        //addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                        String path = basisFolderNode.getPath() ;
+                        String pathSlippted [] = path.split("/Files/BO");
+                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                        result.add(basisFolderNode.getProperty("exo:title").getString());
+                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                        }
+                        else{
+                            result.add("Migration");
+                        }
+                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                        }
+                        else{
+                            result.add("");
+                        }
+                        pathResult.add(pathSlippted[1]);
+                    }
+                    else if(typeQuery.equals("createdByOther")){
+                        //addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
+                        String path = basisFolderNode.getPath() ;
+                        String pathSlippted [] = path.split("/Files/BO");
+                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
+                        result.add(basisFolderNode.getProperty("exo:title").getString());
+                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                        }
+                        else{
+                            result.add("Migration");
+                        }
+                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                        }
+                        else{
+                            result.add("");
+                        }
+                        pathResult.add(pathSlippted[1]);
+                    }
+
+                    if(i>100){
+                        UISimpleSearchForm uiSimpleSearchForm = uiSearchBasisPortlet.getChild(UISimpleSearchForm.class);
+                        String number = uiSimpleSearchForm.getUIFormSelectBox("NumberResult").getValue();
+                        search(result, Integer.parseInt(number));
+                    }
+
                 }
             }
             UISimpleSearchForm uiSimpleSearchForm = uiSearchBasisPortlet.getChild(UISimpleSearchForm.class);
@@ -183,7 +319,19 @@ public class UIResultForm extends UIForm {
                                 String pathSlippted [] = path.split("/Files/BO");
                                 //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                 result.add(basisFolderNode.getProperty("exo:title").getString());
-                                result.add(pathSlippted[1]);
+                                if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                    result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                }
+                                else{
+                                    result.add("Migration");
+                                }
+                                if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                    result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                }
+                                else{
+                                    result.add("");
+                                }
+                                pathResult.add(pathSlippted[1]);
                             }
                         }
                     }
@@ -229,7 +377,19 @@ public class UIResultForm extends UIForm {
                                     String pathSlippted [] = path.split("/Files/BO");
                                     //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                     result.add(basisDocumentNode.getProperty("exo:title").getString());
-                                    result.add(pathSlippted[1]);
+                                    if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                        result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                    }
+                                    else{
+                                        result.add("Migration");
+                                    }
+                                    if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                        result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                    }
+                                    else{
+                                        result.add("");
+                                    }
+                                    pathResult.add(pathSlippted[1]);
                                 }
                             }
                         }
@@ -276,7 +436,19 @@ public class UIResultForm extends UIForm {
                                     String pathSlippted [] = path.split("/Files/BO");
                                     //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                     result.add(basisFollowFolderNode.getProperty("exo:name").getString());
-                                    result.add(pathSlippted[1]);
+                                    if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                        result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                    }
+                                    else{
+                                        result.add("Migration");
+                                    }
+                                    if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                        result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                    }
+                                    else{
+                                        result.add("");
+                                    }
+                                    pathResult.add(pathSlippted[1]);
                                 }
                             }
                         }
@@ -341,7 +513,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisFollowDocumentNode.getProperty("exo:name").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                     }
                                 }
                             }
@@ -392,7 +576,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:title").getString();
                                     }
                                 }
@@ -403,7 +599,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:name").getString();
                                     }
                                 }
@@ -424,7 +632,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:title").getString();
                                     }
                                 }
@@ -435,7 +655,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:name").getString();
                                     }
                                 }
@@ -456,7 +688,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:title").getString();
                                     }
                                 }
@@ -467,7 +711,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:name").getString();
                                     }
                                 }
@@ -488,7 +744,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:title").getString();
                                     }
                                 }
@@ -499,7 +767,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:name").getString();
                                     }
                                 }
@@ -555,7 +835,14 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:title").getString();
                                     }
                                 }
@@ -566,7 +853,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:name").getString();
                                     }
                                 }
@@ -581,7 +880,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:title").getString();
                                     }
                                 }
@@ -592,7 +903,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:name").getString();
                                     }
                                 }
@@ -607,7 +930,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:title").getString();
                                     }
                                 }
@@ -618,7 +953,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:name").getString();
                                     }
                                 }
@@ -634,7 +981,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:title").getString();
                                     }
                                 }
@@ -645,7 +1004,19 @@ public class UIResultForm extends UIForm {
                                         String pathSlippted [] = path.split("/Files/BO");
                                         //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
-                                        result.add(pathSlippted[1]);
+                                        if(basisFolderNode.hasProperty("basis:folderInternSender")){
+                                            result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
+                                        }
+                                        else{
+                                            result.add("Migration");
+                                        }
+                                        if(basisFolderNode.hasProperty("basis:folderExternalReference")){
+                                            result.add(basisFolderNode.getProperty("basis:folderExternalReference").getString());
+                                        }
+                                        else{
+                                            result.add("");
+                                        }
+                                        pathResult.add(pathSlippted[1]);
                                         lastId = basisNode.getProperty("exo:name").getString();
                                     }
                                 }
@@ -665,18 +1036,63 @@ public class UIResultForm extends UIForm {
     public String getSizeResultList(){
         String messageToReturn;
         if(Util.getPortalRequestContext().getLocale().getLanguage().equals("fr")){
-            if((result.size()/2)>1 ) messageToReturn = "Il y a <i>" + result.size()/2 + "</i> resultats";
-            else   messageToReturn = "Il y a <i>" + result.size()/2 + "</i> resultat";
+            if((result.size()/3)>1 ) messageToReturn = "Il y a <i>" + result.size()/3 + "</i> resultats";
+            else   messageToReturn = "Il y a <i>" + result.size()/3 + "</i> resultat";
         }
         else if(Util.getPortalRequestContext().getLocale().getLanguage().equals("nl")){
-            if((result.size()/2)>1 ) messageToReturn = "Er zijn <i>" + result.size()/2 + "</i> resultaat";
-            else   messageToReturn = "Er <i>" + result.size()/2 + "</i> resultaat";
+            if((result.size()/3)>1 ) messageToReturn = "Er zijn <i>" + result.size()/3 + "</i> resultaten";
+            else   messageToReturn = "Er is <i>" + result.size()/3 + "</i> resultaat";
         }
         else {
-            if((result.size()/2)>1 ) messageToReturn = "There are <i>" + result.size()/2 + "</i> results";
-            else   messageToReturn = "There is <i>" + result.size()/2 + "</i> result";
+            if((result.size()/3)>1 ) messageToReturn = "There are <i>" + result.size()/3 + "</i> results";
+            else   messageToReturn = "There is <i>" + result.size()/3 + "</i> result";
 
         }
         return messageToReturn;
+    }
+
+    public List<String> getPathResult() {
+        return pathResult;
+    }
+
+    static public class ExportActionListener extends EventListener<UIResultForm> {
+        public void execute(Event<UIResultForm> event) throws Exception {
+            UIResultForm uiResultForm = event.getSource();
+            System.out.println("test csv");
+            try {
+                String path = uiResultForm.getUIStringInput("export").getValue();
+                PrintStream l_out = new PrintStream(new FileOutputStream(path+"/export.csv"));
+
+//on écrit les lignes :
+                l_out.print("Première ligne ;");
+                l_out.print("on change de cellule;");
+// à cause du point vitgule dans la chaine précédente.
+                l_out.println("idem");
+                l_out.print("on change de ligne;");
+// a cause du "printLN" précédent au lieu du "print".
+                l_out.print("on change de cellule");
+
+//on ferme le fichier :
+                l_out.flush();
+                l_out.close();
+                l_out=null;
+
+                java.io.BufferedInputStream in = new java.io.BufferedInputStream(new java.net.URL("http://bdonline.sqe.com/documents/testplans.pdf").openStream());
+                java.io.FileOutputStream fos = new java.io.FileOutputStream("testplans.pdf");
+                System.out.println("test pdf");
+                java.io.BufferedOutputStream bout = new BufferedOutputStream(fos,1024);
+                byte data[] = new byte[1024];
+                while(in.read(data,0,1024)>=0)
+                {
+                    bout.write(data);
+                }
+                bout.close();
+                in.close();
+
+                UISearchBasisPortlet uiManager = uiResultForm.getAncestorOfType(UISearchBasisPortlet.class) ;
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiManager) ;
+            }
+            catch(Exception e){System.out.println(e.toString());}
+        }
     }
 }

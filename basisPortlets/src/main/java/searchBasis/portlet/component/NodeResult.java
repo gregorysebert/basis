@@ -10,11 +10,13 @@ package searchBasis.portlet.component;
 public class NodeResult {
 
     private String name;
-    private String path;
+    private String user;
+    private String reference;
 
-    public  NodeResult(String name, String path){
+    public  NodeResult(String name, String user, String reference){
         this.name = name;
-        this.path = path;
+        this.user = user;
+        this.reference = reference;
     }
 
     public String getName() {
@@ -25,11 +27,19 @@ public class NodeResult {
         this.name = name;
     }
 
-    public String getPath() {
-        return path;
+    public String getUser() {
+        return user;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 }
