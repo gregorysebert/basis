@@ -23,6 +23,10 @@ import javax.jcr.nodetype.PropertyDefinition;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
@@ -100,9 +104,35 @@ public class UIAdvancedSearchForm extends UIForm  {
 
             String from = uiAdvancedSearchForm.getUIFormSelectBox(FIELD_FROM).getValue();
             Boolean limited = uiAdvancedSearchForm.getUICheckBoxInput(FIELD_LIMITED_SEARCH).getValue();
-            String url = Util.getPortalRequestContext().getRequestURI();
-            String urlSplitted[] = url.split("BO:");
-            String nameBO[] = urlSplitted[1].split("/");
+
+            HttpServletRequest request = Util.getPortalRequestContext().getRequest();
+            HttpServletResponse response = Util.getPortalRequestContext().getResponse();
+            String url[] = Util.getPortalRequestContext().getRequestURI().split("BO:");
+            String nameBO[] = url[1].split("/");
+            Cookie[] cookies = request.getCookies();
+            Cookie cookieDayCheck = new Cookie("dayCheck","");
+            Cookie cookieBoName = new Cookie("boName","");
+            for(int i=0; i < cookies.length; i++){
+                if(cookies[i].getName().equals("dayCheck")){
+                    cookieDayCheck = cookies[i];
+
+                }
+                else if(cookies[i].getName().equals("boName")){
+                    cookieBoName = cookies[i];
+                }
+            }
+
+            if(cookieBoName.getValue().isEmpty() || cookieBoName.getValue().equals(null)){
+                cookieBoName.setValue(nameBO[0]);
+                response.addCookie(cookieBoName);
+            }
+            else if(!cookieBoName.getValue().equals(nameBO[0])){
+                cookieBoName.setValue(nameBO[0]);
+                cookieDayCheck.setValue("No");
+                response.addCookie(cookieBoName);
+                response.addCookie(cookieDayCheck);
+            }
+
             String xPathStatement = "";
 
             uiAdvancedSearchForm.setI(0);

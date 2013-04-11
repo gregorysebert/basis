@@ -10,6 +10,7 @@ package searchBasis.portlet.component;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -21,6 +22,10 @@ import org.exoplatform.webui.event.EventListener;
 
 import javax.jcr.Session;
 import javax.jcr.query.QueryResult;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +52,15 @@ public class UISearchBasisPortlet extends UIPortletApplication {
 
 
     public UISearchBasisPortlet( ) throws Exception {
-        addChild(UISimpleSearchForm.class,null,"simpleSearch");
+        HttpServletResponse response = Util.getPortalRequestContext().getResponse();
+        String url[] = Util.getPortalRequestContext().getRequestURI().split("BO:");
+        String nameBO[] = url[1].split("/");
+        Cookie cookie = new Cookie("dayCheck","No");
+        response.addCookie(cookie);
+        cookie = new Cookie("boName",nameBO[0]);
+        response.addCookie(cookie);
+
+        addChild(UISimpleSearchForm.class, null, "simpleSearch");
         addChild(UIAdvancedSearchForm.class, null, "advancedSearch");
         addChild(UIResultForm.class,null,"Result");
         setRenderedChild("simpleSearch");

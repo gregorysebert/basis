@@ -8,6 +8,8 @@
     <version>trunk</version>
     <packaging>pom</packaging>
 
+
+
 	<modules>
 	 	<module>basisPortlets</module>
 	 	<module>migrationService</module>
@@ -78,7 +80,7 @@
                 <com.lowagie.itext>2.1.7</com.lowagie.itext>
                 <test.skip>true</test.skip>
                 <org.exoplatform.platform>3.5.5</org.exoplatform.platform>
-                <org.exoplatform.basis.version>1.1.6</org.exoplatform.basis.version>
+                <org.exoplatform.basis.version>1.1.8</org.exoplatform.basis.version>
             </properties>
         </profile>
     </profiles>

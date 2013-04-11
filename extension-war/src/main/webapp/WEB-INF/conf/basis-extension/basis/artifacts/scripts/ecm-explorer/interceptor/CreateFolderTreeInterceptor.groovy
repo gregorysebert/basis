@@ -1,12 +1,15 @@
 import java.text.SimpleDateFormat;
 import java.util.logging.Logger;
-import javax.jcr.Session;
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
+import javax.jcr.lock.Lock;
+import javax.jcr.*;
 import org.exoplatform.services.cms.scripts.CmsScript;
 import org.exoplatform.services.jcr.RepositoryService;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.exoplatform.portal.webui.util.Util;
+import javax.jcr.RepositoryException;
 
 public class CreateFolderTreeInterceptor implements CmsScript {
 
@@ -31,6 +34,20 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 
 	public void execute(Object context) {
 
+        HttpServletRequest request = Util.getPortalRequestContext().getRequest();
+        HttpServletResponse response = Util.getPortalRequestContext().getResponse();
+        Cookie cookieDayCheck;
+        Cookie cookieBoName;
+        Cookie[] cookies = request.getCookies();
+        for(int i=0; i < cookies.length; i++){
+            if(cookies[i].getName().equals("dayCheck")){
+                cookieDayCheck = cookies[i];
+            }
+            else if(cookies[i].getName().equals("boName")){
+                cookieBoName = cookies[i];
+            }
+        }
+
 		// get parameters from dialog ... when creating the action
 		String path = (String) context;
 		String[] splittedContent = path.split("&workspaceName=");
@@ -39,33 +56,77 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 		String workspace = splittedContentAgain[0];
 		Session session = null;
 		try {
+            HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
 			session = repositoryService_.getCurrentRepository().getSystemSession(workspace);
 			Node nodeRoot = session.getRootNode();
 			Node srcNode = (Node) session.getItem(nodePath);
 			String BOName = getBONode(srcNode).getName();
-			SimpleDateFormat dateFormat = new SimpleDateFormat();
-			dateFormat.applyPattern("dd-MM-yyyy");
-			String[] alist = dateFormat.format(srcNode.getProperty("exo:dateCreated").getDate().getTime()).split("-");
-			if (!nodeRoot.hasNode(BO_ROOT_PATH + BOName + "/" + alist[2])) {
-				nodeRoot.getNode(BO_ROOT_PATH + BOName).addNode(alist[2], BASIS_DATE_NODETYPE);
-				session.save();
-			}
+            if (getBONode(srcNode).canAddMixin("mix:lockable")){
+                getBONode(srcNode).addMixin("mix:lockable");
+                getBONode(srcNode).save();
+            }
+            SimpleDateFormat dateFormat = new SimpleDateFormat();
+            dateFormat.applyPattern("dd-MM-yyyy");
+            String[] alist = dateFormat.format(srcNode.getProperty("exo:dateCreated").getDate().getTime()).split("-");
 
-			if (!nodeRoot.hasNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1])) {
-				nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2]).addNode(alist[1], BASIS_DATE_NODETYPE);
-				session.save();
-			}
+            if(!cookieBoName.getValue().equals(BOName) || !cookieDayCheck.getValue().equals("Yes")){
+                logger.info("CreateFolderTreeInterceptor  ---  Check node path basis date exist! ");
+                if (!nodeRoot.hasNode(BO_ROOT_PATH + BOName + "/" + alist[2])) {
+                    nodeRoot.getNode(BO_ROOT_PATH + BOName).addNode(alist[2], BASIS_DATE_NODETYPE);
+                    session.save();
+                }
 
-			if (!nodeRoot.hasNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1] + "/" + alist[0])) {
-				nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1]).addNode(alist[0], BASIS_DATE_NODETYPE);
-				session.save();
-			}
+                if (!nodeRoot.hasNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1])) {
+                    nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2]).addNode(alist[1], BASIS_DATE_NODETYPE);
+                    session.save();
+                }
+
+                if (!nodeRoot.hasNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1] + "/" + alist[0])) {
+                    nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1]).addNode(alist[0], BASIS_DATE_NODETYPE);
+                    session.save();
+                }
+                cookieDayCheck.setValue("Yes");
+                response.addCookie(cookieDayCheck);
+                logger.info("CreateFolderTreeInterceptor  ---  Attribute daycheck change to Yes! ");
+            }
 			//Add basis folder
 			Node parentNode = nodeRoot.getNode(BO_ROOT_PATH + BOName + "/" + alist[2] + "/" + alist[1] + "/" + alist[0]);
 			NodeIterator it = parentNode.getNodes();
-			String incre = getBONode(srcNode).getProperty("basis:BOCount").getString();
-            Node basisFolderNode = parentNode.addNode(BOName + "." + incre, BASIS_BASIS_DATE_NODETYPE);
+            while(getBONode(srcNode).isLocked() == true){
+                Logger.info("CreateFolderTreeInterceptor  ---  Src node is lock    Waiting 1sec!");
+                sleep(1000);
+            }
+            Lock lock = getBONode(srcNode).lock(false,false);
+            String incre = getBONode(srcNode).getProperty("basis:BOCount").getString() ;
             String basisFolderNodeTitle = BOName + "." + incre.substring(0, 2) + "." + incre.substring(2, 5) + "." + incre.substring(5);
+            Node basisFolderNode = parentNode.addNode(BOName + "." + incre, BASIS_BASIS_DATE_NODETYPE);
+            if (incre.charAt(7) == '9' && incre.charAt(6) != '9') {
+                incre = (String)(incre.substring(0, 6) + (char)(incre.charAt(6)+1)) + "0";
+            }
+            else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) != '9') {
+                incre = (String)(incre.substring(0, 5) + (char)(incre.charAt(5)+1)) + "00";
+            }
+            else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) == '9' && incre.charAt(4) != '9') {
+                incre = (String)(incre.substring(0, 4) + (char)(incre.charAt(4)+1)) + "000";
+            }
+            else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) == '9' && incre.charAt(4) == '9' && incre.charAt(3) != '9') {
+                incre = (String)(incre.substring(0, 3) + (char)(incre.charAt(3)+1)) + "0000";
+            }
+            else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) == '9' && incre.charAt(4) == '9' && incre.charAt(3) == '9' && incre.charAt(2) != '9') {
+                incre = (String)(incre.substring(0, 2) + (char)(incre.charAt(2)+1)) + "00000";
+            }
+            else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) == '9' && incre.charAt(4) == '9' && incre.charAt(3) == '9' && incre.charAt(2) == '9' && incre.charAt(1) != '9') {
+                incre = (String)(incre.substring(0, 1) + (char)(incre.charAt(1)+1)) + "000000";
+            }
+            else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) == '9' && incre.charAt(4) == '9' && incre.charAt(3) == '9' && incre.charAt(2) == '9' && incre.charAt(1) == '9') {
+                incre = (String)((char)(incre.charAt(0)+1)) + "0000000";
+            }
+            else {
+                incre = (String)(incre.substring(0, 7) + (char)(incre.charAt(7)+1));
+            }
+            getBONode(srcNode).setProperty("basis:BOCount", incre);
+            getBONode(srcNode).save();
+            getBONode(srcNode).unlock() ;
             basisFolderNode.setProperty("exo:title", basisFolderNodeTitle);
 			if (srcNode.hasProperty("basis:folderLanguage")) {
 				basisFolderNode.setProperty("basis:folderLanguage", srcNode.getProperty("basis:folderLanguage").getString());
@@ -97,31 +158,6 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			if (srcNode.hasProperty("basis:folderComments")) {
 				basisFolderNode.setProperty("basis:folderComments", srcNode.getProperty("basis:folderComments").getString());
 			}
-			if (incre.charAt(7) == '9' && incre.charAt(6) != '9') {
-		        incre = (String)(incre.substring(0, 6) + (char)(incre.charAt(6)+1)) + "0";
-			}
-	        else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) != '9') {
-	            incre = (String)(incre.substring(0, 5) + (char)(incre.charAt(5)+1)) + "00";
-			}
-	        else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) == '9' && incre.charAt(4) != '9') {
-	            incre = (String)(incre.substring(0, 4) + (char)(incre.charAt(4)+1)) + "000";
-			}
-	        else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) == '9' && incre.charAt(4) == '9' && incre.charAt(3) != '9') {
-	            incre = (String)(incre.substring(0, 3) + (char)(incre.charAt(3)+1)) + "0000";
-			}
-	        else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) == '9' && incre.charAt(4) == '9' && incre.charAt(3) == '9' && incre.charAt(2) != '9') {
-	            incre = (String)(incre.substring(0, 2) + (char)(incre.charAt(2)+1)) + "00000";
-			}
-	        else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) == '9' && incre.charAt(4) == '9' && incre.charAt(3) == '9' && incre.charAt(2) == '9' && incre.charAt(1) != '9') {
-	            incre = (String)(incre.substring(0, 1) + (char)(incre.charAt(1)+1)) + "000000";
-			}
-	        else if (incre.charAt(7) == '9' && incre.charAt(6) == '9' && incre.charAt(5) == '9' && incre.charAt(4) == '9' && incre.charAt(3) == '9' && incre.charAt(2) == '9' && incre.charAt(1) == '9') {
-	            incre = (String)((char)(incre.charAt(0)+1)) + "0000000";
-			}
-	        else {
-	            incre = (String)(incre.substring(0, 7) + (char)(incre.charAt(7)+1));
-	        }
-			getBONode(srcNode).setProperty("basis:BOCount", incre);
 			//Add basis document
 			Node basisDocumentNode = basisFolderNode.addNode(basisFolderNode.getName() + "-000", BASIS_DOCUMENT_NODETYPE);
 			basisDocumentNode.setProperty("exo:title", basisFolderNodeTitle + "-000");
@@ -195,7 +231,8 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			}
 			if (srcNode.hasProperty("basis:followAnswerByDate")) {
 				basisFollowNode.setProperty("basis:followAnswerByDate", srcNode.getProperty("basis:followAnswerByDate").getDate());
-			}	
+			}
+
 			srcNode.remove();
 			session.save();
 			basisFolderNode.checkin();
@@ -204,14 +241,14 @@ public class CreateFolderTreeInterceptor implements CmsScript {
 			basisDocumentNode.checkout();
 			basisFollowNode.checkin();
 			basisFollowNode.checkout();
-			HttpSession httpSession = Util.getPortalRequestContext().getRequest().getSession();
 			httpSession.setAttribute("basisFolderNumber", basisFolderNodeTitle);
 			httpSession.setAttribute("basisFolderNodePath", basisFolderNode.getPath());
 			httpSession.setAttribute("basisDocumentId", basisDocumentNode.getProperty("exo:title").getString());
 			httpSession.setAttribute("basisDocumentNodePath", basisDocumentNode.getPath());
+
 			
 		} catch (Exception e) {
-			logger.warning("Error in CreateFolderTreeInterceptor script : " + e.getMessage());
+            e.printStackTrace();
 		} finally {
 			if (session != null) {
 				session.logout();

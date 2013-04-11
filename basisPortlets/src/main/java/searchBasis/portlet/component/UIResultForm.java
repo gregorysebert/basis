@@ -119,10 +119,8 @@ public class UIResultForm extends UIForm {
                     if(typeQuery.equals("currentUser")){
                         String remoteUser =  Util.getPortalRequestContext().getRemoteUser();
                         if(basisFollowNode.getProperty("basis:followUserInternEditor").getString().equals(remoteUser)){
-                            //addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
                             String path = basisFolderNode.getPath() ;
                             String pathSlippted [] = path.split("/Files/BO");
-                            //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                             result.add(basisFolderNode.getProperty("exo:title").getString());
                             if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                 result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -142,10 +140,8 @@ public class UIResultForm extends UIForm {
                     else if(typeQuery.equals("byGroup")){
                         String group = uiSearchBasisPortlet.getAttribute();
                         if(basisFollowNode.getProperty("basis:followGroupInternEditor").getString().equals(group)){
-                            //addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
                             String path = basisFolderNode.getPath() ;
                             String pathSlippted [] = path.split("/Files/BO");
-                            //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                             result.add(basisFolderNode.getProperty("exo:title").getString());
                             if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                 result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -165,10 +161,8 @@ public class UIResultForm extends UIForm {
                     else if(typeQuery.equals("byUser")){
                         String user = uiSearchBasisPortlet.getAttribute();
                         if(basisFollowNode.getProperty("basis:followUserInternEditor").getString().equals(user)){
-                            //addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
                             String path = basisFolderNode.getPath() ;
                             String pathSlippted [] = path.split("/Files/BO");
-                            //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                             result.add(basisFolderNode.getProperty("exo:title").getString());
                             if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                 result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -186,10 +180,8 @@ public class UIResultForm extends UIForm {
                         }
                     }
                     else if(typeQuery.equals("contains")){
-                        //addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
                         String path = basisFolderNode.getPath() ;
                         String pathSlippted [] = path.split("/Files/BO");
-                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                         result.add(basisFolderNode.getProperty("exo:title").getString());
                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -208,10 +200,8 @@ public class UIResultForm extends UIForm {
                     else if(typeQuery.equals("byAction")){
                         String action = uiSearchBasisPortlet.getAttribute();
                         if(basisFollowNode.getProperty("basis:followRequiredAction").getString().equals(action)){
-                            //addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
                             String path = basisFolderNode.getPath() ;
                             String pathSlippted [] = path.split("/Files/BO");
-                            //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                             result.add(basisFolderNode.getProperty("exo:title").getString());
                             if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                 result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -229,10 +219,8 @@ public class UIResultForm extends UIForm {
                         }
                     }
                     else if(typeQuery.equals("createdBy")){
-                        //addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
                         String path = basisFolderNode.getPath() ;
                         String pathSlippted [] = path.split("/Files/BO");
-                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                         result.add(basisFolderNode.getProperty("exo:title").getString());
                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -249,10 +237,8 @@ public class UIResultForm extends UIForm {
                         pathResult.add(pathSlippted[1]);
                     }
                     else if(typeQuery.equals("createdByOther")){
-                        //addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
                         String path = basisFolderNode.getPath() ;
                         String pathSlippted [] = path.split("/Files/BO");
-                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                         result.add(basisFolderNode.getProperty("exo:title").getString());
                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -314,10 +300,8 @@ public class UIResultForm extends UIForm {
                                 lastFollowDoc(basisFolderNode, basisFolderNode , uiSearchBasisPortlet, from, null);
                             }
                             else{
-                                //addUIFormInput(new UIFormStringInput(basisFolderNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
                                 String path = basisFolderNode.getPath() ;
                                 String pathSlippted [] = path.split("/Files/BO");
-                                //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                 result.add(basisFolderNode.getProperty("exo:title").getString());
                                 if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                     result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -372,10 +356,8 @@ public class UIResultForm extends UIForm {
                                     lastFollowDoc(basisDocumentNode, basisFolderNode , uiSearchBasisPortlet, from, null);
                                 }
                                 else{
-                                    //addUIFormInput(new UIFormStringInput(basisDocumentNode.getProperty("exo:title").getString(), basisFolderNode.getProperty("exo:title").getString(), null));
                                     String path = basisDocumentNode.getPath() ;
                                     String pathSlippted [] = path.split("/Files/BO");
-                                    //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                     result.add(basisDocumentNode.getProperty("exo:title").getString());
                                     if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                         result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -431,10 +413,8 @@ public class UIResultForm extends UIForm {
                                     lastFollowDoc(basisFollowFolderNode, basisFolderNode , uiSearchBasisPortlet, from, null);
                                 }
                                 else{
-                                    //addUIFormInput(new UIFormStringInput(basisFollowFolderNode.getProperty("exo:name").getString(), basisFolderNode.getProperty("exo:name").getString(), null));
                                     String path = basisFollowFolderNode.getPath() ;
                                     String pathSlippted [] = path.split("/Files/BO");
-                                    //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                     result.add(basisFollowFolderNode.getProperty("exo:name").getString());
                                     if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                         result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -508,10 +488,8 @@ public class UIResultForm extends UIForm {
                                         lastFollowDoc(basisFollowDocumentNode, basisFolderNode , uiSearchBasisPortlet, from, basisDocumentNode);
                                     }
                                     else{
-                                        //addUIFormInput(new UIFormStringInput(basisFollowDocumentNode.getProperty("exo:name").getString(), basisFollowDocumentNode.getProperty("exo:name").getString(), null));
                                         String path = basisFollowDocumentNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisFollowDocumentNode.getProperty("exo:name").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -571,10 +549,8 @@ public class UIResultForm extends UIForm {
                             else{
                                 if(from.equals("Document") || from.equals("Folder")) {
                                     if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -594,10 +570,8 @@ public class UIResultForm extends UIForm {
                                 }
                                 else{
                                     if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -627,10 +601,8 @@ public class UIResultForm extends UIForm {
                             else{
                                 if(from.equals("Document") || from.equals("Folder")) {
                                     if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -650,10 +622,8 @@ public class UIResultForm extends UIForm {
                                 }
                                 else{
                                     if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -683,10 +653,8 @@ public class UIResultForm extends UIForm {
                             else{
                                 if(from.equals("Document") || from.equals("Folder")) {
                                     if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -706,10 +674,8 @@ public class UIResultForm extends UIForm {
                                 }
                                 else{
                                     if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -739,10 +705,8 @@ public class UIResultForm extends UIForm {
                             else{
                                 if(from.equals("Document") || from.equals("Folder")) {
                                     if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -762,10 +726,8 @@ public class UIResultForm extends UIForm {
                                 }
                                 else{
                                     if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -830,10 +792,8 @@ public class UIResultForm extends UIForm {
                             if(basisFollowDocNode.getProperty(mapKey).getString().equals(value[1])){
                                 if(from.equals("Document") || from.equals("Folder")) {
                                     if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -848,10 +808,8 @@ public class UIResultForm extends UIForm {
                                 }
                                 else{
                                     if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -875,10 +833,8 @@ public class UIResultForm extends UIForm {
                             if(basisFollowDocNode.getProperty(mapKey).getString().contains(value[1])){
                                 if(from.equals("Document") || from.equals("Folder")) {
                                     if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -898,10 +854,8 @@ public class UIResultForm extends UIForm {
                                 }
                                 else{
                                     if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -925,10 +879,8 @@ public class UIResultForm extends UIForm {
                             if(!basisFollowDocNode.getProperty(mapKey).getString().equals(value[1])){
                                 if(from.equals("Document") || from.equals("Folder")) {
                                     if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -948,10 +900,8 @@ public class UIResultForm extends UIForm {
                                 }
                                 else{
                                     if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -976,10 +926,8 @@ public class UIResultForm extends UIForm {
 
                                 if(from.equals("Document") || from.equals("Folder")) {
                                     if(!lastId.equals(basisNode.getProperty("exo:title").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:title").getString(), basisNode.getProperty("exo:title").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:title").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());
@@ -999,10 +947,8 @@ public class UIResultForm extends UIForm {
                                 }
                                 else{
                                     if(!lastId.equals(basisNode.getProperty("exo:name").getString())){
-                                        //addUIFormInput(new UIFormStringInput(basisNode.getProperty("exo:name").getString(), basisNode.getProperty("exo:name").getString(), null));
                                         String path = basisNode.getPath() ;
                                         String pathSlippted [] = path.split("/Files/BO");
-                                        //addUIFormInput(new UIFormStringInput(pathSlippted[1], pathSlippted[1], null));
                                         result.add(basisNode.getProperty("exo:name").getString());
                                         if(basisFolderNode.hasProperty("basis:folderInternSender")){
                                             result.add(basisFolderNode.getProperty("basis:folderRNN").getString() + " : " + basisFolderNode.getProperty("basis:folderInternSender").getString());

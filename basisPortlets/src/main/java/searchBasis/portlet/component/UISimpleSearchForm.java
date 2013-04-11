@@ -20,13 +20,15 @@ import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
-import javax.jcr.Node;
-import javax.jcr.NodeIterator;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
+import javax.jcr.*;
+import javax.jcr.lock.Lock;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -165,9 +167,32 @@ public class UISimpleSearchForm extends UIForm {
             UISimpleSearchForm uiSimpleSearchForm = event.getSource();
             String xpathStatement = "";
 
-            String url = Util.getPortalRequestContext().getRequestURI();
-            String urlSplitted[] = url.split("BO:");
-            String nameBO[] = urlSplitted[1].split("/");
+            HttpServletRequest request = Util.getPortalRequestContext().getRequest();
+            HttpServletResponse response = Util.getPortalRequestContext().getResponse();
+            String url[] = Util.getPortalRequestContext().getRequestURI().split("BO:");
+            String nameBO[] = url[1].split("/");
+            Cookie[] cookies = request.getCookies();
+            Cookie cookieDayCheck = new Cookie("dayCheck","");
+            Cookie cookieBoName = new Cookie("boName","");
+            for(int i=0; i < cookies.length; i++){
+                if(cookies[i].getName().equals("dayCheck")){
+                    cookieDayCheck = cookies[i];
+                }
+                else if(cookies[i].getName().equals("boName")){
+                    cookieBoName = cookies[i];
+                }
+            }
+
+            if(cookieBoName.getValue().isEmpty() || cookieBoName.getValue().equals(null)){
+                cookieBoName.setValue(nameBO[0]);
+                response.addCookie(cookieBoName);
+            }
+            else if(!cookieBoName.getValue().equals(nameBO[0])){
+                cookieBoName.setValue(nameBO[0]);
+                cookieDayCheck.setValue("No");
+                response.addCookie(cookieBoName);
+                response.addCookie(cookieDayCheck);
+            }
 
             String language = uiSimpleSearchForm.getUIFormSelectBox(LANGUAGE).getValue();
 
@@ -178,8 +203,6 @@ public class UISimpleSearchForm extends UIForm {
                 Session session = (Session) rs.getRepository("repository").getSystemSession("collaboration");
                 QueryManager queryManager = null;
                 queryManager = session.getWorkspace().getQueryManager();
-
-
 
                 UISearchBasisPortlet uiSearchBasisPortlet = uiSimpleSearchForm.getAncestorOfType(UISearchBasisPortlet.class);
 
@@ -238,7 +261,6 @@ public class UISimpleSearchForm extends UIForm {
                 }
                 else if(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue().equals("contains")){
                     String contains = uiSimpleSearchForm.getUIStringInput(ATTRIBUT).getValue().toLowerCase();
-                    System.out.println(contains);
                     uiSearchBasisPortlet.setTypeQuery(uiSimpleSearchForm.getUIFormSelectBox(QUERY).getValue());
 
                     if(!contains.equals(null)){
@@ -311,9 +333,9 @@ public class UISimpleSearchForm extends UIForm {
                     uiSearchBasisPortlet.updateResult();
                     //uiSimpleSearchForm.getUIFormSelectBox(QUERY).setDefaultValue("currentUser");
                     uiSimpleSearchForm.setRendered(false);
-
                 }
             } catch (RepositoryException e) {
+
                 System.out.println("RepositoryException : " + e);
             }
         }
